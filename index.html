@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelza: Boredom Killer, Make New Friends</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            900: '#881337',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-slate-900 text-white font-sans antialiased overflow-x-hidden selection:bg-brand-500 selection:text-white">
+
+    <!-- Ambient Background Blobs -->
+    <div class="fixed inset-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-brand-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-orange-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tighter text-white">KELZA<span class="text-brand-500">.</span></a>
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
+                <a href="#problem" class="hover:text-white transition">The Problem</a>
+                <a href="#creators" class="hover:text-white transition">Creators</a>
+                <a href="#global" class="hover:text-white transition">Global Strategy</a>
+                <a href="#invest" class="hover:text-white transition">Invest</a>
+            </div>
+            <a href="#join" class="bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">Join Beta</a>
+        </div>
+    </nav>
+
+    <!-- 1. Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <div class="max-w-5xl mx-auto px-6 text-center z-10 animate-fade-in-up">
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-8">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border-white/20">
+                    <span class="flex h-2 w-2 rounded-full bg-brand-500"></span>
+                    <span class="text-xs font-medium text-slate-200 uppercase tracking-wider">Version 1.0 Foundation</span>
+                </div>
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border-white/20">
+                    <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    <span class="text-xs font-medium text-slate-200 uppercase tracking-wider">1:1 Video & Voice Calls</span>
+                </div>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
+                Technology should not <br>replace people.<br>
+                <span class="bg-gradient-to-r from-brand-400 via-purple-400 to-orange-400 text-gradient">It should help people find people.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-300 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
+                Kelza matches you instantly with real, verified people for live 1:1 video and voice calls — so boredom ends, and friendships (sometimes more) begin.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#invest" class="bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition shadow-lg shadow-brand-500/30">View Investor Deck</a>
+                <a href="#manifesto" class="glass hover:bg-white/10 text-white px-8 py-4 rounded-full text-lg font-semibold transition">Read the Manifesto</a>
+            </div>
+        </div>
+    </section>
+
+<!-- NEW: How Kelza Works -->
+    <section id="how-it-works" class="py-24 relative reveal">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">How Kelza Works</h2>
+                <p class="text-lg text-slate-400 max-w-2xl mx-auto">One tap. One real person. One live video or voice call.</p>
+            </div>
+            <div class="grid md:grid-cols-5 gap-6">
+                <div class="glass p-6 rounded-2xl relative">
+                    <span class="absolute -top-4 -left-2 text-5xl font-extrabold text-white/10">1</span>
+                    <h3 class="text-lg font-bold text-white mb-2 relative">Open Kelza</h3>
+                    <p class="text-sm text-slate-400 relative">Whenever you're bored, anywhere in the world.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl relative">
+                    <span class="absolute -top-4 -left-2 text-5xl font-extrabold text-white/10">2</span>
+                    <h3 class="text-lg font-bold text-white mb-2 relative">Get Matched</h3>
+                    <p class="text-sm text-slate-400 relative">Instantly connect for a live 1:1 video or voice call with a real, verified person.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl relative border-t-4 border-t-brand-500">
+                    <span class="absolute -top-4 -left-2 text-5xl font-extrabold text-white/10">3</span>
+                    <h3 class="text-lg font-bold text-white mb-2 relative">Talk & Connect</h3>
+                    <p class="text-sm text-slate-400 relative">Pay-as-you-go with Kelza coins. No subscriptions, no pressure.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl relative">
+                    <span class="absolute -top-4 -left-2 text-5xl font-extrabold text-white/10">4</span>
+                    <h3 class="text-lg font-bold text-white mb-2 relative">Build Something Real</h3>
+                    <p class="text-sm text-slate-400 relative">Hit it off? Follow each other and keep the conversation going.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl relative">
+                    <span class="absolute -top-4 -left-2 text-5xl font-extrabold text-white/10">5</span>
+                    <h3 class="text-lg font-bold text-white mb-2 relative">Or Skip</h3>
+                    <p class="text-sm text-slate-400 relative">Not feeling it? Get matched again in seconds.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. The Manifesto / One Sentence -->
+    <section id="manifesto" class="py-24 relative reveal">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-6">The One Sentence</h2>
+            <p class="text-2xl md:text-4xl text-slate-300 font-medium leading-tight">
+                "Kelza is a global social entertainment platform where conversations become relationships, relationships become communities, and communities become part of everyday life."
+            </p>
+            <p class="text-lg text-slate-400 mt-8 max-w-2xl mx-auto">
+                Sometimes it's conversation. Sometimes it's recognition. Sometimes it's romance. Sometimes it's simply someone who listens — through a real, live video or voice call.
+            </p>
+        </div>
+    </section>
+
+    <!-- 3. The Problem -->
+    <section id="problem" class="py-24 relative reveal">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold mb-6">The internet became very good at making us scroll.</h2>
+                    <div class="space-y-4 text-lg text-slate-400">
+                        <p>It became very bad at helping us build meaningful relationships.</p>
+                        <p>Today, people have thousands of followers, hundreds of contacts, dozens of messaging apps, yet still feel disconnected.</p>
+                        <p>Algorithms decide who people see. Platforms own the audience. Creators chase trends. Users chase entertainment.</p>
+                        <p class="text-white font-semibold text-xl mt-6 border-l-4 border-brand-500 pl-4">Kelza exists to change that.</p>
+                    </div>
+                </div>
+                <div class="glass-dark p-8 rounded-3xl border border-white/10 shadow-2xl">
+                    <h3 class="text-brand-400 font-bold mb-4 tracking-widest uppercase text-sm">Today's Internet Optimizes:</h3>
+                    <ul class="space-y-3 mb-8 text-slate-300 font-medium line-through decoration-brand-500/50 decoration-2">
+                        <li>Attention & Views</li>
+                        <li>Watch Time & Clicks</li>
+                        <li>Advertisements & Virality</li>
+                    </ul>
+                    <h3 class="text-emerald-400 font-bold mb-4 tracking-widest uppercase text-sm">Kelza Optimizes:</h3>
+                    <ul class="space-y-3 text-white font-medium text-lg">
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Conversation & Belonging</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Friendship & Communities</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Shared Experiences</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. The Core Loop -->
+    <section class="py-24 relative reveal">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-16">The Core Loop</h2>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8">
+                <div class="glass p-6 rounded-2xl w-48 font-bold text-lg text-slate-300">Bored</div>
+                <svg class="w-6 h-6 text-brand-500 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <div class="glass p-6 rounded-2xl w-48 font-bold text-lg text-slate-200">Discover</div>
+                <svg class="w-6 h-6 text-brand-500 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <div class="glass p-6 rounded-2xl w-48 font-bold text-lg text-white">1:1 Video Call</div>
+                <svg class="w-6 h-6 text-brand-500 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <div class="bg-gradient-to-r from-brand-500 to-purple-600 p-6 rounded-2xl w-48 font-bold text-lg text-white shadow-xl shadow-brand-500/20">Relationship</div>
+            </div>
+            <p class="mt-12 text-xl text-slate-400">People should come back because someone remembers them. Not because an algorithm tricks them.</p>
+        </div>
+    </section>
+
+    <!-- 5. For Users -->
+    <section class="py-24 relative reveal bg-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1 relative">
+                    <!-- Abstract UI Mockup -->
+                    <div class="glass-dark rounded-[2.5rem] p-4 w-full max-w-sm mx-auto aspect-[9/19] relative border-[8px] border-slate-800 shadow-2xl overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-b from-purple-500/20 to-brand-500/20"></div>
+                        <div class="relative h-full flex flex-col pt-8">
+                            <div class="w-full h-48 rounded-2xl bg-white/10 mb-4 animate-pulse"></div>
+                            <div class="flex gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-brand-500/50"></div>
+                                <div class="flex-1 space-y-2 py-1">
+                                    <div class="h-4 bg-white/20 rounded w-3/4"></div>
+                                    <div class="h-4 bg-white/10 rounded w-1/2"></div>
+                                </div>
+                            </div>
+                            <div class="mt-auto glass rounded-2xl p-4">
+                                <div class="h-4 bg-white/20 rounded w-full mb-2"></div>
+                                <div class="h-4 bg-white/20 rounded w-5/6"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2">
+                    <h2 class="text-4xl font-bold mb-6">Users are not viewers.<br><span class="text-brand-400">They are participants.</span></h2>
+                    <ul class="space-y-4 text-lg text-slate-300">
+                        <li>• Users start instant 1:1 video or voice calls.</li>
+                        <li>• Users discover communities.</li>
+                        <li>• Users attend events.</li>
+                        <li>• Users support creators.</li>
+                        <li>• Users make friends — sometimes more.</li>
+                    </ul>
+                    <p class="mt-6 text-xl font-medium text-white">Users return because they belong somewhere.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. For Creators -->
+    <section id="creators" class="py-24 relative reveal">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold mb-6">Creators are not products.<br><span class="text-purple-400">Creators are people.</span></h2>
+                    <p class="text-lg text-slate-400 mb-6">Creators decide when they are online, who they talk to, how they earn, and how their community grows. Creators stay in control. Kelza provides the tools.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass p-4 rounded-xl border border-white/10">
+                            <h4 class="font-bold text-white">Earn Kelza Coins</h4>
+                            <p class="text-sm text-slate-400">Get paid per minute for 1:1 video & voice calls, plus gifts from your community.</p>
+                        </div>
+                        <div class="glass p-4 rounded-xl border border-white/10">
+                            <h4 class="font-bold text-white">Safety</h4>
+                            <p class="text-sm text-slate-400">Build safe spaces, automatically moderated.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="glass-dark p-10 rounded-3xl border border-white/10">
+                    <h3 class="text-2xl font-bold mb-6">The Creator Ecosystem</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-500 flex items-center justify-center text-xl">📹</div>
+                            <div>
+                                <h4 class="font-bold text-white">1:1 Video & Voice Calls</h4>
+                                <p class="text-sm text-slate-400">Your core earning tool — real-time paid conversations.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-500 flex items-center justify-center text-xl">🎤</div>
+                            <div>
+                                <h4 class="font-bold text-white">Entertain & Inspire</h4>
+                                <p class="text-sm text-slate-400">Host live rooms, events, and games.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-xl">💬</div>
+                            <div>
+                                <h4 class="font-bold text-white">Listen & Connect</h4>
+                                <p class="text-sm text-slate-400">Create one-on-one relationships.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center text-xl">🌍</div>
+                            <div>
+                                <h4 class="font-bold text-white">Build Community</h4>
+                                <p class="text-sm text-slate-400">Followers disappear. Communities remain.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Communities -->
+    <section class="py-24 relative reveal text-center bg-white/5">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-6">The Long-Term Memory of Kelza</h2>
+            <p class="text-2xl text-slate-300 font-light mb-10">Communities create belonging. Communities create friendships. Communities create traditions. Communities create identity.</p>
+            <p class="text-brand-400 font-semibold text-xl">Every successful creator should eventually build one or more thriving communities.</p>
+        </div>
+    </section>
+
+    <!-- 8. Entertainment & Conversations -->
+    <section class="py-24 relative reveal">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-12 text-center">Every Conversation Matters</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="glass p-6 rounded-2xl hover:scale-105 transition duration-300">
+                    <h3 class="text-xl font-bold text-white mb-2">Text & Voice</h3>
+                    <p class="text-slate-400 text-sm">Seamless messaging for daily updates and quick check-ins.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl hover:scale-105 transition duration-300">
+                    <h3 class="text-xl font-bold text-white mb-2">Video & Live</h3>
+                    <p class="text-slate-400 text-sm">Face-to-face interaction and broadcasting to your community.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl hover:scale-105 transition duration-300">
+                    <h3 class="text-xl font-bold text-white mb-2">Shared Games</h3>
+                    <p class="text-slate-400 text-sm">Play, laugh, and compete together in real-time.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl hover:scale-105 transition duration-300">
+                    <h3 class="text-xl font-bold text-white mb-2">Learning</h3>
+                    <p class="text-slate-400 text-sm">Language exchange, skills, and cultural discovery.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Invisible AI -->
+    <section class="py-24 relative reveal">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-8">Invisible AI</h2>
+            <div class="glass-dark p-10 rounded-3xl border border-white/10">
+                <p class="text-xl text-slate-300 mb-8 leading-relaxed">
+                    AI translates. AI recommends. AI summarizes. AI moderates. AI remembers. AI helps creators. AI helps users.
+                </p>
+                <h3 class="text-3xl font-extrabold text-white">
+                    Humans remain the hero.<br>
+                    <span class="text-purple-400">AI remains the assistant.</span>
+                </h3>
+            </div>
+        </div>
+    </section>
+
+<!-- NEW: Trust & Safety -->
+    <section id="safety" class="py-24 relative reveal bg-white/5">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Verified. Safe. 100% Legal.</h2>
+                <p class="text-lg text-slate-400 max-w-2xl mx-auto">Real connection requires real trust — and real rules.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass p-6 rounded-2xl flex items-start gap-4">
+                    <svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <h4 class="font-bold text-white mb-1">Verified Identities</h4>
+                        <p class="text-sm text-slate-400">Every creator is identity-verified before they can go live.</p>
+                    </div>
+                </div>
+                <div class="glass p-6 rounded-2xl flex items-start gap-4">
+                    <svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <h4 class="font-bold text-white mb-1">Real-Time Moderation</h4>
+                        <p class="text-sm text-slate-400">AI and human review work together to keep every call safe.</p>
+                    </div>
+                </div>
+                <div class="glass p-6 rounded-2xl flex items-start gap-4">
+                    <svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <h4 class="font-bold text-white mb-1">Zero Explicit Content</h4>
+                        <p class="text-sm text-slate-400">Kelza is built for connection, not exploitation — explicit or adult content is never permitted.</p>
+                    </div>
+                </div>
+                <div class="glass p-6 rounded-2xl flex items-start gap-4">
+                    <svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <h4 class="font-bold text-white mb-1">Block & Report, Instantly</h4>
+                        <p class="text-sm text-slate-400">One tap ends any call and flags it for review.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-slate-300 mt-12 max-w-2xl mx-auto italic">
+                Kelza channels genuine human curiosity and the desire for connection into something safe, legal, and worth coming back to.
+            </p>
+        </div>
+    </section>
+
+    <!-- 10. Global Strategy Overview -->
+    <section id="global" class="py-24 relative reveal bg-white/5">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">Global from Day One</h2>
+            <p class="text-xl text-slate-400 max-w-3xl mx-auto mb-16">
+                Instead of focusing on a single country, Kelza connects regions with strong creator supply to regions with strong purchasing power.
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- 11. Supply Markets -->
+                <div class="glass p-8 rounded-3xl text-left border-t-4 border-t-brand-500">
+                    <h3 class="text-2xl font-bold mb-2">Creator Supply Markets</h3>
+                    <p class="text-slate-400 mb-6 h-12">Countries where earning in USD can significantly improve creator income.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Philippines</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Indonesia</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Vietnam</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Thailand</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Nepal</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">India</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Brazil</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">+ More</span>
+                    </div>
+                    <div class="mt-8 p-4 bg-brand-500/20 rounded-xl">
+                        <p class="font-bold text-brand-300 text-sm uppercase tracking-wide">Goal</p>
+                        <p class="text-white">Recruit exceptional creators & build sustainable businesses.</p>
+                    </div>
+                </div>
+
+                <!-- 12. Demand Markets -->
+                <div class="glass p-8 rounded-3xl text-left border-t-4 border-t-purple-500">
+                    <h3 class="text-2xl font-bold mb-2">User Demand Markets</h3>
+                    <p class="text-slate-400 mb-6 h-12">Countries with high purchasing power and strong demand for premium experiences.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">United States</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Canada</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">UK</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Germany</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Australia</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Singapore</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">Japan</span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full text-sm">+ More</span>
+                    </div>
+                    <div class="mt-8 p-4 bg-purple-500/20 rounded-xl">
+                        <p class="font-bold text-purple-300 text-sm uppercase tracking-wide">Goal</p>
+                        <p class="text-white">Acquire users seeking meaningful human connections.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 13. Business Model -->
+    <section class="py-24 relative reveal">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-8">The Business</h2>
+            <p class="text-2xl text-slate-300 font-light mb-12">Money is never the product. Relationships are the product.</p>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <h4 class="text-xl font-bold text-white mb-2">Users</h4>
+                    <p class="text-slate-400 text-sm">Receive meaningful experiences.</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold text-white mb-2">Creators</h4>
+                    <p class="text-slate-400 text-sm">Build sustainable businesses.</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold text-white mb-2">Kelza</h4>
+                    <p class="text-slate-400 text-sm">Earns from successful interactions.</p>
+                </div>
+            </div>
+            <p class="mt-12 text-brand-400 font-bold uppercase tracking-widest text-sm">Trust comes before transactions.</p>
+        </div>
+    </section>
+
+    <!-- 14. Design Philosophy -->
+    <section class="py-24 relative reveal">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-12">Design Philosophy</h2>
+            <div class="flex flex-wrap justify-center gap-4 text-lg font-medium text-slate-300 mb-12">
+                <span class="px-4 py-2 glass rounded-full">Beautiful</span>
+                <span class="px-4 py-2 glass rounded-full">Modern</span>
+                <span class="px-4 py-2 glass rounded-full">Warm</span>
+                <span class="px-4 py-2 glass rounded-full">Premium</span>
+                <span class="px-4 py-2 glass rounded-full">Glass</span>
+                <span class="px-4 py-2 glass rounded-full">Motion</span>
+            </div>
+            <p class="text-2xl text-white font-semibold">The interface should disappear. People should remain.</p>
+        </div>
+    </section>
+
+    <!-- 15. The Vision -->
+    <section class="py-24 relative reveal bg-white/5">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="glass-dark p-12 rounded-[3rem] border border-white/10 text-center shadow-2xl">
+                <h2 class="text-4xl font-bold mb-8">Imagine opening one app.</h2>
+                <div class="text-xl text-slate-300 space-y-2 font-light">
+                    <p>You feel bored.</p>
+                    <p>You find someone interesting.</p>
+                    <p>You start chatting.</p>
+                    <p>Maybe you join a community.</p>
+                    <p>Maybe you make a friend.</p>
+                    <p>Maybe someone simply listens.</p>
+                </div>
+                <p class="mt-8 text-3xl font-bold bg-gradient-to-r from-brand-400 to-purple-400 text-gradient">You leave happier than when you arrived.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 16. Success Metrics -->
+    <section class="py-24 relative reveal">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-12 text-center">What Success Looks Like</h2>
+            <ul class="space-y-6 text-xl text-slate-300">
+                <li class="flex items-start gap-4">
+                    <span class="text-brand-500 text-2xl mt-1">✦</span>
+                    <p>Someone laughs because of Kelza.</p>
+                </li>
+                <li class="flex items-start gap-4">
+                    <span class="text-brand-500 text-2xl mt-1">✦</span>
+                    <p>Someone feels less lonely because of Kelza.</p>
+                </li>
+                <li class="flex items-start gap-4">
+                    <span class="text-brand-500 text-2xl mt-1">✦</span>
+                    <p>A creator builds a sustainable career.</p>
+                </li>
+                <li class="flex items-start gap-4">
+                    <span class="text-brand-500 text-2xl mt-1">✦</span>
+                    <p>People feel remembered, valued, and that they belong.</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 17. The Team & Operations -->
+    <section class="py-24 relative reveal bg-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-12 text-center">Initial Operations Team</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <p class="text-lg text-slate-400 mb-6">Kelza is committed to maintaining a strong long-term technology foundation. Engineering architecture, scalability, security, and platform evolution are strategic assets.</p>
+                    <p class="text-white font-bold text-xl mb-4">Estimated Team Size: 6-10 people</p>
+                </div>
+                <div class="glass p-8 rounded-3xl border border-white/10">
+                    <div class="grid grid-cols-2 gap-4 text-sm text-slate-300">
+                        <div>• Product Manager</div>
+                        <div>• Engineering Lead</div>
+                        <div>• Backend/Frontend Devs</div>
+                        <div>• Mobile Devs (iOS/Android)</div>
+                        <div>• UI/UX Designer</div>
+                        <div>• DevOps / QA</div>
+                        <div>• Community Managers</div>
+                        <div>• Creator Success Team</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 18. Investment Opportunity -->
+    <section id="invest" class="py-24 relative reveal">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-12 rounded-[3rem] border border-brand-500/30 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-500/20 rounded-full mix-blend-screen filter blur-[80px]"></div>
+                
+                <p class="text-sm text-brand-300 uppercase tracking-widest font-semibold mb-4">Category: Social Discovery Video Chat</p>
+                <h2 class="text-4xl font-bold mb-6">Investment Opportunity</h2>
+                <p class="text-xl text-slate-300 mb-8 max-w-2xl">
+                    Kelza is seeking strategic investment partners to build the first production version. This is not simply funding for software. It is funding to build the foundation of a long-term global human connection platform.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="glass p-6 rounded-2xl">
+                        <p class="text-slate-400 text-sm uppercase tracking-wide mb-1">Target Raise</p>
+                        <p class="text-4xl font-extrabold text-white">$40k - $60k</p>
+                        <p class="text-sm text-slate-400 mt-2">To complete the MVP and validate market demand.</p>
+                    </div>
+                    <div class="glass p-6 rounded-2xl">
+                        <p class="text-slate-400 text-sm uppercase tracking-wide mb-1">Marketing Budget</p>
+                        <p class="text-4xl font-extrabold text-white">$5k - $10k <span class="text-lg font-normal text-slate-400">/mo</span></p>
+                        <p class="text-sm text-slate-400 mt-2">Post-MVP completion (First 3 months).</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 text-slate-300 mb-10">
+                    <h4 class="text-white font-bold text-lg border-b border-white/10 pb-2">Estimated Dev Budget Allocation (~$17.5k - $20k)</h4>
+                    <div class="flex justify-between border-b border-white/5 pb-2"><span>Product Research & UI/UX</span> <span>~$2,000</span></div>
+                    <div class="flex justify-between border-b border-white/5 pb-2"><span>Consumer App (Cross-platform)</span> <span>~$5,000</span></div>
+                    <div class="flex justify-between border-b border-white/5 pb-2"><span>Creator Platform</span> <span>~$3,500</span></div>
+                    <div class="flex justify-between border-b border-white/5 pb-2"><span>Admin Platform & Infrastructure</span> <span>~$7,000</span></div>
+                </div>
+
+                <button class="bg-white text-slate-900 px-8 py-4 rounded-full text-lg font-bold hover:bg-slate-200 transition w-full md:w-auto">Request Full Deck & Financials</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 19. Join / CTA -->
+    <section id="join" class="py-24 relative reveal text-center">
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-5xl font-extrabold mb-6">Ready to Connect?</h2>
+            <p class="text-xl text-slate-400 mb-10">Technology shouldn't replace real life. It should help you create more meaningful moments.</p>
+            <form class="flex flex-col md:flex-row gap-4 justify-center max-w-lg mx-auto">
+                <input type="email" placeholder="Enter your email" class="glass px-6 py-4 rounded-full flex-1 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-full font-bold transition">Join Waitlist</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 20. Footer / Final Belief -->
+    <footer class="border-t border-white/10 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <a href="https://kelza.fun" class="text-2xl font-bold tracking-tighter text-white mb-6 block">KELZA<span class="text-brand-500">.</span></a>
+            
+            <div class="max-w-2xl mx-auto mb-12">
+                <h3 class="text-brand-400 font-bold uppercase tracking-widest text-sm mb-4">Final Belief</h3>
+                <p class="text-2xl text-white font-medium italic">"People don't remember apps. People remember people. Kelza exists so that more people can find someone worth remembering."</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-6 text-sm text-slate-500">
+                <a href="https://kelza.fun" class="hover:text-white transition">kelza.fun</a>
+                <span>&copy; 2026 Kelza. All rights reserved.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar Scrolled State
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('glass-dark', 'border-b', 'border-white/10');
+            } else {
+                nav.classList.remove('glass-dark', 'border-b', 'border-white/10');
+            }
+        });
+
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        };
+
+        const revealOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>
