@@ -496,16 +496,57 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-white/10 mt-12 bg-slate-900/50">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-3">
-                <p class="font-bold tracking-widest text-white/70">KELZA</p>
+    <footer class="py-16 border-t border-white/10 mt-12 bg-slate-900/50 relative overflow-hidden">
+        <!-- Subtle background glow -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-brand-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 border-b border-white/10 pb-12 mb-8">
+                
+                <!-- Branding & Quote -->
+                <div class="space-y-4 max-w-sm">
+                    <div class="flex items-center gap-3">
+                        <img src="images/logo.png" alt="Kelza Logo" class="h-8 w-auto">
+                        <p class="text-xl font-bold tracking-widest text-white">KELZA</p>
+                    </div>
+                    <p class="text-sm text-slate-400 italic leading-relaxed">
+                        "People don't remember apps. People remember people."
+                    </p>
+                </div>
+                
+                <!-- Contact / Invest Actions -->
+                <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                    
+                    <!-- WhatsApp Button -->
+                    <!-- Note: The pre-filled text is URL-encoded for: "Hello, I am interested in the investment opportunity for Kelza. I would like to learn more about the platform, the global strategy, and how we can partner to build this future-grade super app. Could we schedule a call to discuss this further? Thank you." -->
+                    <a href="https://wa.me/9779746464149?text=Hello,%0A%0AI%20am%20interested%20in%20the%20investment%20opportunity%20for%20Kelza.%20I%20would%20like%20to%20learn%20more%20about%20the%20platform,%20the%20global%20strategy,%20and%20how%20we%20can%20partner%20to%20build%20this%20future-grade%20super%20app.%0A%0ACould%20we%20schedule%20a%20call%20to%20discuss%20this%20further?%0A%0AThank%20you." target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 glass px-6 py-3 rounded-xl hover:bg-[#25D366]/10 hover:border-[#25D366]/50 transition-all group">
+                        <svg class="w-6 h-6 text-[#25D366] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                        <div class="text-left">
+                            <p class="text-xs text-slate-400 font-medium">Invest via WhatsApp</p>
+                            <p class="text-sm font-semibold text-white tracking-wide">+977 974-6464149</p>
+                        </div>
+                    </a>
+
+                    <!-- Email Button -->
+                    <a href="mailto:erbhaweshkafle@gmail.com?subject=Investment%20Opportunity%20-%20Kelza%20Super%20App&body=Hello,%0A%0AI%20am%20interested%20in%20the%20investment%20opportunity%20for%20Kelza.%20I%20would%20like%20to%20learn%20more%20about%20the%20platform,%20the%20global%20strategy,%20and%20how%20we%20can%20partner%20to%20build%20this%20future-grade%20super%20app.%0A%0ACould%20we%20schedule%20a%20call%20to%20discuss%20this%20further?%0A%0AThank%20you." class="flex items-center justify-center gap-3 glass px-6 py-3 rounded-xl hover:bg-[#EA4335]/10 hover:border-[#EA4335]/50 transition-all group">
+                        <svg class="w-6 h-6 text-[#EA4335] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <div class="text-left">
+                            <p class="text-xs text-slate-400 font-medium">Email the Founder</p>
+                            <p class="text-sm font-semibold text-white tracking-wide">erbhaweshkafle@gmail.com</p>
+                        </div>
+                    </a>
+
+                </div>
             </div>
-            <p class="text-sm text-slate-500 text-center md:text-left">
-                "People don't remember apps. People remember people."
-            </p>
-            <div class="text-sm text-slate-500">
-                <a href="https://kelza.fun" class="hover:text-brand-400 transition-colors">kelza.fun</a>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 font-medium">
+                <p>&copy; 2026 Er Lekhnath Kafle. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="https://kelza.fun" class="hover:text-white transition-colors">kelza.fun</a>
+                    <a href="#vision" class="hover:text-white transition-colors">Manifesto</a>
+                    <a href="#ecosystem" class="hover:text-white transition-colors">Ecosystem</a>
+                    <a href="#invest" class="hover:text-brand-400 transition-colors">Deck</a>
+                </div>
             </div>
         </div>
     </footer>
