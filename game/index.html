@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Kelza — Boredom Killer. Make New Friends.</title>
+<meta name="theme-color" content="#06040d">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  fontFamily: { display:['Outfit','sans-serif'], sans:['Space Grotesk','sans-serif'] },
+  colors: { ink:'#06040d', ink2:'#0d091a', neon:{cyan:'#06b6d4',pink:'#ec4899',purple:'#8b5cf6',lime:'#84cc16',amber:'#f59e0b',rose:'#f43f5e'} },
+  keyframes: {
+    floaty:{'0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-12px)'}},
+    pulseGlow:{'0%,100%':{opacity:'.4', transform:'scale(1)'},'50%':{opacity:'1', transform:'scale(1.05)'}},
+    pop:{'0%':{transform:'scale(.8)',opacity:'0'},'100%':{transform:'scale(1)',opacity:'1'}},
+    pp:{'0%':{transform:'scale(1)'},'40%':{transform:'scale(1.3)',color:'#f59e0b'},'100%':{transform:'scale(1)'}},
+    toastIn:{from:{transform:'translateY(20px)',opacity:'0'},to:{transform:'translateY(0)',opacity:'1'}},
+    wave:{'0%,100%':{height:'20%'},'50%':{height:'80%'}}
+  },
+  animation:{floaty:'floaty 4s ease-in-out infinite',pulseGlow:'pulseGlow 2.5s ease-in-out infinite',pop:'pop .3s cubic-bezier(0.34, 1.56, 0.64, 1)',pp:'pp .5s ease-out',toastIn:'toastIn .3s ease-out'}
+}}}
+</script>
+<style>
+  html,body{background:#06040d}
+  body{font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-track{background:#06040d}
+  ::-webkit-scrollbar-thumb{background:#2a1f4a;border-radius:10px}
+  .blob{position:fixed;border-radius:50%;filter:blur(100px);opacity:.25;pointer-events:none;z-index:0;mix-blend-mode:screen;}
+  .grid-bg{background-image:linear-gradient(rgba(139,92,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 70%)}
+  
+  .glass { background: rgba(13, 9, 26, 0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+  .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+
+  .game-card{position:relative;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+  .game-card:hover{transform:translateY(-6px) scale(1.02); box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.3);}
+  .game-card::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.15) 48%,transparent 62%);background-size:250% 100%;background-position:200% 0;transition:background-position .9s}
+  .game-card:hover::after{background-position:-50% 0}
+  
+  .thumb{position:relative;overflow:hidden}
+  .thumb canvas{display:block;width:100%;height:100%}
+  
+  .btn-shine{position:relative;overflow:hidden}
+  .btn-shine::before{content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .6s}
+  .btn-shine:hover::before{left:130%}
+  
+  .modal-back{background:rgba(2,1,5,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .toast{animation:toastIn .3s cubic-bezier(0.34, 1.56, 0.64, 1)}
+  .pill{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+  canvas{touch-action:none}
+  .no-sb::-webkit-scrollbar{display:none}.no-sb{scrollbar-width:none}
+  
+  .gbtn{background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;font-weight:700;padding:.8rem 1.8rem;border-radius:9999px;box-shadow:0 6px 20px -6px rgba(6, 182, 212,.6);transition:all .2s cubic-bezier(0.34, 1.56, 0.64, 1)}
+  .gbtn:hover{transform:translateY(-2px) scale(1.03); box-shadow:0 10px 25px -6px rgba(139, 92, 246,.7)}
+  .gbtn:active{transform:scale(.96)}.gbtn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  
+  .ghost-btn{padding:.7rem 1.4rem;border-radius:9999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.02);font-weight:600;transition:all .15s}
+  .ghost-btn:hover{background:rgba(255,255,255,.08)}
+  .room-tab.active{background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;border-color:transparent;box-shadow:0 4px 15px -3px rgba(139, 92, 246, 0.4)}
+  
+  .fade-in{animation:pop .4s cubic-bezier(0.34, 1.56, 0.64, 1)}
+  .wallet-pulse{animation:pp .5s ease-out}
+
+  /* Audio Waveform specific */
+  .bar { width: 3px; background: #4ade80; border-radius: 2px; animation: wave 1s ease-in-out infinite; }
+  .bar:nth-child(1) { animation-delay: 0.1s; }
+  .bar:nth-child(2) { animation-delay: 0.3s; }
+  .bar:nth-child(3) { animation-delay: 0.5s; }
+  .bar:nth-child(4) { animation-delay: 0.2s; }
+
+  /* KELZA diagonal watermark on game cards (P5) */
+  .game-card .thumb { position: relative; }
+  .game-card .thumb::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.08;
+    background-image: repeating-linear-gradient(135deg, transparent 0 26px, rgba(255,255,255,0.001) 26px 27px);
+  }
+  .game-card .k-wm {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .game-card .k-wm span {
+    font-family: 'Outfit', sans-serif; font-weight: 900; color: rgba(255,255,255,0.07);
+    font-size: clamp(2.5rem, 9vw, 5rem); letter-spacing: 0.18em; white-space: nowrap;
+    transform: rotate(-24deg) scale(1.4); text-transform: uppercase; user-select: none;
+  }
+  .game-card:hover .k-wm span { transition: color .5s ease; color: rgba(139,92,246,0.16); }
+
+  /* Glow border on hover (P5) */
+  .game-card { isolation: isolate; }
+  .game-card::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+    background: linear-gradient(135deg, rgba(139,92,246,0.6), rgba(6,182,212,0.6));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .35s ease; z-index: 2;
+  }
+  .game-card:hover::before { opacity: 1; }
+  .game-card .thumb canvas { transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+  .game-card:hover .thumb canvas { transform: scale(1.04); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .game-card, .game-card .thumb canvas { transition: none !important; }
+    .game-card:hover { transform: none !important; }
+  }
+</style>
+</head>
+<body class="min-h-screen text-slate-100 selection:bg-purple-500/30">
+<!-- Backgrounds -->
+<div class="blob" style="width:500px;height:500px;background:#8b5cf6;top:-150px;left:-100px"></div>
+<div class="blob" style="width:550px;height:550px;background:#06b6d4;top:25%;right:-200px"></div>
+<div class="blob" style="width:450px;height:450px;background:#f59e0b;bottom:-150px;left:20%"></div>
+<div class="grid-bg fixed inset-0 z-0"></div>
+
+<!-- ============ HUB (Discovery) ============ -->
+<div id="hub" class="relative z-10">
+  <header class="sticky top-0 z-30 glass border-b-0">
+    <div class="max-w-7xl mx-auto px-5 py-3.5 flex items-center justify-between gap-4">
+      <button onclick="returnHome()" class="flex items-center gap-3 group">
+        <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-neon-purple to-neon-cyan grid place-items-center text-2xl shadow-[0_0_20px_rgba(139,92,246,0.4)] group-hover:rotate-6 transition-transform">
+          K<span class="absolute -top-1 -right-1 w-3 h-3 bg-neon-amber rounded-full animate-pulseGlow shadow-[0_0_10px_#f59e0b]"></span>
+        </div>
+        <div class="text-left leading-none">
+          <div class="font-display font-black text-2xl tracking-tight text-white">Kelza</div>
+          <div class="text-[9px] tracking-[.25em] text-cyan-300/80 font-bold uppercase">Boredom Killer</div>
+        </div>
+      </button>
+      <div class="flex flex-1 items-center justify-center hidden md:flex">
+        <div class="flex bg-white/5 rounded-full p-1 border border-white/10 backdrop-blur-md">
+            <button class="px-5 py-1.5 rounded-full bg-white/10 text-sm font-bold shadow-sm">Games</button>
+            <button class="px-5 py-1.5 rounded-full text-slate-400 hover:text-white text-sm font-semibold transition">Friends</button>
+            <button class="px-5 py-1.5 rounded-full text-slate-400 hover:text-white text-sm font-semibold transition">Leaderboard</button>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div id="wallet" class="flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-amber-600/10 border border-amber-400/40 rounded-full pl-3 pr-2 py-1.5 cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:bg-amber-500/30 transition" onclick="openDataPanel()" title="Open Wallet">
+          <span class="text-lg">🪙</span><span id="pointsDisplay" class="font-display font-black text-amber-300 text-sm tabular-nums">0</span>
+        </div>
+        <button id="muteBtn" onclick="toggleMute()" title="Toggle sound" class="w-10 h-10 grid place-items-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition text-lg">🔊</button>
+        <button class="w-10 h-10 rounded-full border border-white/20 overflow-hidden ml-1">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex&backgroundColor=transparent" class="w-full h-full bg-slate-800 object-cover">
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="max-w-7xl mx-auto px-5 pt-8 pb-10 md:pt-16 md:pb-14">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-6 text-xs font-semibold text-cyan-200 glass-panel shadow-lg"><span class="w-2 h-2 rounded-full bg-neon-cyan animate-pulseGlow shadow-[0_0_8px_#06b6d4]"></span><span>19 games · Play together live</span></div>
+        <h1 class="font-display font-black text-5xl sm:text-6xl md:text-7xl leading-[1.05] tracking-tight">Make New <br><span class="bg-gradient-to-r from-neon-purple via-neon-cyan to-white bg-clip-text text-transparent">Friends.</span></h1>
+        <p class="mt-6 text-slate-300 text-lg max-w-md leading-relaxed font-medium">Boredom killer. Challenge your video call partner to a quick match of Slots, Crash, or Connect 4 without ever dropping the call.</p>
+        <div class="mt-8 flex flex-wrap gap-4"><a href="#games" class="btn-shine gbtn inline-flex items-center gap-2 text-lg">▶ Play now</a><button onclick="openDataPanel()" class="ghost-btn text-base flex items-center gap-2">🏆 Leaderboards</button></div>
+      </div>
+      <div class="relative h-[380px] hidden sm:block perspective-1000">
+        <!-- Abstract Hero Graphics -->
+        <div class="absolute inset-0 grid place-items-center"><div class="w-64 h-64 rounded-full border border-purple-500/30 grid place-items-center animate-floaty shadow-[0_0_50px_rgba(139,92,246,0.2)]"><div class="text-8xl animate-floaty" style="animation-delay:.5s">🎮</div></div></div>
+        <div class="absolute top-10 left-10 glass border border-white/20 rounded-2xl p-4 animate-floaty shadow-2xl" style="animation-delay:.2s"><div class="text-3xl">🎰</div></div>
+        <div class="absolute top-20 right-6 glass border border-white/20 rounded-2xl p-4 animate-floaty shadow-2xl" style="animation-delay:.8s"><div class="text-3xl">🎲</div></div>
+        <div class="absolute bottom-12 left-4 glass border border-white/20 rounded-2xl p-4 animate-floaty shadow-2xl" style="animation-delay:1.2s"><div class="text-3xl">🎯</div></div>
+        <div class="absolute bottom-24 right-10 glass border border-white/20 rounded-2xl p-4 animate-floaty shadow-2xl" style="animation-delay:.6s"><div class="text-3xl">📈</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Games -->
+  <section id="games" class="max-w-7xl mx-auto px-5 py-8 relative">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+      <div><div class="pill text-cyan-400 mb-2">Social Arcade</div><h2 class="font-display font-black text-3xl md:text-4xl tracking-tight text-white drop-shadow-md">Ready for a challenge?</h2></div>
+      <div id="roomTabs" class="flex flex-wrap gap-2 p-1.5 glass-panel rounded-full border border-white/10"></div>
+    </div>
+    <div id="gamesGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5"></div>
+  </section>
+
+  <footer class="border-t border-white/5 mt-16 bg-ink2/50"><div class="max-w-7xl mx-auto px-5 py-10 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500"><div class="flex items-center gap-3"><span class="text-2xl">K</span><span class="font-display font-bold text-slate-300 text-lg">Kelza</span></div><div class="flex gap-6 font-semibold"><span class="cursor-pointer hover:text-white transition">About</span><span class="cursor-pointer hover:text-white transition">Creators</span><span class="cursor-pointer hover:text-white transition">Privacy</span><span class="cursor-pointer hover:text-white transition">Terms</span></div></div></footer>
+</div>
+
+<!-- ============ KELZA CORE GAMEPLAY STAGE ============ -->
+<div id="stage" class="fixed inset-0 z-40 hidden flex-col bg-ink/95 backdrop-blur-xl">
+  
+  <!-- Top Video Caller Layout -->
+  <div class="flex justify-between items-start p-3 sm:p-5 z-10 shrink-0 pointer-events-none w-full max-w-7xl mx-auto gap-4">
+    
+    <!-- Left: Creator Camera -->
+    <div class="pointer-events-auto flex gap-3 items-center glass p-2 pr-5 rounded-full shadow-lg relative group cursor-pointer hover:bg-white/10 transition">
+        <!-- Live Cam Placeholder -->
+        <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-purple-500 overflow-hidden shadow-[0_0_15px_rgba(168,85,247,0.5)] shrink-0">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Max&backgroundColor=b6e3f4" class="w-full h-full object-cover">
+            <!-- Audio waveform -->
+            <div class="absolute bottom-1 w-full flex items-center justify-center gap-[2px] h-3">
+                <div class="bar h-[30%]"></div><div class="bar h-[80%]"></div><div class="bar h-[50%]"></div><div class="bar h-[60%]"></div>
+            </div>
+            <!-- Speaking glow -->
+            <div class="absolute inset-0 rounded-full border-2 border-purple-300 opacity-50 animate-ping" style="animation-duration: 2s;"></div>
+        </div>
+        <div class="hidden sm:block">
+            <div class="text-sm font-bold text-white flex items-center gap-1">@CreatorMax <span class="text-cyan-400 text-xs">✔</span></div>
+            <div class="text-[11px] text-amber-300 font-bold tracking-wide">🪙 10,000</div>
+            <div class="text-[10px] text-purple-300 uppercase font-bold">Lvl 78</div>
+        </div>
+    </div>
+
+    <!-- Center: Game Meta -->
+    <div class="pointer-events-auto flex flex-col items-center justify-center glass px-5 py-2 rounded-2xl border border-white/10 shadow-lg">
+        <div class="flex items-center gap-2 mb-1">
+            <div id="sIcon" class="w-6 h-6 rounded flex items-center justify-center text-sm"></div>
+            <div id="sTitle" class="font-display font-bold text-base text-white shadow-sm tracking-wide"></div>
+        </div>
+        <div id="sRoom" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hidden sm:block"></div>
+    </div>
+
+    <!-- Right: User Camera -->
+    <div class="pointer-events-auto flex gap-3 items-center glass p-2 pl-5 rounded-full shadow-lg flex-row-reverse sm:flex-row relative group cursor-pointer hover:bg-white/10 transition">
+        <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-cyan-500 overflow-hidden shadow-[0_0_15px_rgba(6,182,212,0.4)] shrink-0">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex&backgroundColor=transparent" class="w-full h-full bg-slate-800 object-cover">
+            <div class="absolute bottom-1 w-full flex items-center justify-center gap-[2px] h-3 opacity-50">
+                <div class="bar h-[20%] bg-cyan-400"></div><div class="bar h-[40%] bg-cyan-400"></div><div class="bar h-[30%] bg-cyan-400"></div>
+            </div>
+        </div>
+        <div class="hidden sm:block text-right sm:text-left">
+            <div class="text-sm font-bold text-white flex items-center gap-1 justify-end sm:justify-start">@Alex</div>
+            <div class="text-[11px] text-amber-300 font-bold tracking-wide flex items-center gap-1 justify-end sm:justify-start">🪙 <span id="sPoints" class="tabular-nums">0</span></div>
+            <div class="text-[10px] text-cyan-300 uppercase font-bold text-right sm:text-left">Lvl 34</div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Middle: Responsive Game Board -->
+  <div class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 mb-4 relative z-0 flex flex-col justify-center">
+      <div id="stageBody" class="w-full h-full max-h-[75vh] relative overflow-hidden rounded-3xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)] glass-panel bg-ink2/90 flex flex-col transition-all duration-300">
+      </div>
+  </div>
+
+  <!-- Bottom: Universal Controls -->
+  <div class="shrink-0 w-full glass border-t border-white/5 pb-safe pt-2">
+      <div class="max-w-3xl mx-auto flex items-center justify-between px-6 py-2">
+          <!-- Left tools -->
+          <div class="flex gap-3">
+              <button class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-lg transition shadow-md border border-white/5" title="Reactions">😂</button>
+              <button class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-lg transition shadow-md border border-white/5 hidden sm:flex" title="Gift Creator">🎁</button>
+          </div>
+          
+          <!-- Core tools -->
+          <div class="flex gap-4">
+              <button id="sMuteBtn" onclick="toggleMute()" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-xl transition shadow-lg border border-white/10 backdrop-blur-md">🔊</button>
+              <button class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white flex items-center justify-center text-xl transition shadow-lg border border-rose-500/30 backdrop-blur-md" title="Mute Mic">🎤</button>
+          </div>
+          
+          <!-- Right tools -->
+          <div class="flex gap-3">
+              <button onclick="returnHome()" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-sm font-bold transition shadow-md border border-white/10 flex items-center gap-2">
+                  <span class="hidden sm:inline">Quit Game</span>
+                  <span class="sm:hidden">Quit</span> 
+                  <span class="text-rose-400 font-bold">✕</span>
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- ============ MODALS (data panel, consent) ============ -->
+<div id="modalRoot" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-back" onclick="if(event.target===this)closeModal()"></div>
+<!-- toasts -->
+<div id="toastWrap" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center gap-2 pointer-events-none"></div>
+
+<script>
+"use strict";
+/* ============================================================================
+   KELZA PLATFORM LOGIC (Zero trims from original)
+   Storage (consent-gated) → Ledger economy → Sound → GameHost/Cleanup → Games
+   ============================================================================ */
+
+/* ---------- STORAGE (consent-gated, client-side) ---------- */
+const STORE_KEY='playhive_v2';
+const Store={
+  consent:null,            // 'granted' | 'denied' | null
+  data:{ points:1000, creatorPoints:4820, history:[], plays:{}, records:{} }, // start bonus
+  _mem:null,
+  load(){
+    try{
+      const raw=localStorage.getItem(STORE_KEY+'_consent');
+      this.consent = raw?JSON.parse(raw):null;
+      if(this.consent==='granted'){
+        const d=localStorage.getItem(STORE_KEY);
+        if(d){ const p=JSON.parse(d); this.data=Object.assign(this.data,p); }
+      }
+    }catch(e){}
+  },
+  saveConsent(c){ this.consent=c; try{ localStorage.setItem(STORE_KEY+'_consent',JSON.stringify(c)); }catch(e){} if(c==='denied') this._mem=JSON.parse(JSON.stringify(this.data)); },
+  save(){ if(this.consent!=='granted') { this._mem=JSON.parse(JSON.stringify(this.data)); return; } try{ localStorage.setItem(STORE_KEY,JSON.stringify(this.data)); }catch(e){} },
+  get(k){ return (this.consent==='denied'&&this._mem)?this._mem[k]:this.data[k]; },
+  set(k,v){ this.data[k]=v; this.save(); },
+  reset(){ this.data={ points:1000, creatorPoints:4820, history:[], plays:{}, records:{} }; this._mem=JSON.parse(JSON.stringify(this.data)); this.save(); }
+};
+Store.load();
+
+/* ---------- ECONOMY (ledger-backed) ---------- */
+const Economy={
+  balance(){ return Store.get('points'); },
+  creatorBalance(){ return Store.get('creatorPoints'); },
+  txn(kind, amount, who, game, reason){
+    amount=Math.round(amount);
+    if(who==='user'||who==='both'){ Store.data.points += amount; }
+    if(who==='creator'||who==='both'){ Store.data.creatorPoints += amount; }
+    const entry={ t:Date.now(), kind, amount, who, game, reason, bal:Store.data.points };
+    const h=Store.data.history||[]; h.push(entry); if(h.length>300) h.shift();
+    Store.data.history=h; Store.save();
+    UI.refreshPoints();
+    return entry;
+  },
+  add(n,who,game,reason){ if(n===0)return; this.txn('earn',Math.abs(n),who,game,reason); },
+  bet(n,game,reason){ if(n<=0||n>this.balance())return false; this.txn('bet',-n,'user',game,reason); return true; },
+  win(n,game,reason){ if(n<=0)return; this.txn('win',n,'user',game,reason); },
+  lose(n,game,reason){ if(n>0)this.txn('lose',-n,'user',game,reason); },
+};
+
+/* ---------- SOUND ---------- */
+const Sound={
+  ctx:null, muted:Store.get('records').muted||false,
+  init(){ if(this.ctx)return; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} },
+  setMuted(m){ this.muted=m; const r=Store.data.records; r.muted=m; Store.save(); },
+  tone(freq,dur,type='square',vol=.06,slideTo){
+    if(this.muted||!this.ctx)return; const t=this.ctx.currentTime;
+    const o=this.ctx.createOscillator(),g=this.ctx.createGain();
+    o.type=type;o.frequency.setValueAtTime(freq,t);
+    if(slideTo)o.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
+    g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g);g.connect(this.ctx.destination);o.start(t);o.stop(t+dur+.02);
+  },
+  shoot(){this.tone(900,.05,'square',.03);},
+  click(){this.tone(520,.04,'triangle',.04);},
+  coin(){this.tone(880,.06,'triangle',.05,1320);},
+  flip(){this.tone(600,.05,'sine',.04);},
+  win(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>this.tone(f,.12,'triangle',.06),i*80)); },
+  lose(){ this.tone(220,.4,'sawtooth',.07,80); },
+  spin(){ this.tone(200,.4,'sawtooth',.04,600); },
+  explode(){ this.tone(120,.3,'sawtooth',.08,40); },
+  pop(){ this.tone(440,.08,'triangle',.05); },
+  splash(){ this.tone(700,.18,'sine',.05,300); },
+};
+
+/* ---------- UI (wallet, toasts, modal) ---------- */
+const UI={
+  refreshPoints(){
+    const b=Economy.balance();
+    const el=document.getElementById('pointsDisplay'); if(el){ el.textContent=b.toLocaleString(); el.classList.remove('wallet-pulse'); void el.offsetWidth; el.classList.add('wallet-pulse'); }
+    const sp=document.getElementById('sPoints'); if(sp) sp.textContent=b.toLocaleString();
+    renderLeaderboard();
+  },
+  toast(msg,icon='✨'){
+    const w=document.getElementById('toastWrap');
+    const t=document.createElement('div');
+    t.className='toast bg-ink2/95 border border-white/10 text-white text-sm font-semibold px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 glass-panel';
+    t.innerHTML=`<span class="text-lg">${icon}</span><span>${msg}</span>`;
+    w.appendChild(t);
+    setTimeout(()=>{ t.style.transition='all .4s cubic-bezier(0.34, 1.56, 0.64, 1)';t.style.opacity='0';t.style.transform='translateY(15px) scale(0.9)';setTimeout(()=>t.remove(),400); },2500);
+  },
+  floatPoints(x,y,text,color){
+    const f=document.createElement('div');
+    f.textContent=text; f.style.cssText=`position:absolute;left:${x}px;top:${y}px;color:${color};font-weight:900;font-family:Outfit,sans-serif;font-size:1.1rem;text-shadow:0 0 12px ${color};pointer-events:none;z-index:30;transition:all 1s ease-out;`;
+    document.body.appendChild(f);
+    requestAnimationFrame(()=>{ f.style.transform='translateY(-50px)';f.style.opacity='0'; });
+    setTimeout(()=>f.remove(),1000);
+  }
+};
+function toggleMute(){
+  Sound.setMuted(!Sound.muted);
+  const i=Sound.muted?'🔇':'🔊';
+  document.getElementById('muteBtn').textContent=i;
+  const sm=document.getElementById('sMuteBtn'); if(sm) sm.textContent=i;
+  UI.toast(Sound.muted?'Sound muted':'Sound enabled', Sound.muted?'🔇':'🔊');
+}
+document.getElementById('muteBtn').textContent = Sound.muted?'🔇':'🔊';
+
+/* ---------- MODAL ---------- */
+function openModal(html){
+  const r=document.getElementById('modalRoot');
+  r.innerHTML=`<div class="glass border border-white/10 rounded-3xl shadow-2xl max-w-lg w-full p-6 fade-in max-h-[88vh] overflow-auto">${html}</div>`;
+  r.classList.remove('hidden'); r.classList.add('flex');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){ const r=document.getElementById('modalRoot'); r.classList.add('hidden'); r.classList.remove('flex'); r.innerHTML=''; document.body.style.overflow=''; }
+
+/* ---------- DATA PANEL ---------- */
+function openDataPanel(){
+  const bal=Economy.balance(); const cb=Economy.creatorBalance();
+  const h=Store.data.history||[];
+  const recent=h.slice(-8).reverse();
+  const consentLabel = Store.consent==='granted'?'✅ Allowed — saved on this device':(Store.consent==='denied'?'⚠️ Not saved — in-memory only (cleared on reload)':'⏳ Not yet decided');
+  openModal(`
+    <div class="flex items-center justify-between mb-4"><h3 class="font-display font-black text-2xl text-white">🏆 Kelza Leaderboard & Data</h3><button onclick="closeModal()" class="w-8 h-8 grid place-items-center rounded-full bg-white/5 hover:bg-white/10 transition">✕</button></div>
+    <div class="text-xs text-slate-400 mb-6 leading-relaxed">Kelza stores your points and streaks <b class="text-slate-200">locally on your device</b>. Play together, earn together.</div>
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="glass-panel rounded-2xl p-4 border-l-4 border-l-cyan-500"><div class="text-[10px] text-slate-400 tracking-widest font-bold">YOUR POINTS</div><div class="font-display font-black text-2xl text-cyan-300 mt-1">${bal.toLocaleString()} 🪙</div></div>
+      <div class="glass-panel rounded-2xl p-4 border-l-4 border-l-purple-500"><div class="text-[10px] text-slate-400 tracking-widest font-bold">CREATOR POINTS</div><div class="font-display font-black text-2xl text-purple-300 mt-1">${cb.toLocaleString()} 🪙</div></div>
+    </div>
+    <div class="text-xs mb-3 font-semibold"><b>Storage:</b> <span class="text-slate-300">${consentLabel}</span></div>
+    <div class="flex gap-3 mb-6">
+      <button onclick="grantConsent()" class="flex-1 gbtn text-sm py-2.5 ${Store.consent==='granted'?'opacity-50':''}">Allow saving</button>
+      <button onclick="denyConsent()" class="flex-1 ghost-btn text-sm ${Store.consent==='denied'?'opacity-50':''}">Not now</button>
+    </div>
+    <div class="border-t border-white/10 pt-4">
+      <div class="text-xs font-bold text-slate-300 mb-3 tracking-wide uppercase">Recent Activity</div>
+      <div class="space-y-1.5 max-h-40 overflow-auto no-sb">
+        ${recent.length?recent.map(e=>`<div class="flex items-center justify-between text-xs py-1.5 border-b border-white/5"><span class="text-slate-400 font-medium">${new Date(e.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><span class="text-slate-200 truncate mx-2 flex-1 font-semibold">${e.game} · ${e.reason||e.kind}</span><span class="${e.amount>0?'text-emerald-400':'text-rose-400'} font-bold tabular-nums bg-white/5 px-2 py-0.5 rounded">${e.amount>0?'+':''}${e.amount}</span></div>`).join(''):'<div class="text-xs text-slate-500 italic">No activity yet. Start playing!</div>'}
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-5 mt-5">
+      <button onclick="resetAllData()" class="w-full py-2.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm font-bold hover:bg-rose-500/20 transition">🗑️ Reset all data</button>
+    </div>
+  `);
+}
+function grantConsent(){ Store.saveConsent('granted'); Store.save(); UI.toast('Saving enabled — your progress is safe','💾'); openDataPanel(); }
+function denyConsent(){ Store.saveConsent('denied'); UI.toast('In-memory only — data clears on reload','⚠️'); openDataPanel(); }
+function resetAllData(){
+  openModal(`<div class="text-center"><div class="text-6xl mb-4">⚠️</div><h3 class="font-display font-black text-2xl mb-2 text-white">Reset everything?</h3><p class="text-sm text-slate-400 mb-8">This clears all points, history, and streaks from this device. This cannot be undone.</p><div class="flex gap-4"><button onclick="closeModal()" class="flex-1 ghost-btn py-3">Cancel</button><button onclick="doReset()" class="flex-1 py-3 rounded-full bg-rose-500 hover:bg-rose-600 font-bold text-white transition shadow-lg shadow-rose-500/30">Yes, reset</button></div></div>`);
+}
+function doReset(){ Store.reset(); UI.refreshPoints(); closeModal(); UI.toast('All data reset','🗑️'); }
+
+/* ---------- CONSENT PROMPT (first run) ---------- */
+function maybeShowConsent(){
+  if(Store.consent!==null)return;
+  setTimeout(()=>{
+    const r=document.getElementById('modalRoot');
+    r.innerHTML=`<div class="glass border border-white/10 rounded-3xl shadow-2xl max-w-md w-full p-8 fade-in text-center relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-cyan-500"></div>
+      <div class="text-6xl mb-4 drop-shadow-lg">💾</div>
+      <h3 class="font-display font-black text-3xl mb-3 text-white">Save your progress?</h3>
+      <p class="text-sm text-slate-300 mb-8 leading-relaxed font-medium">Kelza can securely store your points, history and streaks <b class="text-white">locally on this device</b> so you never lose them. No servers involved.</p>
+      <div class="flex flex-col gap-3">
+        <button onclick="grantConsent();closeModal()" class="gbtn w-full py-3 text-lg shadow-lg">✅ Allow Saving</button>
+        <button onclick="denyConsent();closeModal()" class="ghost-btn w-full py-3">Not now</button>
+      </div>
+    </div>`;
+    r.classList.remove('hidden'); r.classList.add('flex');
+    document.body.style.overflow='hidden';
+  },1200);
+}
+
+/* ============================================================================
+   GAMEHOST + CleanupRegistry
+   ============================================================================ */
+function CleanupRegistry(){
+  const items=[];
+  return {
+    add(type,id,kill){ items.push({type,id,kill}); return id; },
+    raf(fn){ const id=requestAnimationFrame(function loop(t){ fn(t); const i=items.find(x=>x.id===rafId); if(i&&!i._dead) i._next=requestAnimationFrame(loop); }); const rafId=id; return id; },
+    simpleRaf(fn){ let id=requestAnimationFrame(fn); return this.add('raf',id,()=>cancelAnimationFrame(id)); },
+    interval(fn,ms){ const id=setInterval(fn,ms); return this.add('interval',id,()=>clearInterval(id)); },
+    timeout(fn,ms){ const id=setTimeout(fn,ms); return this.add('timeout',id,()=>clearTimeout(id)); },
+    on(target,type,fn,opts){ target.addEventListener(type,fn,opts); return this.add('listener',type+Math.random(),()=>target.removeEventListener(type,fn,opts)); },
+    observe(el,fn){ const ro=new ResizeObserver(fn); ro.observe(el); return this.add('ro',Math.random(),()=>ro.disconnect()); },
+    destroyAll(){ while(items.length){ const it=items.pop(); try{ it.kill&&it.kill(); }catch(e){} } }
+  };
+}
+
+const GameHost={
+  current:null, currentCleanup:null, currentMeta:null,
+  open(meta){
+    this.close();
+    Sound.init();
+    this.currentMeta=meta;
+    document.getElementById('hub').style.display='none';
+    const stage=document.getElementById('stage');
+    stage.classList.remove('hidden'); stage.classList.add('flex');
+    
+    // Header setup
+    const ic=document.getElementById('sIcon');
+    ic.className=`w-7 h-7 rounded-lg grid place-items-center text-base shrink-0 bg-gradient-to-br ${meta.color} shadow-md`;
+    ic.textContent=meta.icon;
+    document.getElementById('sTitle').textContent=meta.title;
+    document.getElementById('sRoom').textContent=meta.rooms.join(' · ');
+    document.getElementById('sMuteBtn').textContent=Sound.muted?'🔇':'🔊';
+    
+    const body=document.getElementById('stageBody');
+    body.innerHTML='';
+    
+    // Stats tracking
+    const plays=Store.data.plays||{}; plays[meta.id]=(plays[meta.id]||0)+1; Store.data.plays=plays; Store.save();
+    
+    // Mount game
+    const cleanup=new CleanupRegistry();
+    this.currentCleanup=cleanup;
+    const api=makeApi(meta,cleanup);
+    const wrap=document.createElement('div');
+    wrap.className='gscene w-full h-full flex flex-col absolute inset-0';
+    body.appendChild(wrap);
+    try{ this.current=meta.module.mount(wrap,api); }
+    catch(e){ console.error('Game mount error',e); wrap.innerHTML='<div class="m-auto text-rose-300 font-bold bg-rose-900/40 p-4 rounded-xl border border-rose-500/30">Game failed to load: '+e.message+'</div>'; }
+  },
+  close(){
+    if(this.currentCleanup){ try{ this.currentCleanup.destroyAll(); }catch(e){} this.currentCleanup=null; }
+    if(this.current&&this.current.destroy){ try{ this.current.destroy(); }catch(e){} }
+    this.current=null; this.currentMeta=null;
+    document.getElementById('stage').classList.add('hidden'); document.getElementById('stage').classList.remove('flex');
+    document.getElementById('stageBody').innerHTML='';
+    document.getElementById('hub').style.display='';
+    UI.refreshPoints();
+  }
+};
+function makeApi(meta,cleanup){
+  return {
+    meta,
+    sound:Sound,
+    container:null,
+    add(n,who,reason){ Economy.add(n,who,meta.title,reason); },
+    bet(n,reason){ const ok=Economy.bet(n,meta.title,reason); if(!ok)UI.toast('Not enough points!','⚠️'); return ok; },
+    win(n,reason){ Economy.win(n,meta.title,reason); },
+    lose(n,reason){ Economy.lose(n,meta.title,reason); },
+    balance(){ return Economy.balance(); },
+    toast:UI.toast,
+    float(x,y,t,c){ UI.floatPoints(x,y,t,c); },
+    on(target,type,fn,opts){ return cleanup.on(target,type,fn,opts); },
+    raf(fn){ let id; const loop=(t)=>{ fn(t); id=requestAnimationFrame(loop); cleanup.add('raf',Math.random(),()=>cancelAnimationFrame(id)); }; id=requestAnimationFrame(loop); return id; },
+    loop(fn){ let id, alive=true; const l=(t)=>{ if(!alive)return; fn(t); id=requestAnimationFrame(l); }; id=requestAnimationFrame(l); return ()=>{ alive=false; cancelAnimationFrame(id); }; },
+    interval(fn,ms){ return cleanup.interval(fn,ms); },
+    timeout(fn,ms){ return cleanup.timeout(fn,ms); },
+    observe(el,fn){ return cleanup.observe(el,fn); },
+    now(){ return performance.now(); },
+    rand(a,b){ return a+Math.random()*(b-a); },
+    shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; },
+    el(tag,cls,html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; },
+    canvas(){ const c=document.createElement('canvas'); c.className='absolute inset-0 w-full h-full block'; return c; },
+    fitCanvas(c){ 
+        const dpr=Math.min(devicePixelRatio||1,2); 
+        const p = c.parentElement; 
+        if(!p) return {w:0,h:0,ctx:null};
+        const r=p.getBoundingClientRect(); 
+        c.width=Math.max(1,r.width*dpr); 
+        c.height=Math.max(1,r.height*dpr); 
+        const ctx=c.getContext('2d'); 
+        ctx.setTransform(dpr,0,0,dpr,0,0); 
+        return {w:r.width,h:r.height,ctx}; 
+    },
+  };
+}
+function returnHome(){ GameHost.close(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!document.getElementById('stage').classList.contains('hidden')) returnHome(); });
+
+/* ============================================================================
+   SHARED GAME HELPERS
+   ============================================================================ */
+function gameTopBar(api,howto,hudHtml){
+  return `<div class="flex items-center justify-between gap-3 px-5 py-2.5 bg-black/40 border-b border-white/10 text-xs backdrop-blur-md z-10">
+    <div class="text-slate-200 min-w-0 truncate font-semibold">${howto||''}</div>
+    <div class="font-bold text-amber-300 tabular-nums whitespace-nowrap bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20 shadow-inner">${hudHtml||''}</div></div>`;
+}
+function bigBtn(text,cls){ const b=document.createElement('button'); b.className='gbtn '+(cls||''); b.textContent=text; return b; }
+function centerOverlay(html, extCls='bg-ink/85 backdrop-blur-md'){ const o=document.createElement('div'); o.className=`absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-8 gap-4 ${extCls}`; o.innerHTML=html; return o; }
+
+/* ============================================================================
+   CARD THUMBNAIL ANIMATIONS
+   ============================================================================ */
+function mountThumb(canvas,fn){
+  const ctx=canvas.getContext('2d'); const dpr=Math.min(devicePixelRatio||1,2);
+  let raf,t=0,alive=true;
+  function size(){ const r=canvas.getBoundingClientRect(); canvas.width=Math.max(1,r.width*dpr); canvas.height=Math.max(1,r.height*dpr); ctx.setTransform(dpr,0,0,dpr,0,0); }
+  size(); new ResizeObserver(size).observe(canvas);
+  function loop(){ 
+      if(!alive)return; 
+      t+=.016; 
+      const cw=canvas.clientWidth, ch=canvas.clientHeight; 
+      if(cw>0 && ch>0) fn(ctx,cw,ch,t); 
+      raf=requestAnimationFrame(loop); 
+  }
+  loop();
+  return ()=>{ alive=false; cancelAnimationFrame(raf); };
+}
+function rr(ctx,x,y,w,h,r){ 
+    w=Math.max(0,w); h=Math.max(0,h); r=Math.max(0,Math.min(r,w/2,h/2)); 
+    ctx.beginPath(); 
+    if(ctx.roundRect)ctx.roundRect(x,y,w,h,r); 
+    else {ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);} 
+}
+
+const T={
+  slots(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#2a0c30');g.addColorStop(1,'#0a0218');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); const syms=['7','♣','🍒','💎']; for(let i=0;i<3;i++){ const x=w*0.2+i*w*0.3; const off=(t*200+i*60)%60-30; ctx.fillStyle='rgba(255,255,255,.08)';rr(ctx,x-14,12,28,Math.max(0,h-24),4);ctx.fill(); ctx.fillStyle='#fbbf24';ctx.font='bold 18px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(syms[(Math.floor(t*2)+i)%4],x,h/2+off); } },
+  plinko(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#062a2a');g.addColorStop(1,'#021414');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); ctx.fillStyle='#22d3ee'; for(let r=0;r<4;r++)for(let c=0;c<=r;c++){ const x=w/2+(c-r/2)*16,y=20+r*16; ctx.beginPath();ctx.arc(x,y,2,0,6.28);ctx.fill(); } const bx=w/2+Math.sin(t*3)*w*0.3*(t%1),by=(t*80)%(h-20)+10; ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(bx,by,3,0,6.28);ctx.fill(); },
+  crash(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#062a18');g.addColorStop(1,'#02140a');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); ctx.strokeStyle='#a3e635';ctx.lineWidth=2;ctx.beginPath(); for(let x=0;x<w;x++){ const p=x/w; ctx.lineTo(x,h-(Math.pow(p,2.5)*(h-15)+10)); } ctx.stroke(); const cx=((t*0.5)%1)*w, cy=h-(Math.pow(((t*0.5)%1),2.5)*(h-15)+10); ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(cx,cy,4,0,6.28);ctx.fill(); },
+  fish(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#062030');g.addColorStop(1,'#020c14');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); const fish=[['🐟',1.2],['🐠',0.8],['🐡',1.6]]; fish.forEach((f,i)=>{ const x=((t*40*f[1]+i*60)%(w+60))-30, y=h*0.25+i*h*0.25; ctx.font='18px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(f[0],x,y); }); ctx.fillStyle='rgba(251,191,36,.5)';ctx.beginPath();ctx.arc(w*0.8,h*0.5,Math.max(0,3+Math.sin(t*8)*2),0,6.28);ctx.fill(); },
+  cards(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1a0830');g.addColorStop(1,'#0a0418');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); const ranks=['A','K','Q']; for(let i=0;i<3;i++){ const x=w*0.25+i*w*0.25, y=h*0.5+Math.sin(t*2+i)*5; const flip=Math.sin(t*1.5+i)>0; ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(t+i)*0.1); if(flip){ctx.fillStyle='#fff';rr(ctx,-12,-16,24,32,4);ctx.fill();ctx.fillStyle='#ec4899';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(ranks[i],0,0);} else {ctx.fillStyle='#a855f7';rr(ctx,-12,-16,24,32,4);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-10,-14);ctx.lineTo(10,14);ctx.moveTo(10,-14);ctx.lineTo(-10,14);ctx.stroke();} ctx.restore(); } },
+  brick(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#0a1838');g.addColorStop(1,'#04081a');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); const cols=['#ec4899','#8b5cf6','#06b6d4','#84cc16']; const bw=Math.max(0,(w-8)/5-2); for(let r=0;r<2;r++)for(let c=0;c<5;c++){ ctx.fillStyle=cols[(r+c)%4];rr(ctx,4+c*((w-8)/5),6+r*8,bw,6,2);ctx.fill(); } ctx.fillStyle='#06b6d4';ctx.fillRect(w/2-12,h-8,24,3); ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(w/2+Math.sin(t*2)*30,h*0.6,3,0,6.28);ctx.fill(); },
+  survival(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#0a1840');g.addColorStop(1,'#04060f');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);for(let i=0;i<12;i++){const x=(i*53)%w,y=(i*31+t*30)%h;ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillRect(x,y,1.5,1.5);}const sx=w/2+Math.sin(t*1.5)*w*0.25,sy=h*0.7;ctx.fillStyle='#06b6d4';ctx.shadowColor='#06b6d4';ctx.shadowBlur=12;ctx.beginPath();ctx.moveTo(sx,sy-8);ctx.lineTo(sx+7,sy+7);ctx.lineTo(sx-7,sy+7);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#ec4899';ctx.beginPath();ctx.arc(w/2+Math.cos(t)*w*0.3,h*0.25,6,0,6.28);ctx.fill(); },
+  polls(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1a0a30');g.addColorStop(1,'#0a0418');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);const bars=[{c:'#8b5cf6',v:.5+Math.sin(t)*.15},{c:'#ec4899',v:.35+Math.cos(t*1.3)*.1},{c:'#06b6d4',v:.2+Math.sin(t*.7)*.08}];const bw=Math.max(0,w*0.18),gap=Math.max(0,w-bw*3)/4;bars.forEach((b,i)=>{const x=gap+(bw+gap)*i,bh=Math.max(0,h*0.55*b.v),y=h*0.85-bh;ctx.fillStyle=b.c;ctx.shadowColor=b.c;ctx.shadowBlur=12;rr(ctx,x,y,bw,bh,6);ctx.fill();ctx.shadowBlur=0;}); },
+  tug(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#2a1208');g.addColorStop(1,'#0a0402');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);const off=Math.sin(t*2)*w*0.15;ctx.strokeStyle='#f59e0b';ctx.lineWidth=3;ctx.shadowColor='#f59e0b';ctx.shadowBlur=8;ctx.beginPath();ctx.moveTo(0,h/2);ctx.quadraticCurveTo(w/2+off,h/2-15,w,h/2);ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#ec4899';ctx.beginPath();ctx.arc(w/2+off,h/2-3,6,0,6.28);ctx.fill();ctx.font='20px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🤜',16,h/2);ctx.fillText('🤛',w-16,h/2); },
+  reaction(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const f=Math.sin(t*2)>.85;ctx.fillStyle=f?'#22c55e':'#0e1a2e';ctx.fillRect(0,0,w,h);if(f){ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('TAP!',w/2,h/2);}else{ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(w/2,h/2,Math.max(0,h*0.28),0,6.28);ctx.stroke();} },
+  trivia(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1a0830');g.addColorStop(1,'#0a0418');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.fillStyle='rgba(255,255,255,.15)';ctx.font='bold 40px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('?',w/2,h*0.4);[{l:'A',c:'#8b5cf6',x:.2,y:.3},{l:'B',c:'#ec4899',x:.7,y:.4},{l:'C',c:'#06b6d4',x:.4,y:.7}].forEach((it,i)=>{const x=it.x*w,y=it.y*h+Math.sin(t*1.5+i)*6;ctx.fillStyle=it.c;ctx.shadowColor=it.c;ctx.shadowBlur=10;ctx.globalAlpha=.85;ctx.beginPath();ctx.arc(x,y,10,0,6.28);ctx.fill();ctx.globalAlpha=1;ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.fillText(it.l,x,y);}); },
+  charades(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#2a0820');g.addColorStop(1,'#0a0208');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);['🍕','🎬','🔥','⭐'].forEach((e,i)=>{const x=w*0.25+(i%2)*w*0.5,y=h*0.3+Math.floor(i/2)*h*0.4,s=1+Math.sin(t*2+i)*0.1;ctx.font=`${18*s}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(e,x,y);}); },
+  price(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#062a20');g.addColorStop(1,'#021410');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.fillStyle='#84cc16';ctx.font='24px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎁',w/2,h*0.32);ctx.fillStyle='#fff';ctx.font='bold 16px sans-serif';ctx.fillText('$'+(Math.floor((Math.sin(t)+1)*50)+10),w/2,h*0.65); },
+  streak(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#2a1000');g.addColorStop(1,'#0a0400');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);const s=1+Math.sin(t*4)*0.15;ctx.save();ctx.translate(w/2,h*0.4);ctx.scale(s,s);ctx.font='30px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🔥',0,0);ctx.restore();ctx.fillStyle='#f59e0b';ctx.font='bold 14px sans-serif';ctx.fillText('Day '+(5+Math.floor((Math.sin(t*0.5)+1)*3)),w/2,h*0.75); },
+  memory(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#0a1838');g.addColorStop(1,'#040818');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);const em=['🌟','🎮','🎵','💎'];for(let i=0;i<4;i++){const x=w*0.25+(i%2)*w*0.5,y=h*0.3+Math.floor(i/2)*h*0.4;if(Math.sin(t*1.2+i*0.8)>0){ctx.font='18px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(em[i],x,y);}else{ctx.fillStyle='#8b5cf6';rr(ctx,x-14,y-14,28,28,5);ctx.fill();}} },
+  scramble(ctx,w,h,t){ ctx.clearRect(0,0,w,h);const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#062030');g.addColorStop(1,'#020c14');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);['P','L','A','Y'].forEach((l,i)=>{const x=w*0.2+i*w*0.2,y=h*0.5+Math.sin(t*2+i*0.5)*6;ctx.fillStyle='#06b6d4';ctx.shadowColor='#06b6d4';ctx.shadowBlur=8;rr(ctx,x-10,y-10,20,20,4);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#06040d';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(l,x,y);}); },
+  connect4(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1e3a8a');g.addColorStop(1,'#172554');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); ctx.fillStyle='#3b82f6'; ctx.shadowColor='#60a5fa'; ctx.shadowBlur=15; rr(ctx,10,20,Math.max(0,w-20),Math.max(0,h-30),8); ctx.fill(); ctx.shadowBlur=0; const s=Math.max(0,(w-40)/7); const rad=Math.max(0,s*0.35); for(let r=0;r<6;r++)for(let c=0;c<7;c++){ const cx=20+s/2+c*s, cy=30+s/2+r*Math.max(0,h-50)/6; ctx.beginPath();ctx.arc(cx,cy,rad,0,6.28); if((r==5&&c==3) || (r==4&&c==3)) ctx.fillStyle='#ef4444'; else if((r==5&&c==4) || (r==5&&c==2)) ctx.fillStyle='#eab308'; else ctx.fillStyle='#1e3a8a'; ctx.fill(); } const by=20-Math.abs(Math.sin(t*3)*15); ctx.fillStyle='#ef4444'; ctx.beginPath(); ctx.arc(20+s/2+3*s, Math.max(0,by), rad,0,6.28); ctx.fill();},
+  chest(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#451a03');g.addColorStop(1,'#2c1002');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); ctx.font = (30 + Math.sin(t*4)*5) + 'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('📦', w/2, h/2-10); ctx.fillStyle='#fbbf24'; ctx.shadowColor='#fbbf24'; ctx.shadowBlur=15; ctx.font='bold 16px sans-serif'; ctx.fillText('2.5x', w/2, h/2+25); },
+  tod(ctx,w,h,t){ ctx.clearRect(0,0,w,h); const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#4c1d95');g.addColorStop(1,'#2e1065');ctx.fillStyle=g;ctx.fillRect(0,0,w,h); ctx.save(); ctx.translate(w/2-15, h/2+Math.sin(t*2)*5); ctx.rotate(-0.2); ctx.fillStyle='#ec4899'; rr(ctx,-15,-20,30,40,4); ctx.fill(); ctx.fillStyle='#fff'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center'; ctx.fillText('DARE',0,0); ctx.restore(); ctx.save(); ctx.translate(w/2+15, h/2+Math.cos(t*2)*5); ctx.rotate(0.1); ctx.fillStyle='#06b6d4'; rr(ctx,-15,-20,30,40,4); ctx.fill(); ctx.fillStyle='#fff'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center'; ctx.fillText('TRUTH',0,0); ctx.restore(); }
+};
+
+/* ============================================================================
+   THE GAMES — each: { meta:{...}, mount(container,api)->{destroy} }
+   ============================================================================ */
+const GAMES=[];
+
+function reg(id,title,icon,color,rooms,module,thumbFn){
+  GAMES.push({ id,title,icon,color,rooms,module,thumb:thumbFn });
+}
+
+/* 1. SLOTS */
+reg('slots','Slots','🎰','from-amber-500 to-pink-600',['🎰 Casino'], {
+  mount(c,api){
+    c.innerHTML = `
+      <div class="flex-1 flex flex-col items-center justify-center p-6 gap-6 relative">
+        <div class="text-center z-10"><div class="font-display font-black text-3xl text-white drop-shadow-md">🎰 NEON SLOTS</div><div class="text-xs text-slate-300">Match 3 symbols · 🐝🐝🐝 = JACKPOT</div></div>
+        <div class="flex gap-4 p-5 rounded-[2rem] bg-black/60 border border-amber-500/40 shadow-[0_0_40px_rgba(245,158,11,0.15)] z-10 backdrop-blur-md relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
+          <div class="reel w-20 h-28 sm:w-28 sm:h-36 bg-gradient-to-b from-white/10 to-white/5 rounded-2xl overflow-hidden border border-white/20 relative shadow-inner"><div class="reel-strip absolute inset-x-0 flex flex-col items-center" style="font-size:3rem;line-height:9rem;text-align:center;"></div></div>
+          <div class="reel w-20 h-28 sm:w-28 sm:h-36 bg-gradient-to-b from-white/10 to-white/5 rounded-2xl overflow-hidden border border-white/20 relative shadow-inner"><div class="reel-strip absolute inset-x-0 flex flex-col items-center" style="font-size:3rem;line-height:9rem;text-align:center;"></div></div>
+          <div class="reel w-20 h-28 sm:w-28 sm:h-36 bg-gradient-to-b from-white/10 to-white/5 rounded-2xl overflow-hidden border border-white/20 relative shadow-inner"><div class="reel-strip absolute inset-x-0 flex flex-col items-center" style="font-size:3rem;line-height:9rem;text-align:center;"></div></div>
+        </div>
+        <div class="flex flex-col items-center gap-4 z-10">
+          <div class="flex items-center gap-3"><span class="text-xs text-slate-300 font-bold tracking-widest">BET</span>
+            <button class="bet-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold text-xl shadow-md border border-white/10" data-d="-1">−</button>
+            <div class="bg-black/50 border border-amber-500/50 rounded-xl px-6 py-2.5 font-display font-black text-2xl text-amber-300 tabular-nums min-w-[100px] text-center shadow-inner"><span id="slotsBet">10</span> 🪙</div>
+            <button class="bet-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold text-xl shadow-md border border-white/10" data-d="1">+</button>
+          </div>
+          <button id="spinBtn" class="gbtn text-xl px-14 py-4 rounded-full shadow-[0_10px_30px_rgba(245,158,11,0.4)] hover:shadow-[0_15px_40px_rgba(245,158,11,0.6)] border border-amber-300/30">SPIN 🎡</button>
+          <div id="slotsMsg" class="text-base font-bold text-white h-6 drop-shadow-md"></div>
+        </div>
+        <div class="absolute bottom-4 left-0 w-full flex justify-center z-10">
+            <div class="grid grid-cols-2 gap-x-8 gap-y-1.5 text-[10px] text-slate-300 max-w-sm glass-panel px-6 py-3 rounded-2xl border border-white/5 font-semibold">
+            <div>🐝🐝🐝 <span class="text-amber-400 font-bold">x100 JACKPOT</span></div><div>777 <span class="text-amber-400 font-bold">x50</span></div>
+            <div>🍒🍒🍒 <span class="text-emerald-400">x20</span></div><div>🍒🍒 <span class="text-emerald-400">x3</span></div>
+            <div>♣♣♣ <span class="text-emerald-400">x15</span></div><div>💎💎💎 <span class="text-emerald-400">x30</span></div>
+            </div>
+        </div>
+      </div>`;
+    const SYMS=['7','♣','🍒','💎','🐝','BAR'];
+    let bet=10, spinning=false;
+    const reels=[...c.querySelectorAll('.reel')];
+    const strips=[...c.querySelectorAll('.reel-strip')];
+    const betEl=c.querySelector('#slotsBet'), msgEl=c.querySelector('#slotsMsg'), spinBtn=c.querySelector('#spinBtn');
+    const CELLS=30;
+    strips.forEach(s=>{ let h=''; for(let i=0;i<CELLS;i++) h+=`<div>${SYMS[Math.floor(Math.random()*SYMS.length)]}</div>`; s.innerHTML=h; });
+    function setBet(n){ bet=Math.max(10,Math.min(api.balance(),n)); betEl.textContent=bet; }
+    c.querySelectorAll('.bet-chg').forEach(b=>b.addEventListener('click',()=>{ setBet(bet+(+b.dataset.d)*10); api.sound.click(); }));
+    function centerCell(strip, reel, cellIdx){
+      const cellH = strip.firstElementChild.offsetHeight || (reel.clientHeight > 120 ? 144 : 112); // Handle responsive sizing
+      const reelH = reel.clientHeight;
+      return -(cellIdx*cellH) + (reelH/2 - cellH/2);
+    }
+    function spin(){
+      if(spinning)return;
+      if(!api.bet(bet,'slots spin'))return;
+      spinning=true; spinBtn.disabled=true; msgEl.textContent=''; api.sound.spin();
+      const results=[0,1,2].map(()=>SYMS[Math.floor(Math.random()*SYMS.length)]);
+      let done=0;
+      reels.forEach((reel,i)=>{
+        const strip=strips[i]; const cells=strip.children;
+        const targetIdx = CELLS-3;
+        cells[targetIdx].textContent = results[i];
+        for(let k=0;k<targetIdx;k++) cells[k].textContent = SYMS[Math.floor(Math.random()*SYMS.length)];
+        const startY = 0;
+        const endY = centerCell(strip, reel, targetIdx);
+        const dur = 1100 + i*450;
+        const start = performance.now();
+        const stop=api.loop((now)=>{
+          const t=Math.min(1,(now-start)/dur);
+          const e = 1-Math.pow(1-t,3);
+          strip.style.transform=`translateY(${startY + (endY-startY)*e}px)`;
+          if(t>=1){ strip.style.transform=`translateY(${endY}px)`; stop(); done++; api.sound.pop(); if(done===3) finish(results); }
+        });
+      });
+    }
+    function finish(results){
+      spinning=false; spinBtn.disabled=false;
+      let mult=0, msg='';
+      const [a,b,d]=results;
+      if(a===b&&b===d){ if(a==='🐝'){mult=100;msg='🎰 JACKPOT! 🐝';} else if(a==='7'){mult=50;msg='777 BIG WIN!';} else if(a==='💎'){mult=30;msg='💎 TRIPLE!';} else if(a==='🍒'){mult=20;msg='🍒 TRIPLE!';} else if(a==='♣'){mult=15;msg='♣♣♣!';} else {mult=10;msg='TRIPLE!';} }
+      else if((a==='🍒'&&b==='🍒')||(b==='🍒'&&d==='🍒')||(a==='🍒'&&d==='🍒')){ mult=3; msg='🍒🍒 pair!'; }
+      else if(a==='🍒'||b==='🍒'||d==='🍒'){ mult=1; msg='🍒 single'; }
+      if(mult>0){ const win=bet*mult; api.win(win,'slots '+msg); msgEl.innerHTML=`<span class="text-emerald-400">🎉 ${msg} +${win} 🪙</span>`; api.sound.win(); api.toast(`${msg} +${win}🪙`,'🎉'); }
+      else { msgEl.innerHTML=`<span class="text-rose-400">No match — try again!</span>`; api.sound.lose(); }
+      setBet(bet);
+    }
+    spinBtn.addEventListener('click',spin);
+    setBet(10);
+    return { destroy(){} };
+  }
+}, T.slots);
+
+/* 2. PLINKO */
+reg('plinko','Plinko','🎾','from-cyan-500 to-blue-600',['🎰 Casino'], {
+  mount(c,api){
+    const top=gameTopBar(api,'Tap DROP to release the ball · lands in a multiplier bucket','Bet: <span id="plBet">10</span> 🪙');
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full">${top}<div id="plStage" class="flex-1 relative bg-gradient-to-b from-cyan-950/20 to-transparent overflow-hidden"></div>
+      <div class="flex items-center justify-center gap-4 p-4 glass border-t-0 flex-none shrink-0 z-10">
+        <button class="pl-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold shadow-md border border-white/10" data-d="-1">−</button>
+        <div class="bg-black/40 border border-cyan-500/40 rounded-xl px-5 py-2 font-display font-black text-xl text-cyan-300 tabular-nums min-w-[90px] text-center shadow-inner"><span id="plBet2">10</span> 🪙</div>
+        <button class="pl-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold shadow-md border border-white/10" data-d="1">+</button>
+        <button id="plDrop" class="gbtn px-8">DROP 🎾</button>
+      </div></div>`;
+    const stage=c.querySelector('#plStage');
+    const canvas=api.canvas(); stage.appendChild(canvas);
+    let {w,h,ctx}=api.fitCanvas(canvas);
+    api.observe(canvas,()=>{ ({w,h,ctx}=api.fitCanvas(canvas)); buildPegs(); draw(); });
+    const ROWS=9;
+    const BUCKETS=[10,3,1.5,1,0.5,1,1.5,3,10];
+    let bet=10;
+    let pegs=[], balls=[];
+    function buildPegs(){
+      pegs=[]; const margin=w*0.12;
+      for(let r=0;r<ROWS;r++){ const cnt=r+2; const y=Math.max(40, h*0.15)+r*((h-Math.max(40, h*0.15)-40)/ROWS); const startX=w/2-(cnt-1)/2*(w*0.76/ROWS); for(let i=0;i<cnt;i++){ pegs.push({x:startX+i*(w*0.76/ROWS),y,r}); } }
+    }
+    buildPegs();
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle='rgba(255,255,255,.6)'; ctx.shadowColor='#06b6d4'; ctx.shadowBlur=8;
+      for(const p of pegs){ ctx.beginPath(); ctx.arc(p.x,p.y,5,0,6.28); ctx.fill(); }
+      ctx.shadowBlur=0;
+      const by=h-35; const bw=w/BUCKETS.length;
+      BUCKETS.forEach((m,i)=>{
+        const x=i*bw;
+        const col = m>=3?'#f59e0b':m>=1.5?'#84cc16':m>=1?'#06b6d4':'#f43f5e';
+        ctx.fillStyle=col+'44'; ctx.fillRect(x+2,by,bw-4,35);
+        ctx.fillStyle=col; ctx.font='bold 12px Outfit,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(m+'x', x+bw/2, by+17);
+      });
+      for(const b of balls){
+        ctx.fillStyle='#fff'; ctx.shadowColor='#f59e0b'; ctx.shadowBlur=12;
+        ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,6.28); ctx.fill();
+        ctx.shadowBlur=0;
+      }
+    }
+    function drop(){
+      if(!api.bet(bet,'plinko drop'))return;
+      api.sound.spin();
+      balls.push({x:w/2+api.rand(-10,10),y:15,vx:0,vy:0,r:8});
+    }
+    function physics(dt){
+      for(let i=balls.length-1;i>=0;i--){
+        const b=balls[i]; b.vy+=900*dt; b.x+=b.vx*dt; b.y+=b.vy*dt; b.vx*=0.99;
+        for(const p of pegs){
+          const dx=b.x-p.x,dy=b.y-p.y,d=Math.hypot(dx,dy);
+          if(d<b.r+5){ const nx=dx/d,ny=dy/d; b.x=p.x+nx*(b.r+5); b.y=p.y+ny*(b.r+5);
+            const dot=b.vx*nx+b.vy*ny; b.vx-=2*dot*nx; b.vy-=2*dot*ny;
+            b.vx+=api.rand(-50,50); b.vx*=0.75; b.vy*=0.75; api.sound.pop(); }
+        }
+        if(b.x<8){b.x=8;b.vx=Math.abs(b.vx)*0.7;} if(b.x>w-8){b.x=w-8;b.vx=-Math.abs(b.vx)*0.7;}
+        if(b.y>h-35){ const idx=Math.min(BUCKETS.length-1,Math.max(0,Math.floor(b.x/(w/BUCKETS.length)))); const mult=BUCKETS[idx]; const winN=Math.round(bet*mult); api.win(winN,`plinko ${mult}x`); api.toast(`${mult}x · +${winN}🪙`,'🎾'); api.sound.coin(); balls.splice(i,1); }
+      }
+    }
+    api.loop((t)=>{ const dt=0.016; physics(dt); draw(); });
+    function setBet(n){ bet=Math.max(10,Math.min(api.balance(),n)); c.querySelector('#plBet').textContent=bet; c.querySelector('#plBet2').textContent=bet; }
+    c.querySelectorAll('.pl-chg').forEach(b=>b.addEventListener('click',()=>{ setBet(bet+(+b.dataset.d)*10); api.sound.click(); }));
+    c.querySelector('#plDrop').addEventListener('click',drop);
+    setBet(10);
+    return { destroy(){} };
+  }
+}, T.plinko);
+
+/* 3. CRASH */
+reg('crash','Crash','📈','from-lime-400 to-emerald-600',['🎰 Casino'], {
+  mount(c,api){
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full">
+      <div class="flex-1 relative bg-gradient-to-b from-emerald-950/20 to-transparent overflow-hidden" id="crStage"></div>
+      <div class="flex items-center justify-center gap-4 p-4 glass border-t-0 flex-none shrink-0 z-10 flex-wrap">
+        <div class="flex items-center gap-2"><button class="cr-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold shadow-md border border-white/10" data-d="-1">−</button>
+        <div class="bg-black/40 border border-lime-500/40 rounded-xl px-5 py-2 font-display font-black text-xl text-lime-300 tabular-nums min-w-[90px] text-center shadow-inner"><span id="crBet">10</span> 🪙</div>
+        <button class="cr-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold shadow-md border border-white/10" data-d="1">+</button></div>
+        <button id="crStart" class="gbtn px-8">BET & FLY 🚀</button>
+        <button id="crCash" class="px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 font-bold text-white shadow-[0_4px_15px_rgba(245,158,11,0.5)] transition disabled:opacity-40 disabled:cursor-not-allowed" disabled>CASH OUT</button>
+      </div></div>`;
+    const stage=c.querySelector('#crStage');
+    const canvas=api.canvas(); stage.appendChild(canvas);
+    let {w,h,ctx}=api.fitCanvas(canvas);
+    api.observe(canvas,()=>{ ({w,h,ctx}=api.fitCanvas(canvas)); draw(); });
+    let bet=10, flying=false, crashed=false, mult=1.0, startT=0, crashAt=2.0, history=[2.1,1.4,3.8,1.02,5.6], pts=[];
+    const betEl=c.querySelector('#crBet'), startBtn=c.querySelector('#crStart'), cashBtn=c.querySelector('#crCash');
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      ctx.strokeStyle='rgba(132,204,22,.1)'; ctx.lineWidth=1;
+      for(let i=0;i<10;i++){ ctx.beginPath(); ctx.moveTo(0,h*i/10); ctx.lineTo(w,h*i/10); ctx.stroke(); ctx.beginPath(); ctx.moveTo(w*i/10,0); ctx.lineTo(w*i/10,h); ctx.stroke(); }
+      if(pts.length>1){ ctx.strokeStyle= crashed?'#f43f5e':'#84cc16'; ctx.lineWidth=4; ctx.shadowColor=crashed?'#f43f5e':'#84cc16'; ctx.shadowBlur=15; ctx.beginPath(); pts.forEach((p,i)=>{ i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y); }); ctx.stroke(); ctx.shadowBlur=0;
+        const last=pts[pts.length-1]; ctx.fillStyle=crashed?'#f43f5e':'#84cc16'; ctx.beginPath(); ctx.arc(last.x,last.y,6,0,6.28); ctx.fill();
+        ctx.font='24px sans-serif'; ctx.fillText('🚀', last.x+15, last.y);
+      }
+      ctx.fillStyle= crashed?'#f43f5e':'#84cc16'; ctx.font='bold 56px Outfit,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.shadowColor=crashed?'#f43f5e':'#84cc16'; ctx.shadowBlur=20;
+      ctx.fillText(mult.toFixed(2)+'x', w/2, h*0.35); ctx.shadowBlur=0;
+      if(flying){ ctx.fillStyle='#84cc16'; ctx.font='bold 16px Space Grotesk'; ctx.fillText('Flying... Get ready to cash out!',w/2,h*0.48); }
+      if(crashed){ ctx.fillStyle='#f43f5e'; ctx.font='bold 28px Outfit'; ctx.fillText('💥 CRASHED',w/2,h*0.5); }
+      ctx.fillStyle='#94a3b8'; ctx.font='bold 12px Space Grotesk'; ctx.textAlign='left';
+      history.slice(-6).forEach((m,i)=>{ ctx.fillText(m.toFixed(2)+'x', 15, 20+i*20); });
+    }
+    function start(){
+      if(flying)return;
+      if(!api.bet(bet,'crash bet'))return;
+      flying=true; crashed=false; mult=1.0; pts=[]; startT=api.now();
+      crashAt = Math.max(1.0, 1/Math.random()); 
+      if(crashAt>20)crashAt=20;
+      startBtn.disabled=true; cashBtn.disabled=false;
+      api.sound.spin();
+    }
+    function cashout(){
+      if(!flying||crashed)return;
+      const winN=Math.round(bet*mult);
+      api.win(winN,`crash cashout ${mult.toFixed(2)}x`);
+      api.toast(`Cashed ${mult.toFixed(2)}x · +${winN}🪙`,'💰');
+      api.sound.win();
+      flying=false; startBtn.disabled=false; cashBtn.disabled=true; pts=[]; history.push(mult); if(history.length>20)history.shift();
+      draw();
+    }
+    api.loop((t)=>{
+      if(flying&&!crashed){
+        const elapsed=(api.now()-startT)/1000;
+        mult = Math.pow(1.07, elapsed*8);
+        const px = Math.min(0.95, elapsed/4)*w;
+        const py = h - Math.min(0.9,Math.pow(mult/10,0.5))*h*0.85;
+        pts.push({x:px,y:py}); if(pts.length>200)pts.shift();
+        if(mult>=crashAt){ crashed=true; flying=false; startBtn.disabled=false; cashBtn.disabled=true; api.sound.explode(); api.toast(`💥 Crashed @ ${mult.toFixed(2)}x`,'💥'); history.push(mult); if(history.length>20)history.shift(); setTimeout(()=>{pts=[];},1500); }
+      }
+      draw();
+    });
+    function setBet(n){ bet=Math.max(10,Math.min(api.balance(),n)); betEl.textContent=bet; }
+    c.querySelectorAll('.cr-chg').forEach(b=>b.addEventListener('click',()=>{ setBet(bet+(+b.dataset.d)*10); api.sound.click(); }));
+    startBtn.addEventListener('click',start); cashBtn.addEventListener('click',cashout);
+    setBet(10);
+    return { destroy(){} };
+  }
+}, T.crash);
+
+/* 4. FISH HUNTER */
+reg('fish','Fish Hunter','🐟','from-cyan-500 to-teal-600',['🐟 Fish'], {
+  mount(c,api){
+    const top=gameTopBar(api,'Tap/click to fire · Bigger fish = bigger payout 🐟','🪙 <span id="fhScore">0</span> · ⏱️ <span id="fhTime">30</span>s');
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full">${top}<div id="fhStage" class="flex-1 relative bg-gradient-to-b from-cyan-950/30 to-transparent overflow-hidden cursor-crosshair"></div></div>`;
+    const stage=c.querySelector('#fhStage');
+    const canvas=api.canvas(); stage.appendChild(canvas);
+    let {w,h,ctx}=api.fitCanvas(canvas);
+    api.observe(canvas,()=>{ ({w,h,ctx}=api.fitCanvas(canvas)); });
+    const FISH=[{e:'🐟',hp:1,val:5,sz:1},{e:'🐠',hp:2,val:12,sz:1.2},{e:'🐡',hp:3,val:25,sz:1.4},{e:'🐙',hp:5,val:60,sz:1.8}];
+    let fish=[], bullets=[], parts=[], score=0, time=30, running=false, spawnT=0, lastT=0;
+    function spawn(){
+      const def=FISH[Math.floor(Math.random()*FISH.length)];
+      const dir=Math.random()<0.5?1:-1;
+      fish.push({ ...def, x:dir>0?-30:w+30, y:api.rand(40,h-40), vx:dir*api.rand(40,90), vy:api.rand(-15,15), hp:def.hp, maxHp:def.hp });
+    }
+    function fire(x,y){
+      const sx=w/2, sy=h-15;
+      const ang=Math.atan2(y-sy,x-sx);
+      bullets.push({x:sx,y:sy,vx:Math.cos(ang)*600,vy:Math.sin(ang)*600,r:5});
+      api.sound.shoot();
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle='rgba(6,182,212,.03)';
+      for(let i=0;i<4;i++){ ctx.fillRect(0,(i*100+performance.now()*0.02)%h,w,2); }
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      for(const f of fish){ ctx.font=`${f.sz*36}px sans-serif`; const flipped=f.vx<0; ctx.save(); ctx.translate(f.x,f.y); if(flipped)ctx.scale(-1,1); ctx.fillText(f.e,0,0); ctx.restore();
+        if(f.hp<f.maxHp){ ctx.fillStyle='rgba(0,0,0,.5)'; ctx.fillRect(f.x-15,f.y-f.sz*22,30,4); ctx.fillStyle='#84cc16'; ctx.fillRect(f.x-15,f.y-f.sz*22,30*(f.hp/f.maxHp),4); }
+      }
+      ctx.fillStyle='#f59e0b'; ctx.shadowColor='#f59e0b'; ctx.shadowBlur=15; ctx.beginPath(); ctx.arc(w/2,h-15,20,0,6.28); ctx.fill(); ctx.shadowBlur=0;
+      for(const b of bullets){ ctx.fillStyle='#f59e0b'; ctx.shadowColor='#f59e0b'; ctx.shadowBlur=10; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,6.28); ctx.fill(); ctx.shadowBlur=0; }
+      for(const p of parts){ ctx.globalAlpha=Math.max(0,p.l/p.m); ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,Math.max(0,p.r),0,6.28); ctx.fill(); } ctx.globalAlpha=1;
+    }
+    function burst(x,y,c,n=10){ for(let i=0;i<n;i++){ const a=Math.random()*6.28,s=Math.random()*180+40; parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:.5+Math.random()*.4,m:.9,c,r:3}); } }
+    function update(dt){
+      if(!running)return;
+      time-=dt; c.querySelector('#fhTime').textContent=Math.max(0,Math.ceil(time));
+      if(time<=0){ endRound(); return; }
+      spawnT-=dt; if(spawnT<=0){ spawn(); spawnT=Math.max(0.3,1.0-score*0.001); }
+      for(let i=bullets.length-1;i>=0;i--){ const b=bullets[i]; b.x+=b.vx*dt; b.y+=b.vy*dt; if(b.x<-10||b.x>w+10||b.y<-10||b.y>h+10){bullets.splice(i,1);continue;}
+        for(let j=fish.length-1;j>=0;j--){ const f=fish[j]; if(Math.hypot(b.x-f.x,b.y-f.y)<f.sz*18){ bullets.splice(i,1); f.hp--; burst(b.x,b.y,'#f59e0b',4); if(f.hp<=0){ score+=f.val; api.win(f.val,`fish ${f.e}`); burst(f.x,f.y,'#06b6d4',16); api.sound.coin(); c.querySelector('#fhScore').textContent=score; fish.splice(j,1); } else api.sound.pop(); break; } } }
+      for(const f of fish){ f.x+=f.vx*dt; f.y+=f.vy*dt; if(f.y<20||f.y>h-20)f.vy*=-1; if(f.x<-50||f.x>w+50)fish.splice(fish.indexOf(f),1); }
+      for(let i=parts.length-1;i>=0;i--){ const p=parts[i]; p.l-=dt; if(p.l<=0){parts.splice(i,1);continue;} p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.95;p.vy*=.95; }
+    }
+    api.on(stage,'pointerdown',e=>{ const r=canvas.getBoundingClientRect(); fire(e.clientX-r.left,e.clientY-r.top); });
+    function endRound(){ running=false; const bonus=Math.floor(score/10); api.add(bonus,'creator','fish hosting'); const o=centerOverlay(`<div class="text-6xl mb-3">🐟</div><div class="font-display font-black text-3xl text-white">Round over!</div><div class="text-cyan-300 text-sm font-semibold">You scored ${score} pts</div><div class="text-amber-400 font-bold bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20 shadow-inner">+${score+bonus} 🪙 earned · creator +${bonus}</div><button class="gbtn mt-4">Play again ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();startRound();}); }
+    function startRound(){ score=0; time=30; fish=[]; bullets=[]; parts=[]; running=true; c.querySelector('#fhScore').textContent=0; c.querySelector('#fhTime').textContent=30; }
+    api.loop((t)=>{ const dt=Math.min(0.05,(t-lastT)/1000)||0.016; lastT=t; update(dt); draw(); });
+    const ov=centerOverlay(`<div class="text-7xl mb-3 drop-shadow-lg">🐟</div><div class="font-display font-black text-3xl text-white">Fish Hunter</div><p class="text-slate-300 text-sm max-w-xs font-medium">Tap to fire at swimming fish. Bigger fish = bigger payouts. 30-second rounds!</p><button class="gbtn mt-4 px-8">Start ▶</button>`); stage.appendChild(ov);
+    ov.querySelector('button').addEventListener('click',()=>{ov.remove();startRound();});
+    return { destroy(){} };
+  }
+}, T.fish);
+
+/* 5. BLACKJACK */
+reg('bj','Blackjack','🃏','from-emerald-500 to-green-700',['🎰 Casino','🃏 Cards'], {
+  mount(c,api){
+    c.innerHTML=`<div class="flex-1 flex flex-col bg-gradient-to-b from-emerald-950/20 to-transparent h-full">
+      <div class="flex-1 flex flex-col items-center justify-between p-6 gap-4">
+        <div class="text-center"><div class="text-xs text-emerald-400 tracking-widest font-bold">DEALER</div><div id="bjDealer" class="flex gap-3 mt-2 min-h-[120px]"></div><div id="bjDVal" class="text-sm text-slate-300 mt-2 font-bold bg-black/40 px-3 py-1 rounded-full inline-block border border-white/5"></div></div>
+        <div class="flex-1 grid place-items-center"><div id="bjMsg" class="font-display font-black text-2xl text-center text-white drop-shadow-md">Place your bet</div></div>
+        <div class="text-center"><div id="bjPlayer" class="flex gap-3 min-h-[120px] justify-center"></div><div id="bjPVal" class="text-sm text-slate-300 mt-2 font-bold bg-black/40 px-3 py-1 rounded-full inline-block border border-white/5"></div><div class="text-xs text-emerald-400 tracking-widest mt-1 font-bold">YOU</div></div>
+      </div>
+      <div class="flex items-center justify-center gap-3 p-4 glass border-t-0 flex-wrap shrink-0 z-10" id="bjCtrl">
+        <div class="flex items-center gap-2"><button class="bj-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold shadow-md border border-white/10" data-d="-1">−</button>
+        <div class="bg-black/50 border border-emerald-500/50 rounded-xl px-5 py-2 font-display font-black text-xl text-emerald-400 tabular-nums min-w-[80px] text-center shadow-inner"><span id="bjBet">25</span> 🪙</div>
+        <button class="bj-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold shadow-md border border-white/10" data-d="1">+</button></div>
+        <button id="bjDeal" class="gbtn px-8">DEAL 🃏</button>
+        <button id="bjHit" class="ghost-btn hidden">Hit</button>
+        <button id="bjStand" class="ghost-btn hidden">Stand</button>
+        <button id="bjDouble" class="ghost-btn hidden">Double</button>
+      </div></div>`;
+    const SUITS=['♠','♥','♦','♣'], RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    let deck=[], player=[], dealer=[], bet=25, phase='bet';
+    const dealBtn=c.querySelector('#bjDeal'), hitBtn=c.querySelector('#bjHit'), standBtn=c.querySelector('#bjStand'), dblBtn=c.querySelector('#bjDouble'), msgEl=c.querySelector('#bjMsg'), betEl=c.querySelector('#bjBet');
+    function newDeck(){ deck=[]; for(let s=0;s<4;s++)for(let r=0;r<13;r++)deck.push({s:SUITS[s],r:RANKS[r]}); api.shuffle(deck); }
+    function cardVal(c){ if(c.r==='A')return 11; if(['J','Q','K'].includes(c.r))return 10; return +c.r; }
+    function handVal(h){ let v=0,aces=0; for(const c of h){ v+=cardVal(c); if(c.r==='A')aces++; } while(v>21&&aces>0){v-=10;aces--;} return v; }
+    function cardEl(c,hidden){ const red=c.s==='♥'||c.s==='♦'; const e=document.createElement('div'); e.className=`relative w-20 h-28 rounded-xl grid place-items-center font-bold text-3xl shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all border border-white/10 ${hidden?'bg-gradient-to-br from-purple-800 to-indigo-900 text-purple-300':'bg-white '+(red?'text-rose-600':'text-slate-900')}`; if(hidden){e.innerHTML='<div class="text-center"><div>🂠</div></div>';}else{e.innerHTML=`<div class="text-center leading-none"><div>${c.r}</div><div class="text-2xl mt-1">${c.s}</div></div>`;} e.style.transform='rotate('+api.rand(-3,3)+'deg)'; return e; }
+    function render(hideDealer){
+      const pe=c.querySelector('#bjPlayer'), de=c.querySelector('#bjDealer');
+      pe.innerHTML=''; de.innerHTML='';
+      player.forEach(card=>pe.appendChild(cardEl(card,false)));
+      dealer.forEach((card,i)=>de.appendChild(cardEl(card, hideDealer&&i===1)));
+      c.querySelector('#bjPVal').textContent = hideDealer? handVal(player)+' +' : handVal(player);
+      c.querySelector('#bjDVal').textContent = hideDealer? cardVal(dealer[0])+' +' : handVal(dealer);
+    }
+    function deal(){
+      if(!api.bet(bet,'blackjack bet'))return;
+      newDeck(); player=[deck.pop(),deck.pop()]; dealer=[deck.pop(),deck.pop()]; phase='play';
+      msgEl.textContent=''; dealBtn.classList.add('hidden'); hitBtn.classList.remove('hidden'); standBtn.classList.remove('hidden'); dblBtn.classList.remove('hidden');
+      render(true); api.sound.flip();
+      if(handVal(player)===21){ setTimeout(()=>stand(true),400); }
+    }
+    function hit(){ player.push(deck.pop()); render(true); api.sound.flip(); if(handVal(player)>21) end('bust'); }
+    function double(){ if(api.balance()<bet)return; api.bet(bet,'blackjack double'); bet*=2; hit(); if(handVal(player)<=21)stand(); betEl.textContent=bet; }
+    function stand(naturalBJ=false){
+      phase='done'; render(false);
+      hitBtn.classList.add('hidden'); standBtn.classList.add('hidden'); dblBtn.classList.add('hidden');
+      const step=()=>{ if(handVal(dealer)<17){ dealer.push(deck.pop()); render(false); api.sound.flip(); setTimeout(step,600); } else finish(naturalBJ); };
+      setTimeout(step,500);
+    }
+    function finish(naturalBJ){
+      const pv=handVal(player), dv=handVal(dealer);
+      let result, win=0;
+      if(pv>21){result='Bust! You lose';api.sound.lose();}
+      else if(dv>21){result='Dealer busts — you win!';win=bet*2;api.sound.win();}
+      else if(naturalBJ&&pv===21&&player.length===2){result='BLACKJACK! 3:2';win=Math.floor(bet*2.5);api.sound.win();}
+      else if(pv>dv){result='You win!';win=bet*2;api.sound.win();}
+      else if(pv<dv){result='Dealer wins';api.sound.lose();}
+      else {result='Push';win=bet;} 
+      if(win>0) api.win(Math.round(win),'blackjack '+result);
+      msgEl.innerHTML=`<span class="${win>bet?'text-emerald-400':(win===bet?'text-amber-400':'text-rose-400')}">${result}${win>bet?' +'+Math.round(win-bet)+'🪙':''}</span>`;
+      bet=Math.max(10,Math.min(bet,api.balance())); betEl.textContent=bet;
+      dealBtn.classList.remove('hidden'); dealBtn.textContent='NEW HAND 🃏';
+      phase='bet';
+    }
+    function end(reason){ if(reason==='bust') finish(false); }
+    function setBet(n){ if(phase!=='bet')return; bet=Math.max(10,Math.min(api.balance(),n)); betEl.textContent=bet; }
+    c.querySelectorAll('.bj-chg').forEach(b=>b.addEventListener('click',()=>{ setBet(bet+(+b.dataset.d)*5); api.sound.click(); }));
+    dealBtn.addEventListener('click',deal); hitBtn.addEventListener('click',hit); standBtn.addEventListener('click',()=>stand()); dblBtn.addEventListener('click',double);
+    setBet(25);
+    return { destroy(){} };
+  }
+}, T.cards);
+
+/* 6. BRICK BREAKER */
+reg('brick','Brick Breaker','🧱','from-pink-500 to-rose-600',['🕹️ Arcade'], {
+  mount(c,api){
+    const top=gameTopBar(api,'Move paddle: drag / ← →','Lives ❤️ <span id="bbLives">3</span> · Score <span id="bbScore">0</span>');
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full">${top}<div id="bbStage" class="flex-1 relative bg-gradient-to-b from-rose-950/20 to-transparent overflow-hidden"></div></div>`;
+    const stage=c.querySelector('#bbStage');
+    const canvas=api.canvas(); stage.appendChild(canvas);
+    let {w,h,ctx}=api.fitCanvas(canvas);
+    api.observe(canvas,()=>{ ({w,h,ctx}=api.fitCanvas(canvas)); if(!running)draw(); });
+    let paddle={x:0,y:0,w:100,h:14}, balls=[], bricks=[], parts=[], lives=3, score=0, running=false, lastT=0, level=1, keys={};
+    function buildLevel(){ bricks=[]; const cols=8, rows=4+Math.min(3,level-1); const bw=(w-30)/cols, bh=20; const colors=['#ec4899','#8b5cf6','#06b6d4','#84cc16','#f59e0b','#f43f5e','#8b5cf6','#06b6d4']; for(let r=0;r<rows;r++)for(let col=0;col<cols;col++){ bricks.push({x:15+col*bw,y:50+r*(bh+5),w:bw-5,h:bh,c:colors[r%colors.length],hp:r<1?2:1}); } }
+    function resetBall(){ paddle={x:w/2-50,y:h-40,w:100,h:14}; balls=[{x:w/2,y:h-60,vx:api.rand(-1,1)*140,vy:-280,r:8}]; }
+    function start(){ lives=3; score=0; level=1; c.querySelector('#bbLives').textContent=lives; c.querySelector('#bbScore').textContent=score; buildLevel(); resetBall(); running=true; lastT=api.now(); }
+    function burst(x,y,col,n=10){ for(let i=0;i<n;i++){ const a=Math.random()*6.28,s=Math.random()*160+40; parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:.6,c:col,r:3}); } }
+    function update(dt){
+      if(!running)return;
+      if(keys['arrowleft']||keys['a'])paddle.x-=450*dt;
+      if(keys['arrowright']||keys['d'])paddle.x+=450*dt;
+      paddle.x=Math.max(0,Math.min(w-paddle.w,paddle.x));
+      for(let i=balls.length-1;i>=0;i--){ const b=balls[i]; b.x+=b.vx*dt; b.y+=b.vy*dt;
+        if(b.x<b.r){b.x=b.r;b.vx*=-1;} if(b.x>w-b.r){b.x=w-b.r;b.vx*=-1;} if(b.y<b.r){b.y=b.r;b.vy*=-1;}
+        if(b.y+b.r>paddle.y&&b.y-b.r<paddle.y+paddle.h&&b.x>paddle.x&&b.x<paddle.x+paddle.w&&b.vy>0){ b.y=paddle.y-b.r; b.vy=-Math.abs(b.vy); b.vx+=(b.x-(paddle.x+paddle.w/2))*5; api.sound.pop(); }
+        for(let j=bricks.length-1;j>=0;j--){ const br=bricks[j]; if(b.x>br.x&&b.x<br.x+br.w&&b.y>br.y&&b.y<br.y+br.h){ br.hp--; if(br.hp<=0){ burst(b.x,b.y,br.c,10); bricks.splice(j,1); score+=10; api.win(2,'brick'); c.querySelector('#bbScore').textContent=score; api.sound.coin(); } else api.sound.pop(); const fromTop=b.y<br.y+br.h*0.5; if(fromTop)b.vy=Math.abs(b.vy); else b.vy=-Math.abs(b.vy); break; } }
+        if(b.y>h+20){ balls.splice(i,1); }
+      }
+      if(balls.length===0){ lives--; c.querySelector('#bbLives').textContent=lives; if(lives<=0){ endGame(); } else { resetBall(); } }
+      if(bricks.length===0){ level++; buildLevel(); resetBall(); api.sound.win(); api.toast('Level '+level+'!','🧱'); }
+      for(let i=parts.length-1;i>=0;i--){ const p=parts[i]; p.l-=dt; if(p.l<=0){parts.splice(i,1);continue;} p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=220*dt; }
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(const br of bricks){ ctx.fillStyle=br.c; ctx.shadowColor=br.c; ctx.shadowBlur=8; rr(ctx,br.x,br.y,br.w,br.h,4); ctx.fill(); if(br.hp>1){ ctx.fillStyle='rgba(255,255,255,.4)'; rr(ctx,br.x+2,br.y+2,br.w-4,br.h-4,2); ctx.fill(); } ctx.shadowBlur=0; }
+      ctx.fillStyle='#06b6d4'; ctx.shadowColor='#06b6d4'; ctx.shadowBlur=12; rr(ctx,paddle.x,paddle.y,paddle.w,paddle.h,8); ctx.fill(); ctx.shadowBlur=0;
+      for(const b of balls){ ctx.fillStyle='#fff'; ctx.shadowColor='#f59e0b'; ctx.shadowBlur=12; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,6.28); ctx.fill(); ctx.shadowBlur=0; }
+      for(const p of parts){ ctx.globalAlpha=Math.max(0,p.l*2); ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,Math.max(0,p.r),0,6.28); ctx.fill(); } ctx.globalAlpha=1;
+    }
+    api.loop((t)=>{ const dt=Math.min(0.05,(t-lastT)/1000)||0.016; lastT=t; update(dt); draw(); });
+    function endGame(){ running=false; api.add(20,'creator','brick host'); const o=centerOverlay(`<div class="text-6xl mb-3">🧱</div><div class="font-display font-black text-3xl text-white">Game over</div><div class="text-slate-300 text-sm font-semibold">Score ${score} · reached level ${level}</div><div class="text-amber-400 font-bold bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20 mt-2">+${score*2+20} 🪙 total</div><button class="gbtn mt-4">Play again ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();start();}); }
+    api.on(stage,'pointermove',e=>{ const r=canvas.getBoundingClientRect(); paddle.x=e.clientX-r.left-paddle.w/2; paddle.x=Math.max(0,Math.min(w-paddle.w,paddle.x)); });
+    api.on(stage,'pointerdown',e=>{ const r=canvas.getBoundingClientRect(); paddle.x=e.clientX-r.left-paddle.w/2; });
+    api.on(window,'keydown',e=>{ keys[e.key.toLowerCase()]=true; if(['arrowleft','arrowright'].includes(e.key.toLowerCase()))e.preventDefault(); });
+    api.on(window,'keyup',e=>{ keys[e.key.toLowerCase()]=false; });
+    const ov=centerOverlay(`<div class="text-7xl mb-3 drop-shadow-lg">🧱</div><div class="font-display font-black text-3xl text-white">Brick Breaker</div><p class="text-slate-300 text-sm max-w-xs font-medium">Move the paddle with drag or arrow keys. Break all bricks. Each brick banks points!</p><button class="gbtn mt-4 px-8">Start ▶</button>`); stage.appendChild(ov);
+    ov.querySelector('button').addEventListener('click',()=>{ov.remove();start();});
+    return { destroy(){} };
+  }
+}, T.brick);
+
+/* 7. CO-OP SURVIVAL */
+reg('survival','Co-op Survival','🚀','from-cyan-500 to-blue-600',['🕹️ Arcade'], {
+  mount(c,api){
+    const top=gameTopBar(api,'Drag / WASD to move · auto-fire','⏱️ <span id="svTime">0</span>s · 🪙 <span id="svScore">0</span>');
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full">${top}<div id="svStage" class="flex-1 relative bg-transparent overflow-hidden"></div></div>`;
+    const stage=c.querySelector('#svStage');
+    const canvas=api.canvas(); stage.appendChild(canvas);
+    let {w,h,ctx}=api.fitCanvas(canvas);
+    api.observe(canvas,()=>{ ({w,h,ctx}=api.fitCanvas(canvas)); });
+    let ship={x:0,y:0,r:14}, bullets=[], enemies=[], parts=[], time=0, score=0, running=false, lastFire=0, last=0, spawnT=0, boss=null;
+    const pointer={x:0,y:0,down:false}; const keys={};
+    function reset(){ ship.x=w/2; ship.y=h*0.8; bullets=[]; enemies=[]; parts=[]; time=0; score=0; spawnT=0; boss=null; }
+    function start(){ reset(); running=true; last=api.now(); }
+    function spawn(){ const r=Math.random(); const e={x:api.rand(20,w-20),y:-20,r:api.rand(12,18),vy:60+time*2+api.rand(0,50),vx:api.rand(-40,40),hp:1,c:r>0.85?'#06b6d4':'#ec4899'}; if(r>0.92&&time>20){e.r=22;e.hp=4;e.c='#8b5cf6';e.vy*=0.6;} enemies.push(e); }
+    function burst(x,y,col,n=12){ for(let i=0;i<n;i++){ const a=Math.random()*6.28,s=api.rand(50,250); parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:.5+Math.random()*.4,m:.9,c:col,r:1+Math.random()*3}); } }
+    function fire(){ const rate=boost.rapid>0?.09:.18; if(lastFire<=0){ bullets.push({x:ship.x,y:ship.y-14,vx:0,vy:-700,r:5,c:'#f59e0b'}); lastFire=rate; api.sound.shoot(); if(boost.triple>0){ bullets.push({x:ship.x,y:ship.y-14,vx:-130,vy:-680,r:5,c:'#f59e0b'}); bullets.push({x:ship.x,y:ship.y-14,vx:130,vy:-680,r:5,c:'#f59e0b'}); } } }
+    const boost={rapid:0,triple:0,shield:0};
+    function update(dt){
+      time+=dt; c.querySelector('#svTime').textContent=Math.floor(time); c.querySelector('#svScore').textContent=score;
+      if(boost.rapid>0)boost.rapid-=dt; if(boost.triple>0)boost.triple-=dt; if(boost.shield>0)boost.shield-=dt;
+      if(Math.floor(time)%45===0 && Math.floor(time)>0 && !boss && time-Math.floor(time)<0.05){ boss={x:w/2,y:70,r:45,hp:30,maxHp:30,t:0,vx:70}; api.toast('⚠️ BOSS WAVE','👾'); }
+      let kx=0,ky=0; if(keys['a']||keys['arrowleft'])kx--; if(keys['d']||keys['arrowright'])kx++; if(keys['w']||keys['arrowup'])ky--; if(keys['s']||keys['arrowdown'])ky++;
+      if(kx||ky){ const L=Math.hypot(kx,ky)||1; ship.x+=kx/L*300*dt; ship.y+=ky/L*300*dt; } else if(pointer.down){ ship.x+=(pointer.x-ship.x)*Math.min(1,12*dt); ship.y+=(pointer.y-ship.y)*Math.min(1,12*dt); }
+      ship.x=Math.max(ship.r,Math.min(w-ship.r,ship.x)); ship.y=Math.max(ship.r,Math.min(h-ship.r,ship.y));
+      lastFire-=dt; fire();
+      for(let i=bullets.length-1;i>=0;i--){ const b=bullets[i]; b.y+=b.vy*dt; b.x+=b.vx*dt; if(b.y<-20)bullets.splice(i,1); }
+      spawnT-=dt; if(spawnT<=0){ spawn(); spawnT=Math.max(0.3,1.2-time*0.01); }
+      for(let i=enemies.length-1;i>=0;i--){ const e=enemies[i]; e.x+=e.vx*dt; e.y+=e.vy*dt; e.x=Math.max(e.r,Math.min(w-e.r,e.x)); if(e.y>h+30){enemies.splice(i,1);continue;}
+        let dead=false; for(let j=bullets.length-1;j>=0;j--){ const b=bullets[j]; if(Math.hypot(b.x-e.x,b.y-e.y)<e.r+b.r){ bullets.splice(j,1); e.hp--; burst(b.x,b.y,e.c,4); if(e.hp<=0){ score+=e.r>16?40:15; c.querySelector('#svScore').textContent=score; burst(e.x,e.y,e.c,16); api.sound.explode(); if(Math.random()<0.1)spawnPow(e.x,e.y); enemies.splice(i,1); dead=true; break; } else api.sound.pop(); } }
+        if(dead)continue;
+        if(Math.hypot(ship.x-e.x,ship.y-e.y)<e.r+ship.r){ if(boost.shield>0){ burst(e.x,e.y,'#84cc16',16); enemies.splice(i,1); continue;} hurt(); enemies.splice(i,1); }
+      }
+      if(boss){ boss.t+=dt; boss.x+=boss.vx*dt; if(boss.x<boss.r||boss.x>w-boss.r)boss.vx*=-1; }
+      for(let i=parts.length-1;i>=0;i--){ const p=parts[i]; p.l-=dt; if(p.l<=0){parts.splice(i,1);continue;} p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.95;p.vy*=.95; }
+      for(const p of powups){ p.y+=90*dt; p.t+=dt; }
+      for(let i=powups.length-1;i>=0;i--){ const p=powups[i]; if(p.y>h+20){powups.splice(i,1);continue;} if(Math.hypot(ship.x-p.x,ship.y-p.y)<ship.r+p.r){ applyPow(p); powups.splice(i,1); } }
+    }
+    let powups=[];
+    function spawnPow(x,y){ const types=['rapid','triple','shield']; powups.push({x,y,r:12,type:types[Math.floor(Math.random()*types.length)],t:0}); }
+    function applyPow(p){ api.sound.coin(); if(p.type==='rapid')boost.rapid=6; if(p.type==='triple')boost.triple=6; if(p.type==='shield')boost.shield=5; api.toast(p.type.toUpperCase()+'!','⚡'); }
+    function hurt(){ burst(ship.x,ship.y,'#ec4899',28); api.sound.lose(); endGame(); }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(let i=0;i<30;i++){ const x=(i*73)%w,y=(i*41+time*40)%h; ctx.fillStyle='rgba(255,255,255,.25)'; ctx.fillRect(x,y,2,2); }
+      for(const p of parts){ ctx.globalAlpha=Math.max(0,p.l/p.m); ctx.fillStyle=p.c; ctx.shadowColor=p.c; ctx.shadowBlur=8; ctx.beginPath(); ctx.arc(p.x,p.y,Math.max(.5,p.r),0,6.28); ctx.fill(); } ctx.globalAlpha=1; ctx.shadowBlur=0;
+      for(const b of bullets){ ctx.fillStyle=b.c; ctx.shadowColor=b.c; ctx.shadowBlur=12; ctx.beginPath(); ctx.ellipse(b.x,b.y,b.r,b.r*2.2,0,0,6.28); ctx.fill(); } ctx.shadowBlur=0;
+      for(const e of enemies){ ctx.fillStyle=e.c; ctx.shadowColor=e.c; ctx.shadowBlur=15; ctx.beginPath(); ctx.arc(e.x,e.y,Math.max(0,e.r),0,6.28); ctx.fill(); } ctx.shadowBlur=0;
+      for(const p of powups){ const c=p.type==='rapid'?'#f59e0b':p.type==='triple'?'#8b5cf6':'#84cc16'; ctx.fillStyle=c; ctx.shadowColor=c; ctx.shadowBlur=15; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.t*2); ctx.fillRect(-p.r,-p.r,p.r*2,p.r*2); ctx.restore(); ctx.shadowBlur=0; }
+      if(boss){ ctx.fillStyle='#8b5cf6'; ctx.shadowColor='#8b5cf6'; ctx.shadowBlur=25; ctx.beginPath(); ctx.arc(boss.x,boss.y,Math.max(0,boss.r),0,6.28); ctx.fill(); ctx.shadowBlur=0; ctx.fillStyle='#fff'; ctx.font='bold 16px Outfit'; ctx.textAlign='center'; ctx.fillText('👹',boss.x,boss.y+6); ctx.fillStyle='rgba(0,0,0,.5)'; ctx.fillRect(boss.x-boss.r,boss.y-boss.r-12,boss.r*2,6); ctx.fillStyle='#ec4899'; ctx.fillRect(boss.x-boss.r,boss.y-boss.r-12,Math.max(0,boss.r*2*boss.hp/boss.maxHp),6); }
+      
+      ctx.save(); ctx.translate(ship.x,ship.y);
+      if(boost.shield>0){ ctx.strokeStyle='#84cc16'; ctx.shadowColor='#84cc16'; ctx.shadowBlur=16; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(0,0,ship.r+10,0,6.28); ctx.stroke(); ctx.shadowBlur=0; }
+      const sc=boost.rapid>0?'#f59e0b':'#06b6d4'; ctx.fillStyle=sc; ctx.shadowColor=sc; ctx.shadowBlur=16;
+      ctx.beginPath(); ctx.moveTo(0,-ship.r); ctx.lineTo(ship.r*.9,ship.r*.8); ctx.lineTo(0,ship.r*.4); ctx.lineTo(-ship.r*.9,ship.r*.8); ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    api.loop((t)=>{ const dt=Math.min(0.05,(t-last)/1000)||0.016; last=t; if(running)update(dt); draw(); });
+    function endGame(){ running=false; const earned=score+Math.floor(time*2); api.add(earned,'both','survival run'); const o=centerOverlay(`<div class="text-6xl mb-3">💥</div><div class="font-display font-black text-3xl text-white">Ship down</div><div class="text-cyan-300 text-sm font-semibold">Survived ${Math.floor(time)}s · ${score} pts</div><div class="text-amber-400 font-bold bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20 mt-2">+${earned} 🪙 to you & creator</div><button class="gbtn mt-4">Play Again ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();start();}); }
+    function sp(e){ const r=canvas.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; pointer.x=t.clientX-r.left; pointer.y=t.clientY-r.top; }
+    api.on(canvas,'mousedown',e=>{pointer.down=true;sp(e);}); api.on(canvas,'mousemove',e=>sp(e)); api.on(window,'mouseup',()=>pointer.down=false);
+    api.on(canvas,'touchstart',e=>{e.preventDefault();pointer.down=true;sp(e);},{passive:false}); api.on(canvas,'touchmove',e=>{e.preventDefault();sp(e);},{passive:false}); api.on(canvas,'touchend',()=>pointer.down=false);
+    api.on(window,'keydown',e=>{ keys[e.key.toLowerCase()]=true; if(['arrowup','arrowdown','arrowleft','arrowright'].includes(e.key.toLowerCase()))e.preventDefault(); });
+    api.on(window,'keyup',e=>{ keys[e.key.toLowerCase()]=false; });
+    const ov=centerOverlay(`<div class="text-7xl mb-3 drop-shadow-lg">🚀</div><div class="font-display font-black text-3xl text-white">Co-op Survival</div><p class="text-slate-300 text-sm max-w-xs font-medium">Fly, dodge, blast enemies. Boss waves every 45s. Grab drops to power up.</p><button class="gbtn mt-4 px-8">Launch ▶</button>`); stage.appendChild(ov);
+    ov.querySelector('button').addEventListener('click',()=>{ov.remove();start();});
+    return { destroy(){} };
+  }
+}, T.survival);
+
+/* 8. LIVE POLLS */
+reg('polls','Live Polls','📊','from-purple-500 to-pink-600',['🧠 Trivia'], {
+  mount(c,api){
+    const polls=[{q:"Creator's go-to late-night snack?",a:['🍕 Pizza','🍜 Ramen','🍦 Ice cream'],c:0},{q:'Favorite streaming vibe?',a:['🎮 Gaming','🎨 Art','💬 Chatting'],c:1},{q:'Dream collab partner?',a:['🎤 Musician','🎬 Filmmaker','🚀 Astronaut'],c:2},{q:'Coffee order?',a:['☕ Black','🥛 Latte','🧋 Boba'],c:1}];
+    let idx=0,pts=0,streak=0;
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">Pick the creator's choice · streaks = bonus</span><span class="text-amber-300 font-bold bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">🪙 <span id="plPts">0</span></span></div><div id="plStage" class="flex-1 relative bg-transparent"></div></div>`;
+    const stage=c.querySelector('#plStage');
+    function render(){ const p=polls[idx]; const card=api.el('div','absolute inset-0 flex flex-col items-center justify-center p-6 gap-4 fade-in'); card.innerHTML=`<div class="text-xs text-purple-400 font-bold tracking-widest uppercase">POLL ${idx+1}/${polls.length}</div><div class="text-2xl font-display font-bold text-center max-w-sm text-white drop-shadow-md">${p.q}</div><div class="w-full max-w-sm space-y-3 mt-4"></div><div class="text-xs text-slate-400 font-semibold mt-2">streak 🔥 ${streak}</div>`; stage.appendChild(card); const oe=card.children[2]; p.a.forEach((opt,i)=>{ const b=api.el('button','w-full text-left px-5 py-4 rounded-2xl glass-panel hover:bg-white/10 hover:border-purple-400/50 transition flex items-center gap-4 font-semibold text-base text-white shadow-lg'); b.innerHTML=`<span class="w-8 h-8 grid place-items-center rounded-full bg-purple-500/30 text-purple-300 font-bold border border-purple-500/50">${'ABC'[i]}</span><span>${opt}</span>`; api.on(b,'click',()=>answer(i,oe,p,card)); oe.appendChild(b); }); }
+    function answer(i,oe,p,card){ [...oe.children].forEach((cc,j)=>{ cc.disabled=true; cc.classList.add('opacity-70'); if(j===p.c)cc.classList.add('bg-emerald-500/20','border-emerald-400/50'); else if(j===i)cc.classList.add('bg-rose-500/20','border-rose-400/50'); }); if(i===p.c){streak++;const g=20+streak*5;pts+=g;api.add(g,'user','poll correct');api.toast('Correct +'+g+'🪙','✅');api.sound.win();}else{streak=0;api.sound.lose();api.toast('Creator picked '+p.a[p.c],'❌');} c.querySelector('#plPts').textContent=pts; api.timeout(()=>{idx++;if(idx>=polls.length)finish();else{card.remove();render();}},1200); }
+    function finish(){ api.add(30,'creator','polls host'); const o=centerOverlay(`<div class="text-6xl mb-3">📊</div><div class="font-display font-black text-3xl text-white">Done!</div><div class="text-cyan-300 text-sm font-semibold">${pts} pts · creator +30</div><button class="gbtn mt-4 px-8">Again ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();idx=0;pts=0;streak=0;c.querySelector('#plPts').textContent=0;render();}); }
+    render();
+    return { destroy(){} };
+  }
+}, T.polls);
+
+/* 9. TUG OF WAR */
+reg('tug','Tug of War','🪢','from-amber-500 to-red-600',['🕹️ Arcade'], {
+  mount(c,api){
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">TAP TAP TAP — pull the flag past the line!</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">You <span id="tgYou">0</span> · <span id="tgBot">0</span> Rival</span></div><div id="tgStage" class="flex-1 relative bg-transparent overflow-hidden"></div></div>`;
+    const stage=c.querySelector('#tgStage');
+    const canvas=api.canvas(); stage.appendChild(canvas);
+    let {w,h,ctx}=api.fitCanvas(canvas); api.observe(canvas,()=>{({w,h,ctx}=api.fitCanvas(canvas));});
+    let pos=0,youT=0,botT=0,running=false,t=0,botTmr=0,parts=[];
+    const tapBtn=document.createElement('button'); tapBtn.className='absolute left-1/2 bottom-8 -translate-x-1/2 z-10 w-32 h-32 rounded-full bg-gradient-to-br from-amber-400 to-pink-500 text-white font-display font-black text-2xl shadow-[0_15px_40px_rgba(245,158,11,0.5)] active:scale-95 transition-transform border-4 border-white/20'; tapBtn.textContent='TAP!';
+    api.on(tapBtn,'pointerdown',()=>{ if(!running)return; pos+=0.04; youT++; c.querySelector('#tgYou').textContent=youT; for(let i=0;i<5;i++)parts.push({x:w/2,y:h-60,vx:api.rand(-250,250),vy:api.rand(-300,-100),l:.5,c:'#f59e0b',r:3}); api.sound.pop(); });
+    stage.appendChild(tapBtn);
+    function start(){pos=0;youT=0;botT=0;t=0;botTmr=0;running=true;}
+    function burst(x,y,col,n=25){for(let i=0;i<n;i++){const a=Math.random()*6.28,s=Math.random()*200+40;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:.6,c:col,r:3});}}
+    api.loop(()=>{ const dt=0.016; if(running){ t+=dt; botTmr-=dt; const rate=Math.max(0.15,0.4-t*0.01); if(botTmr<=0){pos-=0.035;botT++;c.querySelector('#tgBot').textContent=botT;botTmr=rate;} pos=Math.max(-1,Math.min(1,pos)); if(pos>=1)win(true); if(pos<=-1)win(false); } for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.l-=dt;if(p.l<=0){parts.splice(i,1);continue;}p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=450*dt;} draw(); });
+    function draw(){ ctx.clearRect(0,0,w,h); ctx.fillStyle='rgba(255,255,255,.02)'; ctx.fillRect(0,h*0.55,w,h*0.45); ctx.strokeStyle='rgba(255,255,255,.2)'; ctx.lineWidth=3; ctx.setLineDash([8,8]); ctx.beginPath(); ctx.moveTo(w/2,h*0.1); ctx.lineTo(w/2,h*0.8); ctx.stroke(); ctx.setLineDash([]); const fx=w/2+pos*w*0.42; ctx.strokeStyle='#f59e0b'; ctx.lineWidth=5; ctx.shadowColor='#f59e0b'; ctx.shadowBlur=12; ctx.beginPath(); ctx.moveTo(w*0.08,h*0.42); ctx.quadraticCurveTo(fx,h*0.42-25,w*0.92,h*0.42); ctx.stroke(); ctx.shadowBlur=0; ctx.fillStyle='#ec4899'; ctx.shadowColor='#ec4899'; ctx.shadowBlur=15; ctx.beginPath(); ctx.arc(fx,h*0.42-12,10,0,6.28); ctx.fill(); ctx.shadowBlur=0; ctx.font='40px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('🤜',w*0.08,h*0.42); ctx.fillText('🤛',w*0.92,h*0.42); ctx.font='bold 14px Space Grotesk'; ctx.fillStyle='#06b6d4'; ctx.fillText('YOU',w*0.08,h*0.42+35); ctx.fillStyle='#ec4899'; ctx.fillText('RIVAL',w*0.92,h*0.42+35); for(const p of parts){ctx.globalAlpha=Math.max(0,p.l*2);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,Math.max(0,p.r),0,6.28);ctx.fill();}ctx.globalAlpha=1; }
+    function win(youWon){ running=false; burst(w/2,h/2,youWon?'#06b6d4':'#ec4899',40); const g=youWon?120:30; api.add(g,youWon?'user':'creator','tug'); if(youWon)api.sound.win(); else api.sound.lose(); const o=centerOverlay(`<div class="text-7xl mb-3">${youWon?'🏆':'😵'}</div><div class="font-display font-black text-3xl text-white">${youWon?'You pulled it!':'Rival won'}</div><div class="text-cyan-300 text-sm font-semibold">You ${youT} · Rival ${botT}</div><div class="text-amber-400 font-bold bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20 mt-2">+${g} 🪙 to ${youWon?'you':'creator'}</div><button class="gbtn mt-4 px-8">Rematch ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();start();}); }
+    const ov=centerOverlay(`<div class="text-7xl mb-3 drop-shadow-lg">🪢</div><div class="font-display font-black text-3xl text-white">Tug of War</div><p class="text-slate-300 text-sm max-w-xs font-medium">Out-tap the rival team. First to drag the flag past the line wins!</p><button class="gbtn mt-4 px-8">Start ⚔️</button>`); stage.appendChild(ov);
+    ov.querySelector('button').addEventListener('click',()=>{ov.remove();start();});
+    return { destroy(){} };
+  }
+}, T.tug);
+
+/* 10. REACTION DUEL */
+reg('reaction','Reaction Duel','⚡','from-lime-400 to-emerald-600',['🕹️ Arcade'], {
+  mount(c,api){
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">Wait for green, tap fast!</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">Round <span id="rxR">1</span>/5 · Won <span id="rxW">0</span></span></div><div id="rxStage" class="flex-1 relative bg-transparent"></div></div>`;
+    const stage=c.querySelector('#rxStage');
+    const arena=document.createElement('div'); arena.className='absolute inset-0 flex flex-col items-center justify-center cursor-pointer rounded-b-3xl overflow-hidden'; arena.innerHTML=`<div id="rxBox" class="w-full h-full flex flex-col items-center justify-center transition-colors duration-150 bg-rose-950/80"><div id="rxEmoji" class="text-8xl mb-5 drop-shadow-xl">🚦</div><div id="rxText" class="font-display font-black text-4xl text-white drop-shadow-md">Tap to start</div><div id="rxSub" class="text-slate-300 text-base mt-2 font-semibold">Wait for green…</div></div>`; stage.appendChild(arena);
+    let round=1,won=0,waiting=false,go=0,running=false,creatorMs=0;
+    const box=c.querySelector('#rxBox'),em=c.querySelector('#rxEmoji'),tx=c.querySelector('#rxText'),su=c.querySelector('#rxSub');
+    const trash=['Too slow!','You got lucky…','I eat reaction games for breakfast.','Blink and you miss it.'];
+    function set(c2,e,t,s){ box.style.backgroundColor=c2; em.textContent=e; tx.textContent=t; su.textContent=s; }
+    function nxt(){ if(round>5){finish();return;} c.querySelector('#rxR').textContent=round; waiting=true; set('rgba(69, 10, 10, 0.8)','🚦','Round '+round,'Wait for green…'); const d=1200+Math.random()*2600; api.timeout(()=>{ if(!waiting)return; waiting=false; go=api.now(); set('rgba(6, 78, 59, 0.9)','✅','TAP!','Go!'); creatorMs=380-round*20+Math.random()*60; },d); }
+    api.on(arena,'pointerdown',()=>{ api.sound.init(); if(waiting){ waiting=false; set('rgba(113, 63, 18, 0.9)','🐢','Too early!','Round lost'); api.sound.lose(); round++; api.timeout(nxt,1000); return; } if(go>0){ const rt=api.now()-go; go=0; const youWon=rt<creatorMs; if(youWon){won++;c.querySelector('#rxW').textContent=won;api.add(25,'user','reaction win');api.sound.win();}else{api.add(15,'creator','reaction win');api.sound.lose();} set(youWon?'rgba(4, 120, 87, 0.9)':'rgba(127, 29, 29, 0.9)',youWon?'⚡':'🐢','You: '+Math.round(rt)+'ms','Creator: '+Math.round(creatorMs)+'ms — '+(youWon?'YOU WIN ✅':trash[round%4])); round++; api.timeout(nxt,1400); } else if(round===1&&!running){ running=true; nxt(); } });
+    function finish(){ const total=won*25+(won>=3?50:0); if(won>=3)api.add(50,'user','reaction streak'); const o=centerOverlay(`<div class="text-7xl mb-3">${won>=3?'🏆':'🎯'}</div><div class="font-display font-black text-3xl text-white">Match over</div><div class="text-cyan-300 text-sm font-semibold">Won ${won}/5 · +${total} 🪙</div><button class="gbtn mt-4 px-8">Again ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();round=1;won=0;running=false;c.querySelector('#rxW').textContent=0;nxt();}); }
+    return { destroy(){} };
+  }
+}, T.reaction);
+
+/* 11. CREATOR TRIVIA */
+function simpleQuizMount(c,api,opts){
+  const Q=opts.questions; let idx=0,pts=0,correct=0;
+  c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">${opts.howto}</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">${opts.hudLabel} <span id="qzPts">0</span></span></div><div id="qzStage" class="flex-1 relative bg-transparent"></div></div>`;
+  const stage=c.querySelector('#qzStage');
+  function render(){ const q=Q[idx]; const card=api.el('div','absolute inset-0 flex flex-col p-8 gap-5 fade-in'); card.innerHTML=`<div class="text-xs font-bold tracking-widest uppercase ${opts.themeColor}">${opts.label} ${idx+1}/${Q.length}</div><div class="text-2xl font-display font-black text-white drop-shadow-md leading-tight">${q.q}</div><div class="space-y-3 mt-4"></div>`; stage.appendChild(card); const oe=card.children[2]; q.a.forEach((opt,i)=>{ const b=api.el('button','w-full text-left px-5 py-4 rounded-2xl glass-panel hover:bg-white/10 transition flex items-center gap-4 font-semibold text-base text-white shadow-lg border-white/10 hover:border-white/30'); b.innerHTML=`<span class="w-8 h-8 grid place-items-center rounded-full ${opts.themeBadge} font-bold border border-white/20">${i+1}</span><span>${opt}</span>`; api.on(b,'click',()=>{ [...oe.children].forEach((cc,j)=>{cc.disabled=true; if(j===q.c)cc.classList.add('bg-emerald-500/20','border-emerald-400/50'); else if(j===i)cc.classList.add('bg-rose-500/20','border-rose-400/50');}); if(i===q.c){pts+=30;correct++;api.add(30,'user',opts.label+' correct');api.toast('Correct +30','✅');api.sound.win();}else{api.add(10,'creator',opts.label+' host');api.toast('Answer: '+q.a[q.c],'❌');api.sound.lose();} c.querySelector('#qzPts').textContent=pts; api.timeout(()=>{idx++; if(idx>=Q.length)finish(); else {card.remove();render();}},1200); }); oe.appendChild(b); }); }
+  function finish(){ api.add(40,'creator',opts.label+' hosting'); const o=centerOverlay(`<div class="text-7xl mb-3">${correct>=3?'🎓':'📚'}</div><div class="font-display font-black text-3xl text-white">${opts.label} done</div><div class="text-cyan-300 text-sm font-semibold">${correct}/${Q.length} · ${pts} pts · creator +40</div><button class="gbtn mt-4 px-8">Replay ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();idx=0;pts=0;correct=0;c.querySelector('#qzPts').textContent=0;render();}); }
+  render(); return { destroy(){} };
+}
+reg('trivia','Creator Trivia','❓','from-fuchsia-500 to-purple-700',['🧠 Trivia'], { mount(c,api){ return simpleQuizMount(c,api,{ howto:'Pick the answer about the creator', hudLabel:'🪙', themeColor:'text-fuchsia-400', themeBadge:'bg-fuchsia-500/40 text-fuchsia-100', label:'QUESTION', questions:[ {q:'What does the creator main on stream?',a:['Valorant','Minecraft','Stardew Valley'],c:1},{q:"Creator's mascot emoji?",a:['🐝','🐉','🦊'],c:0},{q:'First game they ever speedran?',a:['Celeste','Hollow Knight','Mario 64'],c:2},{q:'Signature catchphrase?',a:["Let's goo!",'Pog moment','Bee time!'],c:2},{q:'Favorite color palette?',a:['Pastel pink','Neon cyan','Sunset orange'],c:1} ] }); } }, T.trivia);
+
+/* 12. EMOJI CHARADES */
+reg('charades','Emoji Charades','🎭','from-pink-500 to-rose-600',['🧩 Puzzle'], {
+  mount(c,api){
+    const P=[{e:'🍕🚀👨\u200d🚀',a:'pizza astronaut'},{e:'🎮👾🔫',a:'space invaders'},{e:'🎤🎸',a:'rock concert'},{e:'🦊☔',a:'fox in rain'},{e:'👑🦁',a:'lion king'},{e:'🌊🐳🎵',a:'whale song'}];
+    let idx=0,pts=0,reveal=0;
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">Tap letters to solve the emoji clue</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">🪙 <span id="chPts">0</span> · #<span id="chIdx">1</span></span></div><div id="chStage" class="flex-1 relative bg-transparent"></div></div>`;
+    const stage=c.querySelector('#chStage');
+    function render(){ const p=P[idx]; reveal=0; const card=api.el('div','absolute inset-0 flex flex-col items-center justify-center p-6 gap-6 fade-in'); card.innerHTML=`<div class="text-xs text-pink-400 font-bold tracking-widest uppercase">CLUE ${idx+1}/${P.length}</div><div class="text-7xl text-center tracking-wider drop-shadow-lg">${p.e}</div><div class="flex gap-2 flex-wrap justify-center min-h-[3rem] mt-2" id="chAns"></div><div class="flex gap-2 flex-wrap justify-center max-w-md mt-4" id="chLetters"></div><button class="text-sm font-semibold text-slate-400 hover:text-white mt-4 transition" id="chSkip">Skip →</button>`; stage.appendChild(card);
+      const ansEl=card.querySelector('#chAns'), letEl=card.querySelector('#chLetters'); const letters=p.a.replace(/\s/g,'').split(''); letters.forEach(()=>{ const s=api.el('div','w-8 h-10 rounded-xl bg-white/5 border border-white/20 grid place-items-center font-bold text-lg shadow-inner'); ansEl.appendChild(s); }); api.shuffle(letters.slice()).forEach(l=>{ const b=api.el('button','w-11 h-12 rounded-xl bg-pink-500/20 border border-pink-400/40 text-pink-100 font-bold hover:bg-pink-500/40 text-xl shadow-md transition'); b.textContent=l; api.on(b,'click',()=>{ if(b.disabled)return; b.disabled=true;b.style.opacity='.3'; const slots=ansEl.children; if(reveal<slots.length){ slots[reveal].textContent=l; slots[reveal].classList.add('bg-pink-500/40','border-pink-400/60'); reveal++; if(reveal===letters.length){ const guess=[...slots].map(s=>s.textContent).join(''); if(guess===letters.join('')){ pts+=40; api.add(40,'user','charades solve'); c.querySelector('#chPts').textContent=pts; api.toast('Solved! +40','🎭'); api.sound.win(); api.timeout(()=>nxt(card),800); } else { api.toast('Not quite','🤔'); api.sound.lose(); } } } }); api.sound.flip(); letEl.appendChild(b); });
+      card.querySelector('#chSkip').addEventListener('click',()=>{ api.add(5,'creator','charades skip'); api.sound.click(); nxt(card); });
+    }
+    function nxt(card){ card.remove(); idx++; if(idx>=P.length)finish(); else { c.querySelector('#chIdx').textContent=idx+1; render(); } }
+    function finish(){ api.add(25,'creator','charades host'); const o=centerOverlay(`<div class="text-7xl mb-3">🎭</div><div class="font-display font-black text-3xl text-white">All solved!</div><div class="text-cyan-300 text-sm font-semibold">${pts} pts · creator +25</div><button class="gbtn mt-4 px-8">Again ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();idx=0;pts=0;c.querySelector('#chPts').textContent=0;c.querySelector('#chIdx').textContent=1;render();}); }
+    render(); return { destroy(){} };
+  }
+}, T.charades);
+
+/* 13. GUESS THE PRICE */
+reg('price','Guess the Price','💵','from-green-500 to-teal-600',['🧩 Puzzle'], {
+  mount(c,api){
+    const items=[{n:'Mech keyboard',e:'⌨️',p:149},{n:'Vintage sneaker',e:'👟',p:320},{n:'Indie game bundle',e:'🎮',p:35},{n:'Fancy ramen bowl',e:'🍜',p:18},{n:'4K monitor',e:'🖥️',p:450},{n:'Vinyl record',e:'💿',p:28}];
+    let idx=0,pts=0;
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">Closest bid without going over wins</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">🪙 <span id="prPts">0</span></span></div><div id="prStage" class="flex-1 relative bg-transparent"></div></div>`;
+    const stage=c.querySelector('#prStage');
+    function render(){ const it=items[idx]; const card=api.el('div','absolute inset-0 flex flex-col items-center justify-center p-6 gap-6 fade-in'); card.innerHTML=`<div class="text-xs text-emerald-400 font-bold tracking-widest uppercase">ITEM ${idx+1}/${items.length}</div><div class="text-8xl drop-shadow-xl">${it.e}</div><div class="font-display font-black text-3xl text-white drop-shadow-md">${it.n}</div><div class="text-sm text-slate-300 font-semibold">What's it worth?</div><div class="flex items-center gap-3 mt-2"><button class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 font-bold text-2xl shadow-md border border-white/10 transition" id="prMinus">−</button><div class="glass-panel border border-emerald-500/30 rounded-2xl px-6 py-3 font-display font-black text-3xl text-emerald-300 tabular-nums min-w-[120px] text-center shadow-inner">$<span id="prBid">50</span></div><button class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 font-bold text-2xl shadow-md border border-white/10 transition" id="prPlus">+</button></div><input type="range" min="1" max="1000" value="50" class="w-72 accent-emerald-500 mt-2 cursor-pointer" id="prRange"><button class="gbtn px-10 py-3 mt-4 text-lg" id="prLock">Lock it in 🔒</button>`; stage.appendChild(card);
+      const bidEl=card.querySelector('#prBid'), range=card.querySelector('#prRange');
+      range.addEventListener('input',()=>bidEl.textContent=range.value);
+      card.querySelector('#prMinus').addEventListener('click',()=>{range.value=Math.max(1,+range.value-10);bidEl.textContent=range.value;});
+      card.querySelector('#prPlus').addEventListener('click',()=>{range.value=Math.min(1000,+range.value+10);bidEl.textContent=range.value;});
+      card.querySelector('#prLock').addEventListener('click',()=>{ const b=+range.value, actual=it.p; let g=0,msg=''; if(b===actual){g=60;msg='Spot on!';} else if(b<actual&&actual-b<=10){g=40;msg='So close!';} else if(b<actual){g=15;msg='Under — was $'+actual;} else {g=5;msg='Over ($'+actual+')';} pts+=g; api.add(g,'user','price '+msg); api.toast(msg+' +'+g+'🪙','💵'); api.sound.win(); c.querySelector('#prPts').textContent=pts; card.querySelector('#prLock').disabled=true; const rev=api.el('div','mt-4 text-center fade-in'); rev.innerHTML=`<div class="text-4xl font-display font-black text-emerald-400 drop-shadow-md">$${actual}</div><div class="text-xs text-slate-400 font-bold uppercase tracking-wider mt-1">actual price</div>`; card.querySelector('#prLock').after(rev); api.timeout(()=>{card.remove();idx++;if(idx>=items.length)finish();else render();},2000); });
+    }
+    function finish(){ api.add(25,'creator','price host'); const o=centerOverlay(`<div class="text-7xl mb-3">💵</div><div class="font-display font-black text-3xl text-white">Auction done</div><div class="text-cyan-300 text-sm font-semibold">${pts} pts · creator +25</div><button class="gbtn mt-4 px-8">Replay ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();idx=0;pts=0;c.querySelector('#prPts').textContent=0;render();}); }
+    render(); return { destroy(){} };
+  }
+}, T.price);
+
+/* 14. DAILY STREAK */
+reg('streak','Daily Streak','🔥','from-orange-500 to-red-600',['🕹️ Arcade'], {
+  mount(c,api){
+    const recs=Store.data.records; let day=recs.streak?recs.streak.day:1; let last=recs.streak?recs.streak.last:0; const today=Math.floor(Date.now()/86400000); if(last&&today-last>1)day=1;
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">3 micro-challenges · keep the streak alive</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">🔥 Day <span id="stDay">${day}</span></span></div><div id="stStage" class="flex-1 relative bg-transparent"></div></div>`;
+    const stage=c.querySelector('#stStage');
+    let step=0,won=0;
+    const ch=[{type:'tap',label:'Tap 15 times in 5s!',target:15,time:5},{type:'react',label:'Tap when dot turns GREEN'},{type:'tap',label:'Tap 22 times in 5s!',target:22,time:5}];
+    function startCh(){ step=0;won=0; nxt(); }
+    function nxt(){ if(step>=ch.length){ finishCh(); return; } const c2=ch[step]; if(c2.type==='tap')runTap(c2); else runReact(c2); }
+    let tapStop=null;
+    function runTap(c2){ const card=api.el('div','absolute inset-0 flex flex-col items-center justify-center gap-5 fade-in'); card.innerHTML=`<div class="text-xs text-orange-400 font-bold tracking-widest uppercase">CHALLENGE ${step+1}</div><div class="text-center font-display font-black text-3xl px-4 text-white drop-shadow-md">${c2.label}</div><div class="text-7xl font-display font-black tabular-nums text-white drop-shadow-lg" id="stCount">0</div><div class="text-sm text-slate-300 font-bold bg-white/10 px-4 py-1.5 rounded-full border border-white/10">⏱️ <span id="stTime">${c2.time}</span>s</div><button class="w-40 h-40 rounded-full bg-gradient-to-br from-orange-400 to-red-600 text-white font-display font-black text-3xl shadow-[0_15px_40px_rgba(234,88,12,0.6)] active:scale-95 transition-transform border-4 border-white/20 mt-4" id="stTap">TAP!</button>`; stage.appendChild(card); let count=0,time=c2.time,over=false; const ce=card.querySelector('#stCount'), te=card.querySelector('#stTime'); tapStop=api.interval(()=>{ if(over)return; time-=0.1; te.textContent=Math.max(0,time).toFixed(1); if(time<=0){ over=true; end(false); } },100); card.querySelector('#stTap').addEventListener('click',()=>{ if(over)return; count++; ce.textContent=count; api.sound.pop(); if(count>=c2.target){ over=true; end(true); } }); function end(success){ over=true; if(tapStop){clearInterval(tapStop);tapStop=null;} card.querySelector('#stTap').disabled=true; if(success)won++; const r=api.el('div','mt-4 text-xl font-black drop-shadow-md '+(success?'text-emerald-400':'text-rose-400')); r.textContent=success?'Cleared! 🎉':`Only ${count} — missed!`; card.appendChild(r); api.timeout(()=>{card.remove();step++;nxt();},1200); }
+    }
+    function runReact(c2){ const card=api.el('div','absolute inset-0 flex flex-col items-center justify-center gap-4 fade-in'); card.innerHTML=`<div class="text-xs text-orange-400 font-bold tracking-widest uppercase">CHALLENGE ${step+1}</div><div class="text-center font-display font-black text-3xl px-4 text-white drop-shadow-md">${c2.label}</div><div class="w-40 h-40 rounded-full bg-rose-600 grid place-items-center text-6xl mt-6 shadow-xl border-4 border-white/10 cursor-pointer transition-colors duration-100" id="stDot">🔴</div><div class="text-base text-slate-300 font-bold mt-4" id="stMsg">Wait for green…</div>`; stage.appendChild(card); const dot=card.querySelector('#stDot'), msg=card.querySelector('#stMsg'); let armed=false,go=0,done=false; const d=1500+Math.random()*2500; api.timeout(()=>{ if(done)return; armed=true; go=api.now(); dot.className='w-40 h-40 rounded-full bg-emerald-500 grid place-items-center text-6xl mt-6 shadow-[0_0_40px_rgba(16,185,129,0.6)] border-4 border-white/20 cursor-pointer transition-colors duration-100'; dot.textContent='🟢'; msg.textContent='TAP!'; },d); dot.addEventListener('click',()=>{ if(done)return; done=true; if(armed){ const rt=api.now()-go; won++; msg.innerHTML=`<span class="text-emerald-400 font-bold text-xl">${Math.round(rt)}ms — cleared! 🎉</span>`; api.sound.win(); } else { msg.innerHTML=`<span class="text-rose-400 font-bold text-xl">Too early!</span>`; api.sound.lose(); } api.timeout(()=>{card.remove();step++;nxt();},1200); }); }
+    function finishCh(){ const cleared=won>=2; if(cleared){ day=day+1; Store.data.records.streak={day,last:today}; Store.save(); const g=40+day*10; api.add(g,'both','streak day '+day); c.querySelector('#stDay').textContent=day; const o=centerOverlay(`<div class="text-7xl mb-3">🔥</div><div class="font-display font-black text-3xl text-white">Day ${day-1} cleared!</div><div class="text-cyan-300 text-sm font-semibold">Streak: ${day} days</div><div class="text-amber-400 font-bold bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20 mt-2">+${g} 🪙 to you & creator</div><button class="gbtn mt-4 px-8">Back to home</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',returnHome); } else { Store.data.records.streak={day:1,last:0}; Store.save(); const o=centerOverlay(`<div class="text-7xl mb-3">💔</div><div class="font-display font-black text-3xl text-white">Streak broken</div><div class="text-cyan-300 text-sm font-semibold">Cleared ${won}/3. Try again.</div><button class="gbtn mt-4 px-8">Try again ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();startCh();}); } }
+    const ov=centerOverlay(`<div class="text-7xl mb-3 drop-shadow-lg">🔥</div><div class="font-display font-black text-3xl text-white">Daily Streak · Day ${day}</div><p class="text-slate-300 text-sm max-w-xs font-medium">Clear 3 quick challenges to extend your streak. Both earn more each day!</p><button class="gbtn mt-4 px-8">Start ▶</button>`); stage.appendChild(ov);
+    ov.querySelector('button').addEventListener('click',()=>{ov.remove();startCh();});
+    return { destroy(){} };
+  }
+}, T.streak);
+
+/* 15. MEMORY MATCH */
+reg('memory','Memory Match','🃏','from-indigo-500 to-violet-700',['🃏 Cards','🧩 Puzzle'], {
+  mount(c,api){
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">Flip 2 cards, find pairs · fewer moves = more points</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">Moves <span id="mvMoves">0</span> · 🪙 <span id="mvPts">0</span></span></div><div id="mvStage" class="flex-1 relative bg-transparent p-5"></div></div>`;
+    const stage=c.querySelector('#mvStage');
+    const em=['🎮','🐝','⚡','🚀','💎','🔥']; let deck=[],flipped=[],matched=0,moves=0,lock=false,pts=0,gridEl=null;
+    function build(){ deck=api.shuffle([...em,...em].map((e,i)=>({e,done:false,flipped:false}))); flipped=[];matched=0;moves=0;lock=false;pts=0; c.querySelector('#mvMoves').textContent=0; c.querySelector('#mvPts').textContent=0; render(); }
+    function render(){ stage.innerHTML=''; gridEl=api.el('div','grid grid-cols-3 gap-3 max-w-md mx-auto h-full pb-4'); gridEl.style.gridTemplateRows='repeat(4,1fr)'; deck.forEach((card,idx)=>{ const b=api.el('button','rounded-[1.5rem] text-3xl font-bold transition-all duration-300 shadow-md flex items-center justify-center'); const show=card.flipped||card.done; if(show){ b.classList.add(card.done?'bg-emerald-500/30':'bg-indigo-500/40','border-2',card.done?'border-emerald-400/50':'border-indigo-400/60'); b.textContent=card.e; if(!card.done) b.classList.add('shadow-[0_0_15px_rgba(99,102,241,0.4)]'); } else { b.classList.add('glass-panel','border-2','border-white/10','hover:bg-white/10'); b.innerHTML='<span class="opacity-30 text-2xl">K</span>'; } api.on(b,'click',()=>flip(idx,b)); gridEl.appendChild(b); }); stage.appendChild(gridEl); }
+    function flip(idx,btn){ if(lock)return; const c2=deck[idx]; if(c2.flipped||c2.done)return; c2.flipped=true; flipped.push(idx); btn.className='rounded-[1.5rem] text-3xl font-bold transition-all duration-300 shadow-[0_0_15px_rgba(99,102,241,0.4)] flex items-center justify-center bg-indigo-500/40 border-2 border-indigo-400/60'; btn.textContent=c2.e; api.sound.flip(); if(flipped.length===2){ moves++; c.querySelector('#mvMoves').textContent=moves; lock=true; const [a,b]=flipped; if(deck[a].e===deck[b].e){ deck[a].done=deck[b].done=true; matched++; flipped=[]; lock=false; const g=Math.max(10,40-moves); pts+=g; api.add(g,'user','memory match'); c.querySelector('#mvPts').textContent=pts; api.toast('Match! +'+g,'🃏'); api.sound.win(); if(matched===em.length)api.timeout(finish,700); render(); } else { api.timeout(()=>{ deck[a].flipped=deck[b].flipped=false; flipped=[]; lock=false; render(); },1000); } } }
+    function finish(){ const bonus=Math.max(0,60-moves*3); pts+=bonus; api.add(bonus,'user','memory bonus'); api.add(30,'creator','memory host'); c.querySelector('#mvPts').textContent=pts; const o=centerOverlay(`<div class="text-7xl mb-3">🎉</div><div class="font-display font-black text-3xl text-white">Solved!</div><div class="text-cyan-300 text-sm font-semibold">${moves} moves · +${bonus} bonus</div><div class="text-amber-400 font-bold bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20 mt-2">+${pts} 🪙 total</div><button class="gbtn mt-4 px-8">Shuffle ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();build();}); }
+    build(); return { destroy(){} };
+  }
+}, T.memory);
+
+/* 16. WORD SCRAMBLE */
+reg('scramble','Word Scramble','🔤','from-sky-500 to-cyan-600',['🧩 Puzzle','🧠 Trivia'], {
+  mount(c,api){
+    const words=['STREAM','KELZA','FRIENDS','VIDEO','COMBO','LEVEL','ARCADE','SOCIAL']; let idx=0,pts=0,solved=0; const TIME=18;
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">Unscramble before time runs out</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">⏱️ <span id="scTime">18</span>s · 🪙 <span id="scPts">0</span></span></div><div id="scStage" class="flex-1 relative bg-transparent"></div></div>`;
+    const stage=c.querySelector('#scStage'); let iv=null,timeLeft=TIME,current='';
+    function render(){ const w=words[idx%words.length]; current=w; const scr=api.shuffle(w.split('')).join(''); timeLeft=TIME; c.querySelector('#scTime').textContent=TIME; const card=api.el('div','absolute inset-0 flex flex-col items-center justify-center gap-6 p-6 fade-in'); card.innerHTML=`<div class="text-xs text-sky-400 font-bold tracking-widest uppercase">WORD ${idx+1}</div><div class="text-4xl md:text-5xl font-display font-black tracking-[0.4em] text-white drop-shadow-[0_0_15px_rgba(56,189,248,0.5)] bg-white/5 px-6 py-4 rounded-2xl border border-white/10">${scr}</div><div class="text-sm text-slate-300 font-semibold">${w.length} letters</div><input maxlength="${w.length}" class="glass-panel border-2 border-white/20 rounded-2xl px-6 py-4 text-center font-bold tracking-[0.3em] uppercase text-2xl outline-none focus:border-sky-400/60 focus:bg-white/10 w-64 shadow-inner transition-all text-white" placeholder="TYPE..." autocomplete="off" id="scInput"><div class="flex gap-3 mt-2"><button class="gbtn px-8 py-3 text-lg" id="scSubmit">Submit ✅</button><button class="px-6 py-3 rounded-full bg-white/5 border border-white/20 text-base font-semibold hover:bg-white/10 transition" id="scSkip">Skip</button></div>`; stage.appendChild(card);
+      const input=card.querySelector('#scInput'); input.focus();
+      card.querySelector('#scSubmit').addEventListener('click',()=>{ const v=input.value.toUpperCase().trim(); if(v===current){ clearInterval(iv); const g=20+Math.floor(timeLeft*2); pts+=g; solved++; api.add(g,'user','scramble solve'); api.toast('Correct +'+g,'🔤'); api.sound.win(); c.querySelector('#scPts').textContent=pts; api.timeout(()=>nxt(card),600); } else { input.classList.add('border-rose-500/70','bg-rose-500/10'); api.sound.lose(); api.timeout(()=>input.classList.remove('border-rose-500/70','bg-rose-500/10'),400); } });
+      card.querySelector('#scSkip').addEventListener('click',()=>{ api.add(5,'creator','scramble skip'); api.sound.click(); nxt(card); });
+      input.addEventListener('keydown',e=>{ if(e.key==='Enter')card.querySelector('#scSubmit').click(); });
+      iv=setInterval(()=>{ timeLeft-=0.1; c.querySelector('#scTime').textContent=Math.max(0,timeLeft).toFixed(1); if(timeLeft<=0){clearInterval(iv);api.toast('Time! It was '+current,'⏰');api.sound.lose();nxt(card);} },100);
+    }
+    function nxt(card){ if(card)card.remove(); idx++; if(idx>=8){clearInterval(iv);finish();} else render(); }
+    function finish(){ clearInterval(iv); api.add(40,'creator','scramble host'); const o=centerOverlay(`<div class="text-7xl mb-3">🔤</div><div class="font-display font-black text-3xl text-white">Round over</div><div class="text-cyan-300 text-sm font-semibold">Solved ${solved} · ${pts} pts</div><button class="gbtn mt-4 px-8">Again ↻</button>`); stage.appendChild(o); o.querySelector('button').addEventListener('click',()=>{o.remove();idx=0;pts=0;solved=0;c.querySelector('#scPts').textContent=0;render();}); }
+    render(); return { destroy(){} };
+  }
+}, T.scramble);
+
+/* ----------------------------------------------------------------------------
+   NEW GAMES ADDED FOR KELZA: Connect 4, Treasure Chest, Truth or Dare
+---------------------------------------------------------------------------- */
+
+/* 17. CONNECT 4 */
+reg('connect4','Connect 4','🔴','from-blue-600 to-indigo-800',['🧩 Puzzle'], {
+  mount(c,api){
+    const top=gameTopBar(api,'Tap column to drop token. Get 4 in a row!','You: 🔴 · Rival: 🟡');
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full">${top}<div id="c4Stage" class="flex-1 relative bg-transparent flex items-center justify-center p-4"></div></div>`;
+    const stage=c.querySelector('#c4Stage');
+    
+    // Logic setup
+    const ROWS=6, COLS=7;
+    let board = Array(ROWS).fill(null).map(()=>Array(COLS).fill(0));
+    let turn = 1; // 1 = player, 2 = AI
+    let gameover = false;
+    
+    // UI setup
+    const boardEl = api.el('div', 'grid gap-2 bg-blue-600/60 p-3 rounded-2xl border-4 border-blue-500/80 shadow-[0_0_30px_rgba(37,99,235,0.4)] backdrop-blur-sm relative');
+    boardEl.style.gridTemplateColumns = `repeat(${COLS}, minmax(0, 1fr))`;
+    boardEl.style.width = '100%';
+    boardEl.style.maxWidth = '500px';
+    boardEl.style.aspectRatio = '7/6';
+    stage.appendChild(boardEl);
+
+    // Build visual grid
+    const cells = [];
+    for(let r=0; r<ROWS; r++) {
+        cells[r] = [];
+        for(let c=0; c<COLS; c++) {
+            const cell = api.el('div', 'rounded-full bg-ink2/80 shadow-inner w-full h-full relative cursor-pointer hover:bg-ink2/60 transition');
+            // Adding column click listener to the whole column effectively
+            cell.addEventListener('click', () => { if(turn===1 && !gameover) drop(c, 1); });
+            cells[r][c] = cell;
+            boardEl.appendChild(cell);
+        }
+    }
+
+    function renderBoard() {
+        for(let r=0; r<ROWS; r++) {
+            for(let c=0; c<COLS; c++) {
+                const val = board[r][c];
+                cells[r][c].className = 'rounded-full w-full h-full relative cursor-pointer shadow-inner ' + 
+                    (val === 0 ? 'bg-ink2/80 hover:bg-ink2/60' : 
+                    (val === 1 ? 'bg-gradient-to-br from-rose-400 to-rose-600 shadow-[0_0_15px_rgba(225,29,72,0.6)]' : 'bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.6)]'));
+            }
+        }
+    }
+
+    function drop(col, player) {
+        // Find lowest empty row
+        let row = -1;
+        for(let r=ROWS-1; r>=0; r--) {
+            if(board[r][col] === 0) { row = r; break; }
+        }
+        if(row === -1) return; // Column full
+
+        board[row][col] = player;
+        api.sound.pop();
+        renderBoard();
+
+        if(checkWin(player)) {
+            endGame(player);
+            return;
+        }
+
+        // Switch turn
+        if(player === 1) {
+            turn = 2;
+            api.timeout(aiMove, 600);
+        } else {
+            turn = 1;
+        }
+    }
+
+    function checkWin(p) {
+        // Horiz
+        for(let r=0;r<ROWS;r++) for(let c=0;c<COLS-3;c++) if(board[r][c]==p && board[r][c+1]==p && board[r][c+2]==p && board[r][c+3]==p) return true;
+        // Vert
+        for(let c=0;c<COLS;c++) for(let r=0;r<ROWS-3;r++) if(board[r][c]==p && board[r+1][c]==p && board[r+2][c]==p && board[r+3][c]==p) return true;
+        // Diag /
+        for(let r=3;r<ROWS;r++) for(let c=0;c<COLS-3;c++) if(board[r][c]==p && board[r-1][c+1]==p && board[r-2][c+2]==p && board[r-3][c+3]==p) return true;
+        // Diag \
+        for(let r=0;r<ROWS-3;r++) for(let c=0;c<COLS-3;c++) if(board[r][c]==p && board[r+1][c+1]==p && board[r+2][c+2]==p && board[r+3][c+3]==p) return true;
+        return false;
+    }
+
+    function aiMove() {
+        if(gameover) return;
+        // Simple AI: pick random valid column.
+        let valid = [];
+        for(let c=0; c<COLS; c++) if(board[0][c] === 0) valid.push(c);
+        if(valid.length === 0) { endGame(0); return; } // Draw
+        
+        let choice = valid[Math.floor(Math.random()*valid.length)];
+        // Very slight smarts: try to block vertical stack of 3 (simplified)
+        for(let c of valid) {
+            for(let r=ROWS-1; r>=3; r--) {
+                if(board[r][c]===1 && board[r-1][c]===1 && board[r-2][c]===1 && board[r-3][c]===0) {
+                    choice = c; break;
+                }
+            }
+        }
+        drop(choice, 2);
+    }
+
+    function endGame(winner) {
+        gameover = true;
+        let title, msg, g = 0;
+        if(winner === 1) { title = 'You Won! 🎉'; msg = 'Connected 4!'; g=100; api.add(100,'user','connect4 win'); api.sound.win(); }
+        else if(winner === 2) { title = 'Rival Won 😵'; msg = 'Better luck next time.'; g=50; api.add(50,'creator','connect4 lose'); api.sound.lose(); }
+        else { title = 'Draw!'; msg = 'Board full.'; }
+
+        api.timeout(()=>{
+            const o=centerOverlay(`<div class="text-7xl mb-3">${winner===1?'🏆':'😵'}</div><div class="font-display font-black text-4xl text-white">${title}</div><div class="text-cyan-300 text-base font-semibold mt-2">${msg}</div><div class="text-amber-400 font-bold bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20 mt-4">+${g} 🪙 to ${winner===1?'you':'creator'}</div><button class="gbtn mt-6 px-10">Rematch ↻</button>`); 
+            stage.appendChild(o); 
+            o.querySelector('button').addEventListener('click',()=>{
+                o.remove(); 
+                board = Array(ROWS).fill(null).map(()=>Array(COLS).fill(0));
+                gameover = false; turn = 1; renderBoard();
+            });
+        }, 800);
+    }
+
+    return { destroy(){} };
+  }
+}, T.connect4);
+
+/* 18. TREASURE CHEST */
+reg('chest','Treasure Chest','📦','from-amber-700 to-orange-900',['🎰 Casino'], {
+  mount(c,api){
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">Pick a chest to reveal your multiplier!</span><span class="font-bold text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">Bet <span id="tcBet">50</span> 🪙</span></div>
+    <div class="flex items-center justify-center gap-4 p-4 glass border-b-0 flex-none shrink-0 z-10">
+        <button class="tc-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold shadow-md border border-white/10" data-d="-1">−</button>
+        <div class="bg-black/40 border border-amber-500/40 rounded-xl px-5 py-2 font-display font-black text-xl text-amber-300 tabular-nums min-w-[90px] text-center shadow-inner"><span id="tcBet2">50</span> 🪙</div>
+        <button class="tc-chg w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 font-bold shadow-md border border-white/10" data-d="1">+</button>
+    </div>
+    <div id="tcStage" class="flex-1 relative bg-transparent flex flex-col items-center justify-center p-4"></div></div>`;
+    const stage=c.querySelector('#tcStage');
+    let bet=50;
+    
+    function setBet(n){ bet=Math.max(10,Math.min(api.balance(),n)); c.querySelector('#tcBet').textContent=bet; c.querySelector('#tcBet2').textContent=bet; }
+    c.querySelectorAll('.tc-chg').forEach(b=>b.addEventListener('click',()=>{ setBet(bet+(+b.dataset.d)*10); api.sound.click(); }));
+
+    function renderChests() {
+        stage.innerHTML = '';
+        const chestContainer = api.el('div', 'flex gap-6 justify-center flex-wrap max-w-2xl');
+        const mults = api.shuffle([0, 0.5, 2, 5]); // 4 chests
+        
+        mults.forEach((m, idx) => {
+            const btn = api.el('button', 'w-32 h-32 sm:w-40 sm:h-40 glass-panel rounded-3xl border-2 border-amber-600/30 shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:bg-amber-900/40 transition-all hover:-translate-y-2 flex flex-col items-center justify-center group relative overflow-hidden');
+            btn.innerHTML = `<div class="text-6xl sm:text-7xl drop-shadow-xl group-hover:scale-110 transition-transform">📦</div><div class="absolute inset-0 bg-gradient-to-t from-amber-500/10 to-transparent"></div>`;
+            
+            api.on(btn, 'click', () => {
+                if(!api.bet(bet, 'treasure chest')) return;
+                
+                // Disable all
+                Array.from(chestContainer.children).forEach(cb => {
+                    cb.disabled = true;
+                    cb.classList.remove('hover:-translate-y-2', 'hover:bg-amber-900/40');
+                });
+
+                // Reveal logic
+                api.sound.flip();
+                btn.classList.add('animate-pop', 'border-amber-400', 'bg-amber-500/20', 'shadow-[0_0_30px_rgba(245,158,11,0.5)]');
+                
+                api.timeout(() => {
+                    // Show result on clicked
+                    btn.innerHTML = `<div class="text-3xl font-black text-amber-300 drop-shadow-md z-10">${m}x</div>`;
+                    if(m >= 2) { api.sound.win(); api.win(bet*m, 'chest win'); api.toast(`${m}x! +${bet*m}🪙`, '💎'); }
+                    else if(m > 0) { api.sound.coin(); api.win(bet*m, 'chest partial'); api.toast('Partial back', '🪙');}
+                    else { api.sound.lose(); api.toast('Empty!', '🕸️'); }
+                    
+                    // Reveal others slightly dimmed
+                    Array.from(chestContainer.children).forEach((cb, i) => {
+                        if(i !== idx) {
+                            cb.classList.add('opacity-50');
+                            cb.innerHTML = `<div class="text-xl font-bold text-slate-400">${mults[i]}x</div>`;
+                        }
+                    });
+
+                    // Reset button
+                    const rbtn = api.el('button', 'gbtn absolute bottom-8 px-10 py-3 shadow-xl animate-pop');
+                    rbtn.textContent = 'Play Again ↻';
+                    api.on(rbtn, 'click', renderChests);
+                    stage.appendChild(rbtn);
+
+                }, 500);
+            });
+            chestContainer.appendChild(btn);
+        });
+        stage.appendChild(chestContainer);
+        setBet(bet);
+    }
+
+    renderChests();
+    return { destroy(){} };
+  }
+}, T.chest);
+
+/* 19. TRUTH OR DARE */
+reg('tod','Truth or Dare','🎭','from-purple-600 to-indigo-900',['🧠 Trivia'], {
+  mount(c,api){
+    c.innerHTML=`<div class="flex-1 flex flex-col h-full"><div class="flex items-center justify-between px-5 py-2.5 text-xs border-b border-white/10 bg-black/40 backdrop-blur-md z-10"><span class="text-slate-200 font-semibold">Social game. No bets, just vibes.</span><span class="font-bold text-cyan-300">Have fun!</span></div>
+    <div id="todStage" class="flex-1 relative bg-transparent flex flex-col items-center justify-center p-6 text-center"></div></div>`;
+    const stage=c.querySelector('#todStage');
+    
+    const truths = ["What's your most embarrassing streaming moment?", "Who was your first streamer crush?", "What's the worst game you've ever played to completion?", "Have you ever faked a reaction for a video?", "What's a secret talent you have?"];
+    const dares = ["Do 10 pushups on camera.", "Show us the last photo saved on your phone.", "Talk in a funny accent for the next 2 minutes.", "Let the other person tweet something from your account.", "Sing the chorus of your favorite song."];
+
+    function showMenu() {
+        stage.innerHTML = `<div class="font-display font-black text-4xl mb-8 text-white drop-shadow-md">Pick Your Fate</div>
+        <div class="flex gap-6 flex-wrap justify-center w-full max-w-md">
+            <button id="btnTruth" class="flex-1 min-w-[140px] aspect-square rounded-[2rem] bg-gradient-to-br from-cyan-400 to-blue-600 text-white font-black text-2xl shadow-[0_15px_30px_rgba(6,182,212,0.4)] hover:scale-105 transition-transform border border-white/20">TRUTH<br><span class="text-4xl mt-2 block">😇</span></button>
+            <button id="btnDare" class="flex-1 min-w-[140px] aspect-square rounded-[2rem] bg-gradient-to-br from-rose-500 to-pink-600 text-white font-black text-2xl shadow-[0_15px_30px_rgba(244,63,94,0.4)] hover:scale-105 transition-transform border border-white/20">DARE<br><span class="text-4xl mt-2 block">😈</span></button>
+        </div>`;
+        
+        stage.querySelector('#btnTruth').addEventListener('click', () => reveal('truth'));
+        stage.querySelector('#btnDare').addEventListener('click', () => reveal('dare'));
+    }
+
+    function reveal(type) {
+        api.sound.flip();
+        const arr = type === 'truth' ? truths : dares;
+        const txt = arr[Math.floor(Math.random()*arr.length)];
+        const color = type === 'truth' ? 'text-cyan-300' : 'text-rose-400';
+        const bg = type === 'truth' ? 'from-cyan-900/50 to-blue-900/50' : 'from-rose-900/50 to-pink-900/50';
+        
+        stage.innerHTML = `<div class="glass-panel w-full max-w-lg p-8 rounded-[2rem] border-2 border-white/10 shadow-2xl flex flex-col items-center justify-center animate-pop bg-gradient-to-br ${bg}">
+            <div class="text-xs font-bold tracking-widest uppercase mb-4 ${color}">${type}</div>
+            <div class="text-2xl sm:text-3xl font-display font-bold text-white leading-relaxed mb-8">${txt}</div>
+            <button id="btnDone" class="gbtn px-10">Done! Next Player ↻</button>
+        </div>`;
+
+        stage.querySelector('#btnDone').addEventListener('click', () => { api.sound.click(); showMenu(); });
+    }
+
+    showMenu();
+    return { destroy(){} };
+  }
+}, T.tod);
+
+
+/* ============================================================================
+   HUB RENDERING — rooms, grid, leaderboard
+   ============================================================================ */
+const ROOMS=[ {id:'all',icon:'🌟',label:'All'}, {id:'casino',icon:'🎰',label:'Casino'}, {id:'arcade',icon:'🕹️',label:'Arcade'}, {id:'cards',icon:'🃏',label:'Cards'}, {id:'fish',icon:'🐟',label:'Fish'}, {id:'puzzle',icon:'🧩',label:'Puzzle'}, {id:'trivia',icon:'🧠',label:'Trivia'} ];
+const ROOM_MAP={all:'All',casino:'🎰 Casino',arcade:'🕹️ Arcade',cards:'🃏 Cards',fish:'🐟 Fish',puzzle:'🧩 Puzzle',trivia:'🧠 Trivia'};
+let activeRoom='all';
+const roomTabs=document.getElementById('roomTabs');
+ROOMS.forEach(r=>{ const b=document.createElement('button'); b.className='room-tab px-4 py-2 rounded-full text-sm font-bold border border-white/5 bg-white/5 hover:bg-white/10 transition text-slate-300 hover:text-white'; b.innerHTML=`${r.icon} ${r.label}`; b.dataset.room=r.id; b.addEventListener('click',()=>{ activeRoom=r.id; updateTabs(); renderGrid(); Sound.click(); }); roomTabs.appendChild(b); });
+function updateTabs(){ roomTabs.querySelectorAll('.room-tab').forEach(b=>b.classList.toggle('active',b.dataset.room===activeRoom)); }
+const gridEl=document.getElementById('gamesGrid');
+const thumbCleanups=[];
+function renderGrid(){
+  thumbCleanups.forEach(fn=>fn()); thumbCleanups.length=0;
+  gridEl.innerHTML='';
+  GAMES.forEach((g,idx)=>{
+    const inRoom = activeRoom==='all' || g.rooms.some(r=>ROOM_MAP[activeRoom]===r);
+    if(!inRoom)return;
+    const card=document.createElement('button'); card.className='game-card text-left rounded-[1.5rem] overflow-hidden border border-white/10 glass shadow-lg group fade-in flex flex-col'; card.style.animationDelay=(idx*0.02)+'s';
+    card.innerHTML=`<div class="thumb aspect-[4/3] bg-gradient-to-br ${g.color} relative border-b border-white/10"><canvas class="absolute inset-0"></canvas><div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div><div class="k-wm" aria-hidden="true"><span>KELZA</span></div><div class="absolute top-3 left-3 text-3xl drop-shadow-md">${g.icon}</div><div class="absolute top-3 right-3 flex flex-wrap gap-1 justify-end">${g.rooms.slice(0,1).map(r=>`<span class="text-[10px] font-bold px-2 py-1 rounded-full bg-black/50 backdrop-blur border border-white/20 text-white uppercase">${r.replace(/^[^\s]+\s/,'')}</span>`).join('')}</div><div class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white text-ink opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_5px_15px_rgba(0,0,0,0.5)] flex items-center justify-center text-sm font-bold scale-90 group-hover:scale-100">▶</div></div><div class="p-4 flex-1 flex flex-col justify-between bg-white/[0.02]"><h3 class="font-display font-bold text-lg leading-tight text-white mb-1 group-hover:text-cyan-300 transition-colors">${g.title}</h3><div class="flex items-center justify-between"><span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Play Now</span><span class="text-[11px] text-slate-500 font-mono">#${(idx+1).toString().padStart(2,'0')}</span></div></div>`;
+    card.addEventListener('click',()=>{ Sound.init(); Sound.click(); GameHost.open(g); });
+    gridEl.appendChild(card);
+    const cv=card.querySelector('canvas'); thumbCleanups.push(mountThumb(cv,g.thumb));
+  });
+}
+function renderLeaderboard(){
+  const list=document.getElementById('leaderboardList'); if(!list) return; // For safety if we move it
+  const base=[ {name:'@CreatorMax',role:'Host',pts:Store.data.creatorPoints,av:'https://api.dicebear.com/7.x/avataaars/svg?seed=Max&backgroundColor=b6e3f4',you:false}, {name:'@Alex',role:'User',pts:Store.data.points,av:'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex&backgroundColor=transparent',you:true}, {name:'@GlitchQueen',role:'Top Fan',pts:3120,av:'https://api.dicebear.com/7.x/avataaars/svg?seed=Glitch&backgroundColor=transparent'},{name:'@VoidWalker',role:'Fan',pts:2880,av:'https://api.dicebear.com/7.x/avataaars/svg?seed=Void&backgroundColor=transparent'} ].sort((a,b)=>b.pts-a.pts);
+  list.innerHTML=base.map((p,i)=>{ const medal=['🥇','🥈','🥉'][i]||''; return `<div class="flex items-center gap-3 p-3 rounded-2xl ${p.you?'bg-gradient-to-r from-amber-500/20 to-pink-500/10 border border-amber-500/40 shadow-inner':'bg-white/[0.03] border border-white/5'}"><div class="w-8 text-center font-display font-black text-lg ${i<3?'':'text-slate-500'}">${medal||'#'+(i+1)}</div><div class="w-10 h-10 rounded-full bg-slate-800 overflow-hidden border border-white/20"><img src="${p.av}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><div class="font-bold text-sm text-white flex items-center gap-2">${p.name} ${p.you?'<span class="text-[9px] bg-amber-500/30 text-amber-300 px-1.5 py-0.5 rounded-sm uppercase tracking-wider font-bold">YOU</span>':''}</div><div class="text-[11px] text-cyan-300 font-semibold">${p.role}</div></div><div class="font-display font-black text-amber-400 tabular-nums text-lg">${p.pts.toLocaleString()} 🪙</div></div>`; }).join('');
+}
+
+/* ============================================================================
+   BOOT
+   ============================================================================ */
+updateTabs(); renderGrid(); UI.refreshPoints(); maybeShowConsent();
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{ const id=a.getAttribute('href'); if(id.length>1){ const t=document.querySelector(id); if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); } } }));
+setTimeout(()=>UI.toast('Welcome to Kelza! 🎮 — Pick a game to challenge your friend.'),800);
+</script>
+</body>
+</html>
