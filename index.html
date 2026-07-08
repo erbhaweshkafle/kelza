@@ -1,834 +1,551 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelza | The Ultimate Boredom Killer & Creator Ecosystem</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        heat: {
-                            pink: '#FF007F', // Primary Heatmap Action
-                            cyan: '#00F0FF', // Secondary Action/Trust
-                            violet: '#8A2BE2', // Premium/VIP
-                        },
-                        surface: {
-                            950: '#030508', // True Black Base
-                            900: '#0A0F1A',
-                            800: '#141B2D',
-                        }
-                    },
-                    backgroundImage: {
-                        'neon-glow': 'radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.15), transparent 60%)',
-                        'cyan-glow': 'radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.1), transparent 50%)',
-                    },
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'ring': 'ring 2s infinite ease-in-out',
-                        'marquee': 'marquee 25s linear infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        },
-                        ring: {
-                            '0%': { transform: 'scale(1)', opacity: 0.8 },
-                            '50%': { transform: 'scale(1.5)', opacity: 0 },
-                            '100%': { transform: 'scale(1)', opacity: 0 }
+<!DOCTYPE html><html lang="en" class="scroll-smooth"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Kelza | The Ultimate Boredom Killer & Creator Ecosystem</title>        <link rel="preconnect" href="https://fonts.googleapis.com">    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">    <script src="https://cdn.tailwindcss.com"></script>
+    <script>        
+        tailwind.config = {            
+            theme: {                
+                extend: {                    
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },                    
+                    colors: {                        
+                        heat: {                            
+                            pink: '#FF007F', /* Primary Heatmap Action */                            
+                            cyan: '#00F0FF', /* Secondary Action/Trust */                            
+                            violet: '#8A2BE2', /* Premium/VIP */                        
+                        },                        
+                        surface: {                            
+                            950: '#030508', /* True Black Base */                            
+                            900: '#0A0F1A',                            
+                            800: '#141B2D',                        
+                        }                    
+                    },                    
+                    backgroundImage: {                        
+                        'neon-glow': 'radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.15), transparent 60%)',                        
+                        'cyan-glow': 'radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.1), transparent 50%)',                    
+                    },                    
+                    animation: {                        
+                        'blob': 'blob 7s infinite',                        
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',                    
+                    },                    
+                    keyframes: {                        
+                        blob: {                            
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },                            
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },                            
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },                            
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },                        
                         },
                         marquee: {
                             '0%': { transform: 'translateX(0%)' },
-                            '100%': { transform: 'translateX(-50%)' }
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        'marquee-half': {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
                         }
-                    }
-                }
-            }
-        }
+                    }                
+                }            
+            }        
+        }    
     </script>
+    <style>        
+        body {            
+            background-color: #030508;            
+            color: #F8FAFC;            
+            overflow-x: hidden;        
+        }
+        /* Glassmorphism Panels */        
+        .glass-panel {            
+            background: rgba(20, 27, 45, 0.6);            
+            backdrop-filter: blur(20px);            
+            -webkit-backdrop-filter: blur(20px);            
+            border: 1px solid rgba(255, 255, 255, 0.05);            
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);        
+        }
+        /* Attention Heatmap Buttons */        
+        .btn-heat-primary {            
+            background: linear-gradient(135deg, #FF007F, #D6006B);            
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.5), inset 0 0 10px rgba(255,255,255,0.2);            
+            border: 1px solid rgba(255, 100, 180, 0.5);            
+            transition: all 0.3s ease;        
+        }        
+        .btn-heat-primary:hover {            
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.8);            
+            transform: scale(1.05);        
+        }
+        .btn-heat-secondary {            
+            background: linear-gradient(135deg, #00F0FF, #00A3CC);            
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);            
+            color: #030508;            
+            border: 1px solid rgba(0, 240, 255, 0.6);            
+            transition: all 0.3s ease;        
+        }        
+        .btn-heat-secondary:hover {            
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);            
+            transform: scale(1.05);        
+        }
+        /* Text Gradients */        
+        .text-gradient-pink {            
+            background: linear-gradient(to right, #FF007F, #FF73B5);            
+            -webkit-background-clip: text;            
+            -webkit-text-fill-color: transparent;        
+        }        
+        .text-gradient-cyan {            
+            background: linear-gradient(to right, #00F0FF, #8A2BE2);            
+            -webkit-background-clip: text;            
+            -webkit-text-fill-color: transparent;        
+        }
+        /* Scroll Reveal */        
+        .reveal {            
+            opacity: 0;            
+            transform: translateY(40px);            
+            transition: all 0.7s cubic-bezier(0.2, 1, 0.2, 1);        
+        }        
+        .reveal.active {            
+            opacity: 1;            
+            transform: translateY(0);        
+        }                
+        .mask-edges {            
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);            
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);        
+        }
+        /* Custom Animations for Mobile Canvas */        
+        @keyframes swipeRight {            
+            0% { transform: translateX(0) rotate(0deg); opacity: 1; }            
+            100% { transform: translateX(120%) rotate(15deg); opacity: 0; }        
+        }        
+        @keyframes pulseHeart {            
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 0, 127, 0.7); }            
+            70% { transform: scale(1.5); opacity: 0; box-shadow: 0 0 0 20px rgba(255, 0, 127, 0); }            
+            100% { transform: scale(1); opacity: 0; }        
+        }        
+        @keyframes slideUpFade {            
+            0% { transform: translateY(20px); opacity: 0; }            
+            100% { transform: translateY(0); opacity: 1; }        
+        }        
+        @keyframes translationFlash {            
+            0% { background-color: rgba(255, 255, 255, 0.1); color: #ccc; }            
+            50% { background-color: rgba(0, 240, 255, 0.4); color: #fff; text-shadow: 0 0 10px #00F0FF; }            
+            100% { background-color: rgba(255, 255, 255, 0.1); color: #fff; }        
+        }        
+        @keyframes floatGift {            
+            0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }            
+            20% { transform: translate(-50%, -40px) scale(2); opacity: 1; }            
+            80% { transform: translate(-50%, -200px) scale(2.5); opacity: 1; }            
+            100% { transform: translate(-50%, -250px) scale(3); opacity: 0; }        
+        }        
+        @keyframes centerRevealGift {            
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }            
+            20% { transform: translate(-50%, -50%) scale(4); opacity: 1; }            
+            80% { transform: translate(-50%, -50%) scale(4.5); opacity: 1; }            
+            100% { transform: translate(-50%, -50%) scale(6); opacity: 0; }        
+        }        
+        @keyframes callRing {            
+            0% { transform: scale(1); opacity: 0.8; }            
+            100% { transform: scale(1.8); opacity: 0; }        
+        }        
+        .anim-swipe-right { animation: swipeRight 0.6s cubic-bezier(0.2, 1, 0.2, 1) forwards; }        
+        .anim-pulse-heart { animation: pulseHeart 0.8s cubic-bezier(0.2, 1, 0.2, 1) forwards; }        
+        .anim-slide-up { animation: slideUpFade 0.4s ease-out forwards; }        
+        .anim-translate { animation: translationFlash 1.5s ease-in-out forwards; }        
+        .anim-gift { animation: floatGift 2.5s ease-out forwards; }        
+        .anim-grand-gift { animation: centerRevealGift 3s ease-out forwards; }        
+        .anim-ring { animation: callRing 1.5s infinite cubic-bezier(0.2, 1, 0.2, 1); }
+        /* Hide scrollbar for canvas */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    <style>
-        body {
-            background-color: #030508;
-            color: #F8FAFC;
-            overflow-x: hidden;
+        /* ============================================================
+           PREMIUM POLISH LAYER — Design tokens, motion, interactions
+           Consolidated for consistency (P1 / P7 / P8 / P10 / P11)
+           ============================================================ */
+        :root {
+            --k-radius: 1rem;
+            --k-radius-lg: 1.5rem;
+            --k-radius-xl: 2rem;
+            --k-blur: 20px;
+            --k-ease: cubic-bezier(0.2, 1, 0.2, 1);
+            --k-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --k-fast: 0.25s; --k-mid: 0.45s; --k-slow: 0.8s;
+            --k-glass: rgba(20, 27, 45, 0.55);
         }
+        html { scroll-behavior: smooth; }
 
-        /* Glassmorphism Panels */
-        .glass-panel {
-            background: rgba(20, 27, 45, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        /* Attention Heatmap Buttons */
-        .btn-heat-primary {
-            background: linear-gradient(135deg, #FF007F, #D6006B);
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.5), inset 0 0 10px rgba(255,255,255,0.2);
-            border: 1px solid rgba(255, 100, 180, 0.5);
-            transition: all 0.3s ease;
-        }
-        .btn-heat-primary:hover {
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.8);
-            transform: scale(1.05);
-        }
-
-        /* Text Gradients */
-        .text-gradient-pink {
-            background: linear-gradient(to right, #FF007F, #FF73B5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .text-gradient-cyan {
-            background: linear-gradient(to right, #00F0FF, #8A2BE2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Scroll Reveal (Fallback support included) */
+        /* --- Upgraded Reveal: blur + scale + translateY (P1) --- */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.7s cubic-bezier(0.2, 1, 0.2, 1);
+            transform: translateY(36px) scale(0.985);
+            filter: blur(10px);
+            transition: opacity var(--k-slow) var(--k-ease),
+                        transform var(--k-slow) var(--k-ease),
+                        filter var(--k-slow) var(--k-ease);
+            will-change: opacity, transform, filter;
         }
         .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
+            opacity: 1; transform: translateY(0) scale(1); filter: blur(0);
         }
-        
-        /* Mobile Simulation Base Container (Bulletproof dimensions) */
-        .sim-container {
-            width: 320px;
-            height: 650px;
-            min-width: 320px;
-            min-height: 650px;
-            flex-shrink: 0;
+        /* Staggered children */
+        .stagger > * {
+            opacity: 0; transform: translateY(28px) scale(0.96); filter: blur(8px);
+            transition: opacity var(--k-mid) var(--k-ease),
+                        transform var(--k-mid) var(--k-ease),
+                        filter var(--k-mid) var(--k-ease);
         }
-
-        /* --- JS Animation Classes --- */
-        .sim-screen {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            transition: opacity 0.4s ease-in-out;
-            opacity: 0;
-            pointer-events: none;
-            overflow: hidden;
+        .stagger.active > * {
+            opacity: 1; transform: translateY(0) scale(1); filter: blur(0);
         }
-        
-        /* Modifiers injected by JS */
-        .anim-swipe-right { transform: translateX(120%) rotate(15deg) !important; opacity: 0 !important; transition: all 0.6s ease-in-out; }
-        .anim-pulse-heart { animation: pulseHeart 0.8s cubic-bezier(0.2, 1, 0.2, 1) forwards; }
-        .anim-slide-up { transform: translateY(0) !important; opacity: 1 !important; transition: all 0.4s ease-out; }
-        .anim-translate { animation: translationFlash 1.5s ease-in-out forwards; }
-        .anim-gift { animation: floatGift 1.8s ease-out forwards; }
+        .stagger.active > *:nth-child(1){transition-delay:.05s}
+        .stagger.active > *:nth-child(2){transition-delay:.13s}
+        .stagger.active > *:nth-child(3){transition-delay:.21s}
+        .stagger.active > *:nth-child(4){transition-delay:.29s}
+        .stagger.active > *:nth-child(5){transition-delay:.37s}
+        .stagger.active > *:nth-child(6){transition-delay:.45s}
+        .stagger.active > *:nth-child(7){transition-delay:.53s}
+        .stagger.active > *:nth-child(8){transition-delay:.61s}
 
-        @keyframes pulseHeart {
-            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 0, 127, 0.7); }
-            70% { transform: scale(1.5); opacity: 0; box-shadow: 0 0 0 20px rgba(255, 0, 127, 0); }
-            100% { transform: scale(1); opacity: 0; }
+        /* --- Premium card hover: elevation + animated shadow + border glow + reflection sweep (P8) --- */
+        .glass-panel { transition: transform var(--k-mid) var(--k-ease), box-shadow var(--k-mid) var(--k-ease), border-color var(--k-mid) var(--k-ease); }
+        .premium-card { position: relative; overflow: hidden; }
+        .premium-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+            background: linear-gradient(115deg, transparent 32%, rgba(255,255,255,0.10) 48%, transparent 64%);
+            background-size: 240% 100%; background-position: 200% 0; transition: background-position var(--k-slow);
         }
-        @keyframes translationFlash {
-            0% { background-color: rgba(255, 255, 255, 0.1); color: #ccc; }
-            50% { background-color: rgba(0, 240, 255, 0.4); color: #fff; text-shadow: 0 0 10px #00F0FF; }
-            100% { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+        .premium-card:hover::after { background-position: -60% 0; }
+
+        /* --- Magnetic primary buttons + ripple (P8) --- */
+        .btn-heat-primary, .btn-heat-secondary { position: relative; overflow: hidden; }
+        .btn-heat-primary:hover, .btn-heat-secondary:hover { transition: transform var(--k-fast) var(--k-spring), box-shadow var(--k-fast) var(--k-ease); }
+        .btn-heat-primary::before {
+            content:''; position:absolute; inset:0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.35) 48%, transparent 66%);
+            background-size: 240% 100%; background-position: 200% 0; transition: background-position var(--k-slow); pointer-events:none;
         }
-        @keyframes floatGift {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            20% { transform: translateY(-40px) scale(1.5); opacity: 1; }
-            100% { transform: translateY(-250px) scale(2); opacity: 0; }
+        .btn-heat-primary:hover::before { background-position: -60% 0; }
+        .ripple {
+            position: absolute; border-radius: 9999px; transform: scale(0); opacity: 0.5;
+            background: rgba(255,255,255,0.5); pointer-events: none; animation: kRipple .65s var(--k-ease) forwards;
         }
-    </style>
-</head>
-<body class="antialiased selection:bg-heat-pink selection:text-white">
+        @keyframes kRipple { to { transform: scale(3.2); opacity: 0; } }
 
-    <nav class="fixed w-full z-50 transition-all duration-300 py-4 glass-panel border-b-0" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-heat-pink to-heat-violet flex items-center justify-center shadow-[0_0_15px_rgba(255,0,127,0.5)]">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
-                <span class="text-2xl font-black tracking-widest text-white">KELZA</span>
-            </div>
-            
-            <div class="hidden lg:flex space-x-8 text-sm font-bold text-slate-300">
-                <a href="#product" class="hover:text-heat-pink transition-colors">The App</a>
-                <a href="#creators" class="hover:text-heat-cyan transition-colors">Creator Economy</a>
-                <a href="#tech" class="hover:text-white transition-colors">Tech & KYC</a>
-                <a href="#investors" class="hover:text-heat-violet transition-colors">Investor Pitch</a>
-            </div>
+        /* --- Heatmap attention CTA — breathing glow + halo ring (P7) --- */
+        .attention-cta { position: relative; animation: kBreath 3.4s ease-in-out infinite; }
+        .attention-cta::after {
+            content:''; position:absolute; inset:-3px; border-radius: inherit; border:1px solid rgba(0,240,255,0.55);
+            animation: kHalo 2.6s var(--k-ease) infinite; pointer-events:none;
+        }
+        @keyframes kBreath {
+            0%,100% { box-shadow: 0 0 22px rgba(0,240,255,0.25), 0 0 0 0 rgba(0,240,255,0.18); }
+            50%     { box-shadow: 0 0 40px rgba(0,240,255,0.55), 0 0 0 6px rgba(0,240,255,0.10); }
+        }
+        @keyframes kHalo { 0%{ transform: scale(1); opacity:.7 } 100%{ transform: scale(1.18); opacity:0 } }
 
-            <div class="flex items-center gap-4">
-                <a href="#investors" class="btn-heat-primary text-white px-6 py-2.5 rounded-full font-bold text-sm uppercase tracking-wide">
-                    $120K Seed Deck
-                </a>
-            </div>
-        </div>
-    </nav>
+        /* --- Floating particles for hero (P1) --- */
+        .k-particle { position:absolute; border-radius:50%; pointer-events:none; background: radial-gradient(circle, rgba(255,255,255,0.7), transparent 70%); animation: kFloat var(--k-d, 12s) linear infinite; opacity:0; }
+        @keyframes kFloat { 0%{ transform: translateY(20px) scale(.6); opacity:0 } 10%{opacity:.6} 90%{opacity:.5} 100%{ transform: translateY(-340px) scale(1.1); opacity:0 } }
 
-    <header class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-surface-950">
-        <div class="absolute top-0 -left-4 w-96 h-96 bg-heat-pink opacity-20 rounded-full mix-blend-screen filter blur-3xl animate-blob"></div>
-        <div class="absolute top-0 -right-4 w-96 h-96 bg-heat-cyan opacity-20 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-8 left-20 w-96 h-96 bg-heat-violet opacity-20 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-4000"></div>
+        /* --- Ecosystem Gallery: responsive grid + auto-caption + hover (P3) --- */
+        .k-gallery { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; }
+        @media (max-width: 640px){ .k-gallery { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:.75rem; } }
+        .k-shot { position:relative; overflow:hidden; border-radius: var(--k-radius-lg); border:1px solid rgba(255,255,255,0.08); aspect-ratio: 9/18; background:#0A0F1A; box-shadow: 0 10px 30px -12px rgba(0,0,0,0.7); }
+        .k-shot img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform var(--k-slow) var(--k-ease), filter var(--k-slow) var(--k-ease); filter: blur(14px) scale(1.08); opacity:0; }
+        .k-shot.k-loaded img { filter: blur(0) scale(1); opacity:1; }
+        .k-shot:hover img { transform: scale(1.06); }
+        .k-shot .k-cap {
+            position:absolute; left:0; right:0; bottom:0; padding:.75rem .9rem .85rem; z-index:2;
+            background: linear-gradient(to top, rgba(3,5,8,0.92), rgba(3,5,8,0.0));
+            transform: translateY(8px); opacity:0; transition: opacity var(--k-mid) var(--k-ease), transform var(--k-mid) var(--k-ease);
+            font-weight:700; font-size:.8rem; letter-spacing:.02em; color:#fff;
+        }
+        .k-shot:hover .k-cap, .k-shot:focus-within .k-cap { opacity:1; transform: translateY(0); }
+        .k-shot::before { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0; transition: opacity var(--k-mid) var(--k-ease);
+            background: linear-gradient(135deg, rgba(255,0,127,0.18), rgba(0,240,255,0.18)); mix-blend-mode: screen; }
+        .k-shot:hover::before { opacity:1; }
+        .k-shot::after { content:''; position:absolute; inset:0; z-index:3; pointer-events:none; border-radius:inherit; opacity:0; transition: opacity var(--k-mid) var(--k-ease);
+            background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%); background-size:240% 100%; background-position:200% 0; }
+        .k-shot:hover::after { opacity:1; background-position:-60% 0; }
+        @media (hover: none) { .k-shot .k-cap { opacity:1; transform: translateY(0); } }
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
-            <div class="text-left reveal">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-heat-cyan/30 text-xs font-bold text-heat-cyan mb-6 uppercase tracking-widest">
-                    <span class="w-2 h-2 rounded-full bg-heat-cyan animate-pulse"></span>
-                    1:1 Private Encrypted Platform
-                </div>
-                <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight leading-[1.05] text-white">
-                    Cure <span class="text-gradient-cyan">Loneliness.</span><br>
-                    Kill <span class="text-gradient-pink">Boredom.</span>
-                </h1>
-                <p class="text-lg md:text-xl text-slate-300 mb-10 font-medium leading-relaxed max-w-lg">
-                    The ultimate Super App for verified 1:1 human connection. Speak your heart out, flirt, or heal. 100% Real Humans. Zero AI Bots. 
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#product" class="btn-heat-primary text-white text-center px-8 py-4 rounded-xl font-black text-lg shadow-lg">
-                        Get 5 Free 25s Matches
-                    </a>
-                    <a href="#creators" class="glass-panel text-white border border-white/20 text-center px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-colors">
-                        Earn USD as a Creator
-                    </a>
-                </div>
-            </div>
-            
-            <div class="relative reveal hidden lg:block">
-                <img src="images/hero_bg.png" alt="Live Call Preview" class="w-full h-auto rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.2)] border border-white/10 transform -rotate-2 hover:rotate-0 transition-transform duration-500 object-cover" style="height: 600px;">
-                <div class="absolute -bottom-6 -left-10 glass-panel p-4 rounded-2xl border border-heat-pink/30 flex items-center gap-4 animate-bounce">
-                    <div class="w-12 h-12 bg-heat-pink rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-white font-bold">Live 1:1 Call</p>
-                        <p class="text-heat-pink text-xs font-bold">+500 Kelza Coins</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+        /* --- Floating glass nav shortcuts (P4) --- */
+        .k-fab-wrap { position: fixed; right: 1rem; bottom: 1rem; z-index: 60; display:flex; flex-direction:column; gap:.5rem; align-items:flex-end; }
+        @media (min-width: 768px){ .k-fab-wrap { right: 1.5rem; bottom: 1.5rem; } }
+        .k-fab {
+            display:flex; align-items:center; gap:0; height:3rem; min-width:3rem; padding:0;
+            border-radius: 9999px; overflow:hidden; cursor:pointer; text-decoration:none;
+            background: var(--k-glass); backdrop-filter: blur(var(--k-blur)); -webkit-backdrop-filter: blur(var(--k-blur));
+            border:1px solid rgba(255,255,255,0.12); color:#fff; font-weight:700; font-size:.85rem;
+            box-shadow: 0 10px 30px -8px rgba(0,0,0,0.6); animation: kFabBreath 3.6s ease-in-out infinite;
+            transition: padding var(--k-fast) var(--k-ease), box-shadow var(--k-fast) var(--k-ease), border-color var(--k-fast) var(--k-ease), transform var(--k-fast) var(--k-ease);
+        }
+        .k-fab .k-ic { width:3rem; height:3rem; display:flex; align-items:center; justify-content:center; font-size:1.15rem; flex-shrink:0; }
+        .k-fab .k-lbl { max-width:0; overflow:hidden; white-space:nowrap; opacity:0; transition: max-width var(--k-mid) var(--k-ease), opacity var(--k-mid) var(--k-ease), padding var(--k-mid) var(--k-ease); padding-right:0; }
+        .k-fab:hover { padding:0 1rem 0 0; transform: translateX(-2px); }
+        .k-fab:hover .k-lbl { max-width: 140px; opacity:1; padding-right:.4rem; }
+        .k-fab.is-active { border-color: rgba(0,240,255,0.6); box-shadow: 0 0 22px rgba(0,240,255,0.4); }
+        @keyframes kFabBreath { 0%,100%{ box-shadow: 0 10px 30px -8px rgba(0,0,0,0.6), 0 0 0 0 rgba(255,0,127,0.0) } 50%{ box-shadow: 0 14px 36px -8px rgba(0,0,0,0.7), 0 0 0 4px rgba(255,0,127,0.06) } }
 
-    <div class="w-full bg-heat-cyan text-surface-950 py-3 overflow-hidden whitespace-nowrap z-20 relative font-black text-sm uppercase tracking-widest flex">
-        <div class="animate-marquee whitespace-nowrap flex items-center">
-            <span class="mx-4">• 🔒 E2EE ENCRYPTED</span><span class="mx-4">• 👤 100% KYC VERIFIED</span><span class="mx-4">• 🤖 ANTI-AI / ZERO BOTS</span><span class="mx-4">• 💳 STRIPE PAYOUTS</span><span class="mx-4">• 🔞 STRICTLY 18+ PREMIUM</span><span class="mx-4">• 🌐 SUB-200MS LATENCY</span>
-            <span class="mx-4">• 🔒 E2EE ENCRYPTED</span><span class="mx-4">• 👤 100% KYC VERIFIED</span><span class="mx-4">• 🤖 ANTI-AI / ZERO BOTS</span><span class="mx-4">• 💳 STRIPE PAYOUTS</span><span class="mx-4">• 🔞 STRICTLY 18+ PREMIUM</span><span class="mx-4">• 🌐 SUB-200MS LATENCY</span>
-        </div>
+        /* --- Animated counters + timeline nodes (P6) --- */
+        .k-count { font-variant-numeric: tabular-nums; }
+        .k-tl-node { position:relative; padding-left:2.5rem; }
+        .k-tl-node::before { content:''; position:absolute; left:.55rem; top:0; bottom:-1.5rem; width:2px; background: linear-gradient(to bottom, rgba(255,0,127,0.6), rgba(0,240,255,0.0)); }
+        .k-tl-node:last-child::before { display:none; }
+        .k-tl-node::after { content:''; position:absolute; left:0; top:.15rem; width:1.15rem; height:1.15rem; border-radius:50%; background:#0A0F1A; border:2px solid #FF007F; box-shadow:0 0 0 4px rgba(255,0,127,0.15); }
+        .k-tl-node.k-cyan::after { border-color:#00F0FF; box-shadow:0 0 0 4px rgba(0,240,255,0.15); }
+        .k-tl-node.k-white::after { border-color:#fff; box-shadow:0 0 0 4px rgba(255,255,255,0.12); }
+
+        /* --- Performance: pause decorative animation when off-screen (P10) --- */
+        .k-paused.animate-blob,
+        .k-paused.attention-cta,
+        .k-paused .k-particle { animation-play-state: paused !important; }
+
+        /* --- Reduced motion (P10) --- */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .stagger > * { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
+            .attention-cta, .k-fab, .animate-blob, .k-particle, .animate-bounce, .animate-pulse { animation: none !important; }
+            * { scroll-behavior: auto !important; }
+        }
+    </style></head><body class="antialiased selection:bg-heat-pink selection:text-white">
+    <!-- Global Navigation Bar -->    <nav class="fixed w-full z-50 transition-all duration-300 py-4 glass-panel border-b-0" id="navbar">        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">            <div class="flex items-center gap-3">                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-heat-pink to-heat-violet flex items-center justify-center shadow-[0_0_15px_rgba(255,0,127,0.5)]">                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>                </div>                <span class="text-2xl font-black tracking-widest text-white">KELZA</span>            </div>                        <div class="hidden lg:flex space-x-8 text-sm font-bold text-slate-300">                <a href="#product" class="hover:text-heat-pink transition-colors">The App</a>                <a href="#creators" class="hover:text-heat-cyan transition-colors">Creator Economy</a>                <a href="#tech" class="hover:text-white transition-colors">Tech & KYC</a>                <a href="#investors" class="hover:text-heat-violet transition-colors">Investor Pitch</a>            </div>
+            <div class="flex items-center gap-4">                <a href="#investors" class="btn-heat-primary text-white px-6 py-2.5 rounded-full font-bold text-sm uppercase tracking-wide hidden sm:block">                    $120K Seed Deck                </a>            </div>        </div>    </nav>
+    <!-- Floating Glass Shortcuts (Premium nav, bottom-right) -->
+    <div class="k-fab-wrap" id="k-fab-wrap" aria-label="Quick shortcuts">
+        <a href="#gallery" class="k-fab" data-target="#gallery"><span class="k-ic">🎁</span><span class="k-lbl">Gifts</span></a>
+        <a href="game.html" class="k-fab" data-target="game.html"><span class="k-ic">🎮</span><span class="k-lbl">Games</span></a>
+        <a href="demoscreen.html" class="k-fab attention-cta" data-target="demoscreen.html"><span class="k-ic">📱</span><span class="k-lbl">Live Demo</span></a>
     </div>
 
-    <section id="problem" class="py-24 relative bg-surface-900 border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16 items-center">
-            <div class="relative reveal">
-                <div class="absolute -inset-4 bg-heat-pink/20 blur-2xl rounded-3xl"></div>
-                <img src="images/emotive_heavy.png" alt="Feeling Heavy? Talk to someone who listens." class="relative rounded-3xl border-2 border-heat-pink/30 shadow-2xl w-full object-cover h-[500px]">
-            </div>
-            <div class="reveal">
-                <h2 class="text-heat-pink font-black tracking-widest uppercase mb-2 text-sm">The Market Gap</h2>
-                <h3 class="text-5xl font-black text-white mb-6 leading-tight">Feeling Heavy?<br>Talk to someone who listens.</h3>
-                <p class="text-slate-300 text-lg mb-8 leading-relaxed">
-                    Sometimes you don't want a dating app or a noisy live stream. Sometimes you just feel "heavy" and need a verified, empathetic human to listen to you instantly. We provide a private, judgment-free space to open up, heal your wounds, or just share a laugh.
-                </p>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-heat-pink">
-                        <h4 class="text-white font-bold text-lg mb-1">No Judgement</h4>
-                        <p class="text-sm text-slate-400">Total privacy. OS-level screen recording prevention.</p>
-                    </div>
-                    <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-heat-cyan">
-                        <h4 class="text-white font-bold text-lg mb-1">No Bots</h4>
-                        <p class="text-sm text-slate-400">Every single user and creator undergoes Liveness KYC.</p>
-                    </div>
-                </div>
-            </div>
+    <!-- Hero Section -->    <header class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-surface-950" id="hero">        <!-- Floating Particles (P1) -->        <div class="absolute inset-0 pointer-events-none z-[1]" id="hero-particles" aria-hidden="true"></div>        <!-- Animated Background Orbs -->        <div class="absolute top-0 -left-4 w-96 h-96 bg-heat-pink opacity-20 rounded-full mix-blend-screen filter blur-3xl animate-blob k-decor"></div>        <div class="absolute top-0 -right-4 w-96 h-96 bg-heat-cyan opacity-20 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-2000 k-decor"></div>        <div class="absolute -bottom-8 left-20 w-96 h-96 bg-heat-violet opacity-20 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-4000 k-decor"></div>
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 items-center">            <div class="text-left reveal">                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-heat-cyan/30 text-xs font-bold text-heat-cyan mb-6 uppercase tracking-widest">                    <span class="w-2 h-2 rounded-full bg-heat-cyan animate-pulse"></span>                    1:1 Private Encrypted Platform                </div>                <h1 class="text-5xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tight leading-[1.05] text-white">                    Cure <span class="text-gradient-cyan">Loneliness.</span><br>                    Kill <span class="text-gradient-pink">Boredom.</span>                </h1>                <p class="text-lg md:text-xl text-slate-300 mb-10 font-medium leading-relaxed max-w-lg">                    The ultimate Super App for verified 1:1 human connection. Speak your heart out, flirt, or heal. 100% Real Humans. Zero AI Bots.                 </p>                <div class="flex flex-col sm:flex-row gap-4 flex-wrap">                    <a href="#product" class="btn-heat-primary text-white text-center px-8 py-4 rounded-xl font-black text-lg shadow-lg">                        Get 5 Free 25s Matches                    </a>                    <a href="#creators" class="glass-panel text-white border border-white/20 text-center px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-colors">                        Earn USD as a Creator                    </a>                </div>            </div>                        <!-- Hero Mockup (Reversed to top on mobile) -->            <div class="relative reveal w-full max-w-lg mx-auto lg:max-w-none mt-8 lg:mt-0">                <img src="images/hero_bg.png" alt="Make a Livestream App" class="w-full h-auto aspect-[4/5] lg:h-[600px] rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.2)] border border-white/10 transform lg:-rotate-2 hover:rotate-0 transition-transform duration-500 object-cover">                <!-- Floating element -->                <div class="absolute -bottom-6 -left-4 lg:-left-10 glass-panel p-4 rounded-2xl border border-heat-pink/30 flex items-center gap-4 animate-bounce">                    <div class="w-12 h-12 bg-heat-pink rounded-full flex items-center justify-center">                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>                    </div>                    <div>                        <p class="text-white font-bold text-sm lg:text-base">Live 1:1 Call</p>                        <p class="text-heat-pink text-xs font-bold">+500 Kelza Coins</p>                    </div>                </div>            </div>        </div>    </header>
+    <!-- Trust & Verification Ticker -->    <div class="w-full bg-heat-cyan text-surface-950 py-3 overflow-hidden whitespace-nowrap z-20 relative font-black text-sm uppercase tracking-widest flex">        <div class="animate-[marquee-half_20s_linear_infinite] whitespace-nowrap flex items-center w-max min-w-max">            <span class="mx-4">🔒 E2EE ENCRYPTED</span><span class="mx-4">👤 100% KYC VERIFIED</span><span class="mx-4">🤖 ANTI-AI / ZERO BOTS</span><span class="mx-4">💳 STRIPE PAYOUTS</span><span class="mx-4">🔞 STRICTLY 18+ PREMIUM</span><span class="mx-4">🌐 SUB-200MS LATENCY</span>            <span class="mx-4">🔒 E2EE ENCRYPTED</span><span class="mx-4">👤 100% KYC VERIFIED</span><span class="mx-4">🤖 ANTI-AI / ZERO BOTS</span><span class="mx-4">💳 STRIPE PAYOUTS</span><span class="mx-4">🔞 STRICTLY 18+ PREMIUM</span><span class="mx-4">🌐 SUB-200MS LATENCY</span>        </div>    </div>
+    <!-- Interactive App Demo -->    <div class="py-12 bg-surface-900 border-b border-white/5 relative z-10 flex flex-col items-center justify-center text-center px-4">        <a href="demoscreen.html" class="attention-cta glass-panel premium-card text-heat-cyan border border-heat-cyan/30 text-center px-8 py-4 rounded-xl font-bold text-lg hover:bg-heat-cyan/10 transition-colors w-full sm:w-auto inline-flex items-center justify-center gap-2 mb-3">            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>            Interactive App Demo        </a>        <p class="text-sm text-slate-400 font-medium">Demo version just for prototype,actual design will have much more detailed,</p>    </div>
+    <!-- The Market Gap -->    <section id="problem" class="py-24 relative bg-surface-900 border-b border-white/5">        <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16 items-center">            <div class="relative reveal">                <div class="absolute -inset-4 bg-heat-pink/20 blur-2xl rounded-3xl"></div>                <img src="images/emotive_heavy.png" alt="Feeling Heavy? Talk to someone who listens." class="relative rounded-3xl border-2 border-heat-pink/30 shadow-2xl w-full object-cover h-[350px] md:h-[500px]">            </div>            <div class="reveal">                <h2 class="text-heat-pink font-black tracking-widest uppercase mb-2 text-sm">The Market Gap</h2>                <h3 class="text-5xl font-black text-white mb-6 leading-tight">Feeling Heavy?<br>Talk to someone who listens.</h3>                <p class="text-slate-300 text-lg mb-8 leading-relaxed">                    Sometimes you don't want a dating app or a noisy live stream. Sometimes you just feel "heavy" and need a verified, empathetic human to listen to you instantly. We provide a private, judgment-free space to open up, heal your wounds, or just share a laugh.                </p>                <div class="grid grid-cols-2 gap-6">                    <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-heat-pink">                        <h4 class="text-white font-bold text-lg mb-1">No Judgement</h4>                        <p class="text-sm text-slate-400">Total privacy. OS-level screen recording prevention.</p>                    </div>                    <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-heat-cyan">                        <h4 class="text-white font-bold text-lg mb-1">No Bots</h4>                        <p class="text-sm text-slate-400">Every single user and creator undergoes Liveness KYC.</p>                    </div>                </div>            </div>        </div>    </section>
+    <!-- Experience the Engine (Canvas Simulation) -->    <section id="product" class="py-24 bg-surface-950 relative overflow-hidden border-t border-white/5">        <div class="absolute inset-0 bg-cyan-glow opacity-20"></div>        <div class="max-w-7xl mx-auto px-4 relative z-10">            <div class="text-center mb-16 reveal">                <h2 class="text-heat-cyan font-black tracking-widest uppercase mb-2 text-sm">Experience the Engine</h2>                <h3 class="text-4xl font-black text-white mb-6">Frictionless Interaction & Monetization.</h3>                <p class="text-slate-400 max-w-2xl mx-auto text-lg">Watch how our UI combines algorithmic matching, real-time AI translation, and high-velocity micro-transactions seamlessly.</p>            </div>
+            <div class="grid lg:grid-cols-3 gap-12 items-center">                <!-- Left Details -->                <div class="space-y-8 reveal hidden lg:block">                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-heat-pink transition-all duration-300" id="info-swipe">                        <h4 class="text-white font-bold text-lg mb-2 flex items-center gap-2"><span class="text-2xl">🔥</span> Intelligent Matching</h4>                        <p class="text-sm text-slate-400">Swipe right to instantly trigger a 25s free match. Heartbeat animations simulate adrenaline and dopamine loops.</p>                    </div>                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-heat-cyan transition-all duration-300 opacity-50" id="info-translate">                        <h4 class="text-white font-bold text-lg mb-2 flex items-center gap-2"><span class="text-2xl">🌐</span> Live AI Translation</h4>                        <p class="text-sm text-slate-400">Chat messages are instantly translated into the user's native tongue, completely destroying language barriers.</p>                    </div>                </div>
+                <!-- Center: Bulletproof Mobile Canvas -->                <div class="relative reveal mx-auto flex justify-center">                    <div class="w-[320px] h-[650px] min-w-[320px] min-h-[650px] bg-surface-950 border-[10px] border-surface-800 rounded-[3rem] shadow-[0_0_50px_rgba(0,240,255,0.15)] overflow-hidden flex flex-col z-10 relative">                        <!-- Top Notch -->                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-surface-800 rounded-b-2xl z-50"></div>                                                <!-- Screen 1: Swipe Interface -->                        <div id="sim-screen-1" class="absolute inset-0 w-full h-full bg-surface-900 z-40 transition-opacity duration-300 p-4 pt-12 flex flex-col">                            <div class="flex justify-between items-center mb-4">                                <span class="text-white font-bold text-lg">Discover</span>                                <span class="bg-heat-pink/20 text-heat-pink text-xs px-2 py-1 rounded-full font-bold">5 Free Matches</span>                            </div>                                                        <!-- Swipe Card -->                            <div id="sim-swipe-card" class="flex-1 relative rounded-2xl overflow-hidden shadow-xl border border-white/10 origin-bottom-right transition-transform">                                <img src="images/swipe_match.png" class="absolute inset-0 w-full h-full object-cover">                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>                                <div class="absolute bottom-4 left-4 right-4">                                    <div class="flex items-center gap-2 mb-1">                                        <h3 class="text-white font-black text-2xl">Elena, 23</h3>                                        <span class="w-3 h-3 bg-green-500 rounded-full shadow-[0_0_8px_#22c55e]"></span>                                    </div>                                    <p class="text-slate-300 text-sm mb-2">Bogotá, Colombia • 🎙️ Good Listener</p>                                    <div class="flex gap-2 text-xs">                                        <span class="glass-panel px-2 py-1 rounded-md text-heat-cyan border border-heat-cyan/30">Affordable</span>                                        <span class="glass-panel px-2 py-1 rounded-md text-white border border-white/10">Speaks: ES, EN</span>                                    </div>                                </div>                            </div>
+                            <!-- Controls -->                            <div class="flex justify-center gap-6 mt-6 mb-4">                                <div class="w-14 h-14 rounded-full glass-panel border border-white/10 flex items-center justify-center text-slate-400">                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>                                </div>                                <div id="sim-btn-right" class="w-16 h-16 rounded-full bg-gradient-to-br from-heat-pink to-heat-violet shadow-[0_0_20px_rgba(255,0,127,0.4)] flex items-center justify-center text-white relative">                                    <div id="sim-heart-pulse" class="absolute inset-0 rounded-full border-4 border-heat-pink opacity-0"></div>                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>                                </div>                            </div>                        </div>
+                        <!-- Screen 1.5: Incoming Call -->                        <div id="sim-screen-1-5" class="absolute inset-0 w-full h-full bg-black z-35 flex flex-col items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">                            <img src="images/live_call.png" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-md">                                                        <div class="relative mb-8 z-10">                                <div class="absolute inset-0 rounded-full border-2 border-green-500 anim-ring"></div>                                <div class="absolute inset-0 rounded-full border-2 border-green-500 anim-ring" style="animation-delay: 0.5s"></div>                                <img src="images/swipe_match.png" class="w-28 h-28 rounded-full object-cover border-4 border-heat-cyan relative z-10 shadow-[0_0_30px_rgba(0,240,255,0.4)]">                            </div>                                                        <h3 class="text-white font-black text-3xl mb-2 z-10">Elena</h3>                            <p class="text-slate-300 mb-16 animate-pulse z-10 font-medium">Incoming Video Call...</p>                                                        <div class="flex gap-10 w-full justify-center z-10">                                <div class="w-16 h-16 rounded-full bg-red-500/20 border border-red-500 flex items-center justify-center text-red-500">                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l-8 8m0-8l8 8"></path></svg>                                </div>                                <div id="sim-btn-accept" class="w-16 h-16 rounded-full bg-green-500 border border-green-400 flex items-center justify-center text-white shadow-[0_0_20px_rgba(34,197,94,0.6)] animate-bounce transition-transform">                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>                                </div>                            </div>                        </div>
+                        <!-- Screen 2: Video Chat & Monetization -->                        <div id="sim-screen-2" class="absolute inset-0 w-full h-full bg-black z-30 flex flex-col justify-end p-4 pb-[88px] transition-opacity duration-300 opacity-0 pointer-events-none">                            <img src="images/live_call.png" class="absolute inset-0 w-full h-full object-cover opacity-90">                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div>                                                        <!-- Header -->                            <div class="absolute top-12 left-4 right-4 flex justify-between items-center z-10">                                <div class="glass-panel px-3 py-1 rounded-full flex items-center gap-2 border border-white/10">                                    <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>                                    <span class="text-xs font-bold text-white">00:14 / 00:25</span>                                </div>                                <div class="bg-black/50 px-3 py-1 rounded-full border border-yellow-500/50 flex items-center gap-1 shadow-[0_0_10px_rgba(234,179,8,0.3)]">                                    <span class="text-yellow-400 text-xs font-bold">🪙 300</span>                                </div>                            </div>
+                            <!-- Massive Center Reveal Gift -->                            <div id="sim-grand-gift" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[100px] opacity-0 pointer-events-none z-40 drop-shadow-[0_0_50px_rgba(255,0,127,1)]">🏰</div>
+                            <!-- Chat Area -->                            <div class="relative z-10 w-full flex flex-col gap-2 mb-4">                                <div id="sim-chat-bubble" class="self-start max-w-[80%] bg-white/10 backdrop-blur-md rounded-2xl rounded-tl-sm px-4 py-2 text-sm text-slate-300 opacity-0 translate-y-4 border border-white/5 shadow-lg">                                    <span id="sim-chat-text" class="font-medium">¡Hola! ¿Cómo estás hoy?</span>                                </div>                            </div>
+                            <!-- Bottom Action Bar -->                            <div class="relative z-10 flex gap-2 items-center w-full">                                <div class="flex-1 bg-black/40 border border-white/20 rounded-full h-10 flex items-center px-4 text-xs text-slate-400">                                    Type a message...                                </div>                                <div class="w-10 h-10 rounded-full bg-heat-pink flex items-center justify-center text-white shadow-[0_0_15px_rgba(255,0,127,0.6)] flex-shrink-0 relative">                                    🎁                                    <div id="sim-floating-gift" class="absolute bottom-10 left-1/2 -translate-x-1/2 text-4xl opacity-0 pointer-events-none drop-shadow-2xl z-40">🌹</div>                                </div>                            </div>
+                            <!-- Low Balance Warning Overlay -->                            <div id="sim-modal" class="absolute inset-x-4 bottom-24 glass-panel border border-red-500/50 rounded-2xl p-4 z-50 translate-y-10 opacity-0 pointer-events-none transition-all duration-300 shadow-2xl">                                <div class="flex items-center gap-2 mb-2">                                    <span class="text-xl">⚠️</span>                                    <h4 class="text-white font-bold text-sm">Low Coin Balance</h4>                                </div>                                <p class="text-xs text-slate-300 mb-4">You need more coins to send this Gift. You currently have 300.</p>                                <button class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-black text-sm py-2 rounded-xl shadow-lg animate-pulse">                                    Top-up Combo: 5000 🪙 for $9.99                                </button>                            </div>                        </div>
+                        <!-- Static Footer Menu -->                        <div class="absolute bottom-0 left-0 right-0 h-[72px] bg-surface-950 border-t border-white/10 z-50 flex justify-around items-center px-4 rounded-b-[2.5rem]">                            <svg class="w-6 h-6 text-heat-pink" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3l8 6v12h-5v-7h-6v7H4V9l8-6z"/></svg>                            <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>                            <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>                            <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>                        </div>                    </div>                </div>
+                <!-- Right Details -->                <div class="space-y-8 reveal hidden lg:block">                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-yellow-500 transition-all duration-300 opacity-50" id="info-gift">                        <h4 class="text-white font-bold text-lg mb-2 flex items-center gap-2"><span class="text-2xl">🎁</span> Impulse Gifting</h4>                        <p class="text-sm text-slate-400">Animated 3D gifts map directly to the creator's payout, turning user appreciation into instant revenue.</p>                    </div>                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500 transition-all duration-300 opacity-50" id="info-topup">                        <h4 class="text-white font-bold text-lg mb-2 flex items-center gap-2"><span class="text-2xl">💳</span> Frictionless Top-ups</h4>                        <p class="text-sm text-slate-400">When balance is low, highly visible "Combo Packs" appear in-stream, leveraging FOMO to trigger one-tap purchases.</p>                    </div>                </div>            </div>        </div>    </section>
+    <!-- VIP Membership Section -->    <section id="vip" class="py-24 bg-surface-950 relative overflow-hidden border-t border-white/5">        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-heat-violet opacity-10 rounded-full blur-[100px] pointer-events-none"></div>        <div class="max-w-7xl mx-auto px-4 relative z-10 reveal">            <h2 class="text-heat-cyan font-black tracking-widest uppercase mb-2 text-sm text-center">Premium Experience</h2>            <h3 class="text-4xl font-black text-white mb-6 text-center">Unlock Kelza VIP</h3>            <p class="text-slate-400 text-center mb-12 max-w-2xl mx-auto">Talk Freely With Verified People Around the World. One Membership. Unlimited Conversations.</p>                        <div class="grid md:grid-cols-3 gap-8 mb-16">                <!-- Weekly -->                <div class="glass-panel premium-card p-8 rounded-3xl border border-blue-500/30 text-center relative group hover:-translate-y-2 transition-transform duration-300 bg-gradient-to-b from-blue-900/20 to-transparent">                    <h4 class="text-xl font-bold text-white mb-2">Weekly VIP</h4>                    <div class="text-blue-400 text-4xl mb-4 drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]">💎</div>                    <div class="text-4xl font-black text-white mb-2">$7.99<span class="text-sm font-normal text-slate-400">/week</span></div>                    <p class="text-xs text-slate-400 mb-6">Billed weekly<br>✓ Cancel anytime</p>                    <button class="w-full py-3 rounded-full bg-blue-500/20 text-blue-400 font-bold border border-blue-500/50 hover:bg-blue-500 hover:text-white transition-colors">Choose Weekly</button>                </div>                <!-- Monthly -->                <div class="glass-panel premium-card p-8 rounded-3xl border border-heat-pink/50 text-center relative group hover:-translate-y-2 transition-transform duration-300 bg-gradient-to-b from-heat-pink/20 to-transparent transform md:-translate-y-4 shadow-[0_0_40px_rgba(255,0,127,0.2)]">                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-heat-pink text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-lg">Most Popular</div>                    <h4 class="text-xl font-bold text-white mb-2">Monthly VIP</h4>                    <div class="text-heat-pink text-4xl mb-4 drop-shadow-[0_0_15px_rgba(255,0,127,0.8)]">💎</div>                    <div class="text-4xl font-black text-white mb-2">$19.99<span class="text-sm font-normal text-slate-400">/month</span></div>                    <p class="text-xs text-slate-400 mb-6">Billed monthly<br>✓ Cancel anytime</p>                    <button class="w-full py-3 rounded-full bg-heat-pink text-white font-bold shadow-[0_0_20px_rgba(255,0,127,0.5)] hover:scale-105 transition-transform">Choose Monthly</button>                </div>                <!-- Yearly -->                <div class="glass-panel premium-card p-8 rounded-3xl border border-heat-violet/30 text-center relative group hover:-translate-y-2 transition-transform duration-300 bg-gradient-to-b from-heat-violet/20 to-transparent">                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-heat-violet text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-lg">Best Value</div>                    <h4 class="text-xl font-bold text-white mb-2">Yearly VIP</h4>                    <div class="text-heat-violet text-4xl mb-4 drop-shadow-[0_0_15px_rgba(138,43,226,0.8)]">💎</div>                    <div class="text-4xl font-black text-white mb-2">$99.99<span class="text-sm font-normal text-slate-400">/year</span></div>                    <p class="text-xs text-slate-400 mb-6">Billed yearly<br><span class="text-green-400 font-bold">Save 58%</span></p>                    <button class="w-full py-3 rounded-full bg-heat-violet/20 text-heat-violet font-bold border border-heat-violet/50 hover:bg-heat-violet hover:text-white transition-colors">Choose Yearly</button>                </div>            </div>
+            <!-- VIP Benefits Grid -->            <div class="glass-panel p-8 rounded-3xl border border-white/10">                <h4 class="text-center text-white font-bold mb-8 uppercase tracking-widest text-sm flex items-center justify-center gap-4">                    <span class="h-[1px] w-12 bg-white/20"></span> VIP MEMBERSHIP BENEFITS <span class="h-[1px] w-12 bg-white/20"></span>                </h4>                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">                    <div class="flex flex-col items-center text-center gap-2">                        <div class="w-12 h-12 rounded-full bg-surface-800 flex items-center justify-center text-xl text-heat-pink">💬</div>                        <p class="text-white font-bold">Unlimited Messages</p>                        <p class="text-xs text-slate-400">Chat without limits</p>                    </div>                    <div class="flex flex-col items-center text-center gap-2">                        <div class="w-12 h-12 rounded-full bg-surface-800 flex items-center justify-center text-xl text-heat-cyan">🎙️</div>                        <p class="text-white font-bold">Unlimited Audio</p>                        <p class="text-xs text-slate-400">Call without limits</p>                    </div>                    <div class="flex flex-col items-center text-center gap-2">                        <div class="w-12 h-12 rounded-full bg-surface-800 flex items-center justify-center text-xl text-heat-violet">📹</div>                        <p class="text-white font-bold">Unlimited Video</p>                        <p class="text-xs text-slate-400">Face to face, anytime</p>                    </div>                    <div class="flex flex-col items-center text-center gap-2">                        <div class="w-12 h-12 rounded-full bg-surface-800 flex items-center justify-center text-xl text-yellow-400">👑</div>                        <p class="text-white font-bold">VIP Badge</p>                        <p class="text-xs text-slate-400">Show your VIP status</p>                    </div>                    <div class="flex flex-col items-center text-center gap-2">                        <div class="w-12 h-12 rounded-full bg-surface-800 flex items-center justify-center text-xl text-blue-400">🌐</div>                        <p class="text-white font-bold">Meet Worldwide</p>                        <p class="text-xs text-slate-400">From every country</p>                    </div>                    <div class="flex flex-col items-center text-center gap-2">                        <div class="w-12 h-12 rounded-full bg-surface-800 flex items-center justify-center text-xl text-green-400">🔤</div>                        <p class="text-white font-bold">AI Translation</p>                        <p class="text-xs text-slate-400">Talk in any language</p>                    </div>                    <div class="flex flex-col items-center text-center gap-2">                        <div class="w-12 h-12 rounded-full bg-surface-800 flex items-center justify-center text-xl text-orange-400">⭐</div>                        <p class="text-white font-bold">Priority Matching</p>                        <p class="text-xs text-slate-400">Get better matches</p>                    </div>                    <div class="flex flex-col items-center text-center gap-2">                        <div class="w-12 h-12 rounded-full bg-surface-800 flex items-center justify-center text-xl text-red-400">🎧</div>                        <p class="text-white font-bold">Premium Support</p>                        <p class="text-xs text-slate-400">We're here for you</p>                    </div>                </div>            </div>        </div>    </section>
+    <!-- App Gallery Section (Responsive Grid + Auto Captions) -->
+    <section id="gallery" class="py-24 bg-surface-900 border-t border-white/5 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 mb-12 text-center reveal">
+            <h2 class="text-heat-pink font-black tracking-widest uppercase mb-2 text-sm">App Interface</h2>
+            <h3 class="text-4xl font-black text-white">Inside the Ecosystem</h3>
+            <p class="text-slate-400 mt-4 max-w-2xl mx-auto">Every screen of the Kelza super app — discover, match, call, wallet, and creator tools.</p>
+        </div>
+        <div class="max-w-7xl mx-auto px-4">
+            <!-- Auto-populated by JS from images/screen_*.png; captions generated from filenames -->
+            <div class="k-gallery reveal stagger" id="k-gallery-grid"></div>
         </div>
     </section>
-
-    <section id="product" class="py-24 bg-surface-950 relative overflow-hidden border-t border-white/5">
-        <div class="absolute inset-0 bg-cyan-glow opacity-20"></div>
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-heat-cyan font-black tracking-widest uppercase mb-2 text-sm">Experience the Engine</h2>
-                <h3 class="text-4xl font-black text-white mb-6">Frictionless Interaction & Monetization.</h3>
-                <p class="text-slate-400 max-w-2xl mx-auto text-lg">Watch how our UI combines algorithmic matching, real-time AI translation, and high-velocity micro-transactions seamlessly.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-12 items-center">
-                <!-- Left Info Elements -->
-                <div class="space-y-8 reveal hidden lg:block">
-                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-heat-pink transition-all duration-300" id="info-swipe">
-                        <h4 class="text-white font-bold text-lg mb-2 flex items-center gap-2"><span class="text-2xl">🔥</span> Intelligent Matching</h4>
-                        <p class="text-sm text-slate-400">Swipe right to instantly trigger a 25s free match. Heartbeat animations simulate adrenaline and dopamine loops.</p>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-heat-cyan transition-all duration-300 opacity-50" id="info-translate">
-                        <h4 class="text-white font-bold text-lg mb-2 flex items-center gap-2"><span class="text-2xl">🌐</span> Live AI Translation</h4>
-                        <p class="text-sm text-slate-400">Chat messages are instantly translated into the user's native tongue, completely destroying language barriers.</p>
-                    </div>
-                </div>
-
-                <!-- Center: Bulletproof Mobile Canvas -->
-                <div class="relative reveal mx-auto flex justify-center">
-                    <!-- Absolute fixed size wrapper to prevent collapse -->
-                    <div class="sim-container bg-surface-950 border-[10px] border-surface-800 rounded-[3rem] shadow-[0_0_50px_rgba(0,240,255,0.15)] relative overflow-hidden flex flex-col z-10">
-                        
-                        <!-- Top Notch -->
-                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-surface-800 rounded-b-2xl z-50"></div>
-                        
-                        <!-- Screen 1: Swipe Interface -->
-                        <div id="scr1" class="sim-screen bg-surface-900 p-4 pt-12 flex flex-col z-40" style="opacity: 1; pointer-events: auto;">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-white font-bold text-lg">Discover</span>
-                                <span class="bg-heat-pink/20 text-heat-pink text-xs px-2 py-1 rounded-full font-bold">5 Free Matches</span>
-                            </div>
-                            
-                            <!-- Swipe Card -->
-                            <div id="sim-swipe-card" class="flex-1 relative rounded-2xl overflow-hidden shadow-xl border border-white/10 origin-bottom-right transition-transform duration-700 ease-in-out">
-                                <img src="images/swipe_match.png" class="absolute inset-0 w-full h-full object-cover">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                                <div class="absolute bottom-4 left-4 right-4">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <h3 class="text-white font-black text-2xl">Elena, 23</h3>
-                                        <span class="w-3 h-3 bg-green-500 rounded-full shadow-[0_0_8px_#22c55e]"></span>
-                                    </div>
-                                    <p class="text-slate-300 text-sm mb-2">Bogotá, Colombia • 🎙️ Good Listener</p>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-center gap-6 mt-6 mb-4">
-                                <div class="w-14 h-14 rounded-full glass-panel border border-white/10 flex items-center justify-center text-slate-400">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                </div>
-                                <div id="sim-btn-right" class="w-16 h-16 rounded-full bg-gradient-to-br from-heat-pink to-heat-violet shadow-[0_0_20px_rgba(255,0,127,0.4)] flex items-center justify-center text-white relative">
-                                    <div id="sim-heart-pulse" class="absolute inset-0 rounded-full border-4 border-heat-pink opacity-0"></div>
-                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Screen 2: Incoming Call -->
-                        <div id="scr2" class="sim-screen bg-black p-4 flex flex-col justify-center items-center z-30" style="opacity: 0;">
-                            <img src="images/live_call.png" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-md">
-                            <div class="relative mb-8 z-10">
-                                <div class="absolute inset-0 rounded-full border-2 border-heat-cyan animate-ring"></div>
-                                <div class="absolute inset-0 rounded-full border-2 border-heat-cyan animate-ring" style="animation-delay: 0.5s"></div>
-                                <img src="images/swipe_match.png" class="w-28 h-28 rounded-full object-cover border-4 border-heat-cyan relative z-10 shadow-[0_0_30px_rgba(0,240,255,0.4)]">
-                            </div>
-                            <h3 class="text-white font-black text-3xl mb-2 z-10">Elena</h3>
-                            <p class="text-slate-300 mb-16 animate-pulse z-10 font-medium">Incoming Video Call...</p>
-                            
-                            <!-- Accept / Reject UI -->
-                            <div class="flex gap-10 w-full justify-center z-10">
-                                <div class="w-16 h-16 rounded-full bg-red-500/20 border border-red-500 flex items-center justify-center text-red-500">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l-8 8m0-8l8 8"></path></svg>
-                                </div>
-                                <div id="sim-btn-accept" class="w-16 h-16 rounded-full bg-green-500 border border-green-400 flex items-center justify-center text-white shadow-[0_0_20px_rgba(34,197,94,0.6)] animate-bounce">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Screen 3: Video Chat & Monetization -->
-                        <div id="scr3" class="sim-screen bg-black flex flex-col justify-end p-4 pb-8 z-20" style="opacity: 0;">
-                            <img src="images/live_call.png" class="absolute inset-0 w-full h-full object-cover opacity-90">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div>
-                            
-                            <!-- Header -->
-                            <div class="absolute top-12 left-4 right-4 flex justify-between items-center z-10">
-                                <div class="glass-panel px-3 py-1 rounded-full flex items-center gap-2 border border-white/10">
-                                    <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                                    <span class="text-xs font-bold text-white">00:14 / 00:25</span>
-                                </div>
-                                <div class="bg-black/50 px-3 py-1 rounded-full border border-yellow-500/50 flex items-center gap-1 shadow-[0_0_10px_rgba(234,179,8,0.3)]">
-                                    <span class="text-yellow-400 text-xs font-bold">🪙 300</span>
-                                </div>
-                            </div>
-
-                            <!-- Chat Area -->
-                            <div class="relative z-10 w-full flex flex-col gap-2 mb-4">
-                                <div id="sim-chat-bubble" class="self-start max-w-[80%] bg-white/10 backdrop-blur-md rounded-2xl rounded-tl-sm px-4 py-2 text-sm text-slate-300 translate-y-10 opacity-0 border border-white/5 shadow-lg">
-                                    <span id="sim-chat-text" class="font-medium">¡Hola! ¿Cómo estás?</span>
-                                </div>
-                            </div>
-
-                            <!-- Bottom Action Bar -->
-                            <div class="relative z-10 flex gap-2 items-center w-full">
-                                <div class="flex-1 bg-black/40 border border-white/20 rounded-full h-10 flex items-center px-4 text-xs text-slate-400">
-                                    Type a message...
-                                </div>
-                                <div class="w-10 h-10 rounded-full bg-heat-pink flex items-center justify-center text-white shadow-[0_0_15px_rgba(255,0,127,0.6)] flex-shrink-0 relative">
-                                    🎁
-                                    <!-- The Floating Gift Element -->
-                                    <div id="sim-floating-gift" class="absolute top-0 left-1/2 -translate-x-1/2 text-4xl opacity-0 pointer-events-none">🌹</div>
-                                </div>
-                            </div>
-
-                            <!-- Low Balance Warning Overlay -->
-                            <div id="sim-modal" class="absolute inset-x-4 bottom-24 glass-panel border border-red-500/50 rounded-2xl p-4 z-50 translate-y-10 opacity-0 transition-all duration-300 shadow-2xl">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="text-xl">⚠️</span>
-                                    <h4 class="text-white font-bold text-sm">Low Coin Balance</h4>
-                                </div>
-                                <p class="text-xs text-slate-300 mb-4">You need 500 coins to send a Rose. You have 300.</p>
-                                <button class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-black text-sm py-2 rounded-xl shadow-lg animate-pulse">
-                                    Combo Pack: 5000 🪙 / $9.99
-                                </button>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-
-                <!-- Right Info Elements -->
-                <div class="space-y-8 reveal hidden lg:block">
-                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-yellow-500 transition-all duration-300 opacity-50" id="info-gift">
-                        <h4 class="text-white font-bold text-lg mb-2 flex items-center gap-2"><span class="text-2xl">🎁</span> Impulse Gifting</h4>
-                        <p class="text-sm text-slate-400">Animated 3D gifts map directly to the creator's payout, turning user appreciation into instant revenue.</p>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500 transition-all duration-300 opacity-50" id="info-topup">
-                        <h4 class="text-white font-bold text-lg mb-2 flex items-center gap-2"><span class="text-2xl">💳</span> Frictionless Top-ups</h4>
-                        <p class="text-sm text-slate-400">Highly visible "Combo Packs" appear in-stream, leveraging FOMO to trigger one-tap Stripe purchases.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-surface-950 border-y border-white/5 relative">
-        <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16 items-center">
-            <div class="reveal">
-                <h2 class="text-heat-violet font-black tracking-widest uppercase mb-2 text-sm">Phase 2 Ecosystem (Upcoming)</h2>
-                <h3 class="text-4xl font-black text-white mb-6">Live Game Rooms & Coin Rewards.</h3>
-                <p class="text-slate-300 text-lg mb-6 leading-relaxed">
-                    We are aggressively evolving beyond 1:1 calls. Phase 2 introduces <strong>Private Hot Rooms</strong> and <strong>Interactive 1v1 Games</strong> (Roulette, Slot challenges, Trivia). Users wager and reward using Kelza Coins, massively extending session times and driving exponential creator payoffs.
-                </p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-center gap-3 text-slate-400"><span class="text-heat-violet">✓</span> Multi-user exclusive broadcasts.</li>
-                    <li class="flex items-center gap-3 text-slate-400"><span class="text-heat-violet">✓</span> In-stream casual mini-games for coins.</li>
-                    <li class="flex items-center gap-3 text-slate-400"><span class="text-heat-violet">✓</span> Weekly subscription tiers for premium host content.</li>
-                </ul>
-            </div>
-            <div class="grid grid-cols-2 gap-4 reveal">
-                <img src="images/creator_lifestyle.png" alt="Live Streaming" class="rounded-2xl border border-white/10 shadow-2xl transform translate-y-8 hover:-translate-y-2 transition-transform duration-500 object-cover h-64 w-full">
-                <img src="images/game_room.png" alt="Global Game Rooms" class="rounded-2xl border border-white/10 shadow-2xl hover:-translate-y-2 transition-transform duration-500 object-cover h-64 w-full">
-            </div>
-        </div>
-    </section>
-
-    <section id="creators" class="py-24 bg-surface-950 relative">
-        <div class="max-w-7xl mx-auto px-4 reveal text-center mb-16">
-            <h2 class="text-heat-pink font-black tracking-widest uppercase mb-2 text-sm">Supply Acquisition</h2>
-            <h3 class="text-4xl md:text-5xl font-black text-white mb-6">Disrupting the Creator Economy.</h3>
-            <p class="text-slate-400 max-w-2xl mx-auto text-lg">We don't exploit creators; we partner with them. Enjoy a sustainable monetization engine ensuring 24/7 global availability.</p>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-3 gap-6 mb-16 reveal">
-            <div class="relative rounded-3xl border border-white/10 overflow-hidden shadow-lg h-[400px] group">
-                <img src="images/global_network.png" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                <div class="absolute bottom-6 left-6 right-6 text-center">
-                    <p class="text-5xl font-black text-heat-cyan mb-2">1.5K+</p>
-                    <p class="text-white font-bold">Phase 1 Global Creators</p>
-                </div>
-            </div>
-            <div class="relative rounded-3xl border border-white/10 overflow-hidden shadow-lg h-[400px] group border-t-4 border-t-heat-pink">
-                <img src="images/trust_ecosystem.png" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-50">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
-                <div class="absolute inset-0 flex flex-col justify-center items-center text-center p-6">
-                    <div class="w-16 h-16 bg-heat-pink/20 rounded-full flex items-center justify-center text-heat-pink mb-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0-2.08-.402-2.599-1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <p class="text-6xl font-black text-white mb-2">80%</p>
-                    <p class="text-heat-pink font-bold text-lg">Creator Payout Share</p>
-                    <p class="text-xs text-slate-400 mt-4 px-4">Industry-leading revenue share. You own your content, you keep the profits.</p>
-                </div>
-            </div>
-            <div class="relative rounded-3xl border border-white/10 overflow-hidden shadow-lg h-[400px] group">
-                <img src="images/creator_dashboard.png" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                <div class="absolute bottom-6 left-6 right-6 text-center">
-                    <p class="text-5xl font-black text-heat-violet mb-2">24/7</p>
-                    <p class="text-white font-bold">Follow-The-Sun Availability</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-surface-900 border-y border-white/5">
-        <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-12 items-center">
-            <div class="lg:col-span-7 space-y-8 reveal">
-                <div>
-                    <h2 class="text-heat-cyan font-black tracking-widest uppercase mb-2 text-sm">Creator Dashboard</h2>
-                    <h3 class="text-4xl font-black text-white mb-4">Earn Money From Home.</h3>
-                    <p class="text-slate-300 mb-6">Earn per minute via Kelza Coin, Audio, Video, and Gifts. Fast local bank transfers via Stripe.</p>
-                </div>
-                <div class="space-y-4">
-                    <div class="glass-panel p-6 rounded-2xl flex gap-4 border border-heat-pink/50 bg-heat-pink/5 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-heat-pink text-white text-xs font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Early Adopter Perk</div>
-                        <div class="w-10 h-10 rounded-full bg-heat-pink/20 flex items-center justify-center text-heat-pink font-black shrink-0">1</div>
-                        <div>
-                            <h4 class="text-white font-bold text-lg mb-1">100% Commission-Free Phase</h4>
-                            <p class="text-sm text-slate-300">Join during our onboarding phase and keep <strong class="text-white">100% of your earnings</strong> for your first 30 days.</p>
-                        </div>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex gap-4">
-                        <div class="w-10 h-10 rounded-full bg-heat-cyan/20 flex items-center justify-center text-heat-cyan font-black shrink-0">2</div>
-                        <div>
-                            <h4 class="text-white font-bold text-lg mb-1">Total Boundary Control</h4>
-                            <p class="text-sm text-slate-400">Toggle Online/Offline, set "Holiday Mode", manage push notifications, pause incoming video.</p>
-                        </div>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex gap-4">
-                        <div class="w-10 h-10 rounded-full bg-heat-violet/20 flex items-center justify-center text-heat-violet font-black shrink-0">3</div>
-                        <div>
-                            <h4 class="text-white font-bold text-lg mb-1">Instant Engagement Alerts</h4>
-                            <p class="text-sm text-slate-400">Receive "New User Online" notifications. Set your per-minute rates dynamically.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lg:col-span-5 grid grid-cols-1 gap-6 reveal">
-                <div class="flex gap-4 h-48">
-                    <img src="images/creator_lifestyle.png" alt="Dashboard Setup" class="w-1/2 rounded-2xl border border-white/10 shadow-lg object-cover">
-                    <img src="images/creator_dashboard.png" alt="FAQ" class="w-1/2 rounded-2xl border border-white/10 shadow-lg object-cover">
-                </div>
-                <div class="relative h-64 rounded-2xl border border-white/10 shadow-2xl overflow-hidden group">
-                    <img src="images/founder_team.png" alt="Testimonial" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 right-4">
-                        <p class="text-heat-cyan text-4xl font-serif leading-none">"</p>
-                        <p class="text-white text-sm font-medium italic mb-2">Kelza gave me the freedom to work from my apartment in Manila and earn steady USD. The 100% free commission phase changed my life.</p>
-                        <p class="text-slate-400 text-xs font-bold uppercase">— Sofia R., Founding Creator</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-surface-950 relative overflow-hidden border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-4 relative z-10 reveal">
-            <h2 class="text-heat-violet font-black tracking-widest uppercase mb-2 text-sm text-center">The Growth Engine</h2>
-            <h3 class="text-4xl font-black text-white mb-12 text-center">Marketing & Referral Loops.</h3>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass-panel p-8 rounded-3xl relative overflow-hidden group">
-                    <img src="images/global_network.png" class="absolute top-0 right-0 w-48 h-48 opacity-10 group-hover:scale-110 transition-transform duration-500 object-cover rounded-bl-full">
-                    <h4 class="text-2xl font-bold text-white mb-4 relative z-10">Managed Surrogate Marketing</h4>
-                    <p class="text-slate-400 mb-6 relative z-10">You focus on connecting; we focus on traffic. Kelza runs a vast network of highly targeted TikTok, Instagram, and Facebook handles pumping high-spending Tier-1 users directly to your online profile.</p>
-                    <ul class="space-y-2 text-sm font-medium text-slate-300 relative z-10">
-                        <li class="flex items-center gap-2"><span class="text-heat-pink">✓</span> Professional Social Media Management</li>
-                        <li class="flex items-center gap-2"><span class="text-heat-pink">✓</span> High-intent ad spend in 15+ rich countries</li>
-                    </ul>
-                </div>
-                
-                <div class="glass-panel p-8 rounded-3xl relative overflow-hidden group border border-heat-cyan/30">
-                    <h4 class="text-2xl font-bold text-white mb-4 relative z-10">The "Refer-a-Peer" Bonus</h4>
-                    <p class="text-slate-400 mb-6 relative z-10">Grow your own wealth by growing our network. Invite other verified creators and build your own passive income stream.</p>
-                    <div class="bg-surface-950 p-6 rounded-2xl border border-white/10 relative z-10 text-center">
-                        <p class="text-4xl font-black text-heat-cyan mb-2">10%</p>
-                        <p class="text-white font-bold mb-2">Passive Revenue Share</p>
-                        <p class="text-xs text-slate-400">Earn 10% of Kelza's revenue from any creator you refer for their first full year on the platform. No limits.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="creator-onboarding" class="py-24 bg-surface-900 border-y border-white/5 relative">
-        <div class="max-w-4xl mx-auto px-4 reveal">
-            <div class="glass-panel p-8 md:p-12 rounded-[2.5rem] border border-heat-pink/30 shadow-[0_0_40px_rgba(255,0,127,0.15)] relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-heat-pink/10 rounded-full mix-blend-screen filter blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-                
-                <div class="text-center mb-10 relative z-10">
-                    <h3 class="text-3xl md:text-4xl font-black text-white mb-4">Apply for the Creator Collective</h3>
-                    <p class="text-slate-400">Phase 1 onboarding is currently open for 15 countries. Secure your spot, complete KYC, and start earning USD from home.</p>
-                </div>
-                
-                <form class="space-y-6 relative z-10" onsubmit="event.preventDefault(); alert('Application Received. Redirecting to KYC Verification...');">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Full Legal Name</label>
-                            <input type="text" required class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-heat-pink transition-colors" placeholder="As it appears on ID">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">WhatsApp Number</label>
-                            <input type="tel" required class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-heat-pink transition-colors" placeholder="+Country Code">
-                        </div>
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Country of Residence</label>
-                            <select class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-heat-pink transition-colors appearance-none">
-                                <option>Philippines</option><option>Indonesia</option><option>Vietnam</option><option>Thailand</option><option>Cambodia</option><option>India</option><option>Nepal</option><option>Bangladesh</option><option>Kenya</option><option>Colombia</option><option>Brazil</option><option>Mexico</option><option>Venezuela</option><option>Peru</option><option>Ecuador</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Primary Social Link</label>
-                            <input type="url" required class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-heat-pink transition-colors" placeholder="Instagram/TikTok URL">
-                        </div>
-                    </div>
-                    <div class="pt-4">
-                        <button type="submit" class="w-full btn-heat-primary text-white font-black text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(255,0,127,0.4)] hover:scale-[1.02] transition-transform">
-                            Submit Application & Start KYC
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <section id="why-us" class="py-24 bg-surface-950 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 reveal">
-            <h2 class="text-heat-violet font-black tracking-widest uppercase mb-2 text-sm text-center">Competitive Edge</h2>
-            <h3 class="text-4xl font-black text-white mb-16 text-center">Why Kelza Wins the Market.</h3>
-
-            <div class="grid lg:grid-cols-3 gap-6">
-                <div class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-300">
-                    <img src="images/trust_ecosystem.png" alt="No Bots" class="w-24 h-24 mx-auto rounded-full mb-6 border-2 border-heat-cyan/50 object-cover">
-                    <h4 class="text-xl font-bold text-white mb-3">Zero Fake Profiles</h4>
-                    <p class="text-sm text-slate-400">Competitors are flooded with AI bots. Kelza forces API-level Identity Verification on 100% of accounts.</p>
-                </div>
-                <div class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-300 border border-heat-pink/30 relative">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-heat-pink text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Industry Best</div>
-                    <img src="images/creator_dashboard.png" alt="80% Payout" class="w-24 h-24 mx-auto rounded-full mb-6 border-2 border-heat-pink/50 object-cover">
-                    <h4 class="text-xl font-bold text-white mb-3">80% Creator Payouts</h4>
-                    <p class="text-sm text-slate-400">Industry standard takes 50-70%. We take 20%. Our low-overhead tech stack passes massive earnings back.</p>
-                </div>
-                <div class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-300">
-                    <img src="images/global_network.png" alt="Low Latency" class="w-24 h-24 mx-auto rounded-full mb-6 border-2 border-heat-violet/50 object-cover">
-                    <h4 class="text-xl font-bold text-white mb-3">Sub-200ms Latency</h4>
-                    <p class="text-sm text-slate-400">A call across the world shouldn't lag. Multi-region STUN/TURN server network ensures flawless sync.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="tech" class="py-24 bg-surface-900 border-y border-white/5 relative">
-        <div class="max-w-7xl mx-auto px-4 reveal">
-            <h2 class="text-heat-cyan font-black tracking-widest uppercase mb-2 text-sm text-center">Infrastructure</h2>
-            <h3 class="text-4xl font-black text-white mb-12 text-center">Uncompromising Security & Tech.</h3>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="glass-panel p-6 rounded-2xl text-center">
-                    <div class="w-12 h-12 bg-surface-800 rounded-full mx-auto flex items-center justify-center mb-4 text-heat-cyan">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    </div>
-                    <h4 class="text-lg font-bold text-white mb-2">100% Mandatory KYC</h4>
-                    <p class="text-sm text-slate-400">Strictly 18+. Real identity verification via API.</p>
-                </div>
-                <div class="glass-panel p-6 rounded-2xl text-center">
-                    <div class="w-12 h-12 bg-surface-800 rounded-full mx-auto flex items-center justify-center mb-4 text-heat-pink">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <h4 class="text-lg font-bold text-white mb-2">Custom WebRTC</h4>
-                    <p class="text-sm text-slate-400">Regional STUN/TURN nodes guarantee proper audio/video sync.</p>
-                </div>
-                <div class="glass-panel p-6 rounded-2xl text-center">
-                    <div class="w-12 h-12 bg-surface-800 rounded-full mx-auto flex items-center justify-center mb-4 text-heat-violet">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    </div>
-                    <h4 class="text-lg font-bold text-white mb-2">Privacy First</h4>
-                    <p class="text-sm text-slate-400">End-to-End Encryption (E2EE) and screen record blocking.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="investors" class="py-24 bg-surface-950 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-        <div class="max-w-7xl mx-auto px-4 relative z-10 reveal">
-            <div class="text-center mb-16">
-                <h2 class="text-heat-violet font-black tracking-widest uppercase mb-2 text-sm">Seed Round Open</h2>
-                <h3 class="text-5xl font-black text-white mb-6">The $120,000 Catalyst.</h3>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-heat-cyan"><p class="text-xs text-slate-400 font-bold uppercase mb-1">Product & Tech</p><p class="text-3xl font-black text-white mb-2">$42K</p></div>
-                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-heat-pink"><p class="text-xs text-slate-400 font-bold uppercase mb-1">Marketing</p><p class="text-3xl font-black text-white mb-2">$48K</p></div>
-                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-white"><p class="text-xs text-slate-400 font-bold uppercase mb-1">Ops & Legal</p><p class="text-3xl font-black text-white mb-2">$18K</p></div>
-                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-slate-600"><p class="text-xs text-slate-400 font-bold uppercase mb-1">Reserve</p><p class="text-3xl font-black text-white mb-2">$12K</p></div>
-            </div>
-            <div class="grid lg:grid-cols-2 gap-12">
-                <div class="glass-panel p-8 rounded-3xl">
-                    <h4 class="text-2xl font-black text-white mb-6">The 90-Day Execution Sprint</h4>
-                    <div class="space-y-4">
-                        <div class="flex gap-4"><div class="text-heat-pink font-bold shrink-0 w-16">Days 1-15</div><div><h5 class="text-white font-bold">Planning & Design</h5></div></div>
-                        <div class="flex gap-4"><div class="text-heat-cyan font-bold shrink-0 w-16">Days 16-75</div><div><h5 class="text-white font-bold">60-Day Sprint Coding</h5></div></div>
-                        <div class="flex gap-4"><div class="text-white font-bold shrink-0 w-16">Days 76-90</div><div><h5 class="text-white font-bold">QA & V1 Launch</h5></div></div>
-                    </div>
-                </div>
-                <div class="glass-panel p-8 rounded-3xl">
-                    <h4 class="text-2xl font-black text-white mb-6">Optimized Human Resources</h4>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div><p class="text-white font-bold mb-2">Leadership & Tech</p><ul class="text-slate-400 space-y-1"><li>Founder/CEO</li><li>PM & Team Lead</li><li>4 Frontend Devs</li><li>2 Backend Devs</li><li>1 AI Engineer</li><li>QA/DevOps</li></ul></div>
-                        <div><p class="text-white font-bold mb-2">Creative & Growth</p><ul class="text-slate-400 space-y-1"><li>2 Designers</li><li>3 Content/Video</li><li>4 Social Media Mkts</li><li>4 Care Support</li></ul></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-[#030508] pt-20 pb-10 border-t border-white/5 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-16">
-                <div class="space-y-4 max-w-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-heat-pink to-heat-violet flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        </div>
-                        <p class="text-xl font-black tracking-widest text-white">KELZA</p>
-                    </div>
-                    <p class="text-sm text-slate-400 italic leading-relaxed font-medium">"People don't remember apps. People remember people."</p>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                    <a href="https://wa.me/9779746464149?text=Hello" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 glass-panel px-6 py-3 rounded-xl hover:bg-[#25D366]/10 hover:border-[#25D366]/50 transition-all group border border-white/10">
-                        <svg class="w-6 h-6 text-[#25D366] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                        <div class="text-left"><p class="text-xs text-slate-400 font-medium">Invest via WhatsApp</p><p class="text-sm font-bold text-white tracking-wide">+977 974-6464149</p></div>
-                    </a>
-                    <a href="mailto:erbhaweshkafle@gmail.com" class="flex items-center justify-center gap-3 glass-panel px-6 py-3 rounded-xl hover:bg-[#EA4335]/10 hover:border-[#EA4335]/50 transition-all group border border-white/10">
-                        <svg class="w-6 h-6 text-[#EA4335] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                        <div class="text-left"><p class="text-xs text-slate-400 font-medium">Email the Founder</p><p class="text-sm font-bold text-white tracking-wide">erbhaweshkafle@gmail.com</p></div>
-                    </a>
-                </div>
-            </div>
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 font-bold border-t border-white/10 pt-8">
-                <p>&copy; 2026 Er Lekhnath Kafle. All rights reserved.</p>
-                <div class="flex gap-6">
-                    <a href="https://kelza.fun" class="hover:text-heat-pink transition-colors">kelza.fun</a>
-                    <a href="#investors" class="hover:text-heat-cyan transition-colors">Investor Pitch</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Native Async Sleep Function
-        const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-        // Info Highlight Helper
-        const highlightInfo = (id) => {
-            ['info-swipe', 'info-translate', 'info-gift', 'info-topup'].forEach(infoId => {
-                const el = document.getElementById(infoId);
-                if(el) {
-                    if(infoId === id) { el.classList.remove('opacity-50'); el.style.transform = 'scale(1.02)'; }
-                    else { el.classList.add('opacity-50'); el.style.transform = 'scale(1)'; }
-                }
-            });
-        };
-
-        // Infinite Simulation Loop Engine
-        async function runInfiniteSimulation() {
-            // Setup DOM references
-            const scr1 = document.getElementById('scr1');
-            const scr2 = document.getElementById('scr2');
-            const scr3 = document.getElementById('scr3');
-            
-            const swipeCard = document.getElementById('sim-swipe-card');
-            const heartPulse = document.getElementById('sim-heart-pulse');
-            
-            const btnAccept = document.getElementById('sim-btn-accept');
-            const chatBubble = document.getElementById('sim-chat-bubble');
-            const chatText = document.getElementById('sim-chat-text');
-            const floatGift = document.getElementById('sim-floating-gift');
-            const modal = document.getElementById('sim-modal');
-
-            // Infinite Loop
-            while (true) {
-                // --- STEP 0: RESET STATE ---
-                highlightInfo('info-swipe');
-                scr1.style.opacity = 1; scr1.style.pointerEvents = 'auto';
-                scr2.style.opacity = 0; scr2.style.pointerEvents = 'none';
-                scr3.style.opacity = 0; scr3.style.pointerEvents = 'none';
-                
-                swipeCard.classList.remove('anim-swipe-right');
-                heartPulse.classList.remove('anim-pulse-heart');
-                chatBubble.classList.remove('anim-slide-up', 'anim-translate');
-                floatGift.classList.remove('anim-gift');
-                
-                modal.style.opacity = 0;
-                modal.style.transform = 'translateY(20px)';
-                chatText.innerText = "¡Hola! ¿Cómo estás?";
-                
-                // Pause on Screen 1 before action
-                await sleep(2000);
-
-                // --- STEP 1: SWIPE RIGHT ---
-                heartPulse.classList.add('anim-pulse-heart');
-                swipeCard.classList.add('anim-swipe-right');
-                await sleep(800);
-
-                // --- STEP 2: INCOMING CALL SCREEN ---
-                scr1.style.opacity = 0; scr1.style.pointerEvents = 'none';
-                scr2.style.opacity = 1; scr2.style.pointerEvents = 'auto';
-                await sleep(2500); // Ringing delay
-
-                // Simulate picking up call (Green button pressed effect)
-                btnAccept.style.transform = 'scale(0.9)';
-                await sleep(150);
-                btnAccept.style.transform = 'scale(1)';
-                await sleep(150);
-
-                // --- STEP 3: VIDEO CHAT STARTED ---
-                scr2.style.opacity = 0; scr2.style.pointerEvents = 'none';
-                scr3.style.opacity = 1; scr3.style.pointerEvents = 'auto';
-                await sleep(1000);
-
-                // --- STEP 4: CHAT BUBBLE SLIDES UP ---
-                highlightInfo('info-translate');
-                chatBubble.classList.add('anim-slide-up');
-                await sleep(1500);
-
-                // --- STEP 5: AI TRANSLATION EFFECT ---
-                chatBubble.classList.add('anim-translate');
-                await sleep(500); // Halfway through the glow effect
-                chatText.innerText = "Hello! How are you?";
-                await sleep(2000); // Read translated text
-
-                // --- STEP 6: SEND 3D EMOJI GIFT ---
-                highlightInfo('info-gift');
-                floatGift.classList.add('anim-gift');
-                await sleep(1500);
-
-                // --- STEP 7: LOW BALANCE TOP-UP WARNING ---
-                highlightInfo('info-topup');
-                modal.style.opacity = 1;
-                modal.style.transform = 'translateY(0)';
-                
-                // Allow user to see the final state before loop restarts
-                await sleep(4000); 
+    <!-- Phase 2 Ecosystem (Game Rooms) -->    <section class="py-24 bg-surface-950 border-y border-white/5 relative">        <div class="max-w-7xl mx-auto px-4 flex flex-col-reverse lg:grid lg:grid-cols-2 gap-16 items-center">            <div class="reveal">                <h2 class="text-heat-violet font-black tracking-widest uppercase mb-2 text-sm">Phase 2 Ecosystem (Upcoming)</h2>                <h3 class="text-4xl font-black text-white mb-6">Live Game Rooms & Coin Rewards.</h3>                <p class="text-slate-300 text-lg mb-6 leading-relaxed">                    We are aggressively evolving beyond 1:1 calls. Phase 2 introduces <strong>Private Hot Rooms</strong> and <strong>Interactive 1v1 Games</strong> (Roulette, Slot challenges, Trivia). Users wager and reward using Kelza Coins, massively extending session times and driving exponential creator payoffs.                </p>                <ul class="space-y-3 mb-8">                    <li class="flex items-center gap-3 text-slate-400"><span class="text-heat-violet">✓</span> Multi-user exclusive broadcasts.</li>                    <li class="flex items-center gap-3 text-slate-400"><span class="text-heat-violet">✓</span> In-stream casual mini-games for coins.</li>                    <li class="flex items-center gap-3 text-slate-400"><span class="text-heat-violet">✓</span> Weekly subscription tiers for premium host content.</li>                </ul>                <a href="game.html" class="inline-flex items-center gap-2 btn-heat-secondary px-8 py-4 rounded-xl font-black text-lg shadow-lg hover:scale-105 transition-transform">                    🎮 Play Free Games (Demo)                </a>            </div>            <div class="grid grid-cols-2 gap-4 reveal w-full">                <img src="images/creator_lifestyle.png" alt="Live Streaming & Social Entertainment" class="rounded-2xl border border-white/10 shadow-2xl transform lg:translate-y-8 hover:-translate-y-2 transition-transform duration-500 object-cover aspect-video lg:h-64 w-full">                <img src="images/game_room.png" alt="Global Game Rooms" class="rounded-2xl border border-white/10 shadow-2xl hover:-translate-y-2 transition-transform duration-500 object-cover aspect-video lg:h-64 w-full">            </div>        </div>    </section>
+    <!-- Supply Acquisition -->    <section id="creators" class="py-24 bg-surface-950 relative">        <div class="max-w-7xl mx-auto px-4 reveal text-center mb-16">            <h2 class="text-heat-pink font-black tracking-widest uppercase mb-2 text-sm">Supply Acquisition</h2>            <h3 class="text-4xl md:text-5xl font-black text-white mb-6">Disrupting the Creator Economy.</h3>            <p class="text-slate-400 max-w-2xl mx-auto text-lg">We don't exploit creators; we partner with them. Enjoy a sustainable monetization engine ensuring 24/7 global availability across our diverse markets.</p>        </div>
+        <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-3 gap-6 mb-16 reveal">            <div class="relative rounded-3xl border border-white/10 overflow-hidden shadow-lg h-[400px] group">                <img src="images/global_network.png" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>                <div class="absolute bottom-6 left-6 right-6 text-center">                    <p class="text-5xl font-black text-heat-cyan mb-2 k-count" data-count="1500" data-suffix="+" data-format="k1">1.5K+</p>                    <p class="text-white font-bold">Phase 1 Global Creators</p>                </div>            </div>            <div class="relative rounded-3xl border border-white/10 overflow-hidden shadow-lg h-[400px] group border-t-4 border-t-heat-pink">                <img src="images/trust_ecosystem.png" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-50">                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>                <div class="absolute inset-0 flex flex-col justify-center items-center text-center p-6">                    <div class="w-16 h-16 bg-heat-pink/20 rounded-full flex items-center justify-center text-heat-pink mb-4">                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0-2.08-.402-2.599-1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>                    </div>                    <p class="text-6xl font-black text-white mb-2 k-count" data-count="80" data-suffix="%">80%</p>                    <p class="text-heat-pink font-bold text-lg">Creator Payout Share</p>                    <p class="text-xs text-slate-400 mt-4 px-4">Industry-leading revenue share. You own your content, you keep the profits.</p>                </div>            </div>            <div class="relative rounded-3xl border border-white/10 overflow-hidden shadow-lg h-[400px] group">                <img src="images/live_call.png" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>                <div class="absolute bottom-6 left-6 right-6 text-center">                    <p class="text-5xl font-black text-heat-violet mb-2">24/7</p>                    <p class="text-white font-bold">Follow-The-Sun Availability</p>                </div>            </div>        </div>    </section>
+    <!-- Creator Dashboard Section -->    <section class="py-24 bg-surface-900 border-y border-white/5 relative">        <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-12 items-center">            <div class="lg:col-span-7 space-y-8 reveal">                <div>                    <h2 class="text-heat-cyan font-black tracking-widest uppercase mb-2 text-sm">Creator Dashboard</h2>                    <h3 class="text-4xl font-black text-white mb-4">Earn Money From Home.</h3>                    <p class="text-slate-300 mb-6">Earn per minute via Kelza Coin, Audio, Video, and Gifts. Fast local bank transfers via Stripe.</p>                </div>                <div class="space-y-4">                    <div class="glass-panel p-6 rounded-2xl flex gap-4 border border-heat-pink/50 bg-heat-pink/5 relative overflow-hidden">                        <div class="absolute top-0 right-0 bg-heat-pink text-white text-xs font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Early Adopter Perk</div>                        <div class="w-10 h-10 rounded-full bg-heat-pink/20 flex items-center justify-center text-heat-pink font-black shrink-0">1</div>                        <div>                            <h4 class="text-white font-bold text-lg mb-1">100% Commission-Free Phase</h4>                            <p class="text-sm text-slate-300">Join during our onboarding phase and keep <strong class="text-white">100% of your earnings</strong> for your first 30 days.</p>                        </div>                    </div>                    <div class="glass-panel p-6 rounded-2xl flex gap-4">                        <div class="w-10 h-10 rounded-full bg-heat-cyan/20 flex items-center justify-center text-heat-cyan font-black shrink-0">2</div>                        <div>                            <h4 class="text-white font-bold text-lg mb-1">Total Boundary Control</h4>                            <p class="text-sm text-slate-400">Toggle Online/Offline, set "Holiday Mode", manage push notifications, pause incoming video.</p>                        </div>                    </div>                    <div class="glass-panel p-6 rounded-2xl flex gap-4">                        <div class="w-10 h-10 rounded-full bg-heat-violet/20 flex items-center justify-center text-heat-violet font-black shrink-0">3</div>                        <div>                            <h4 class="text-white font-bold text-lg mb-1">Instant Engagement Alerts</h4>                            <p class="text-sm text-slate-400">Receive "New User Online" notifications. Set your per-minute rates dynamically.</p>                        </div>                    </div>                </div>            </div>            <div class="lg:col-span-5 flex flex-col gap-6 reveal">                <img src="images/creator_lifestyle.png" alt="Dashboard Setup" class="w-full rounded-2xl border border-white/10 shadow-lg object-cover aspect-video lg:h-48">                <div class="relative rounded-2xl border border-white/10 shadow-2xl overflow-hidden group aspect-video lg:h-64">                    <img src="images/founder_team.png" alt="Testimonial" class="absolute inset-0 w-full h-full object-cover">                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>                    <div class="absolute bottom-4 left-4 right-4">                        <p class="text-heat-cyan text-4xl font-serif leading-none">"</p>                        <p class="text-white text-sm font-medium italic mb-2">Kelza gave me the freedom to work from my apartment in Manila and earn steady USD. The 100% free commission phase changed my life.</p>                        <p class="text-slate-400 text-xs font-bold uppercase">— Sofia R., Founding Creator</p>                    </div>                </div>                <img src="images/creator_dashboard.png" alt="Dashboard Setup" class="w-full rounded-2xl border border-white/10 shadow-lg object-cover aspect-video lg:h-48">            </div>        </div>    </section>
+    <!-- The Growth Engine Section -->    <section class="py-24 bg-surface-950 relative overflow-hidden border-t border-white/5">        <div class="max-w-7xl mx-auto px-4 relative z-10 reveal">            <h2 class="text-heat-violet font-black tracking-widest uppercase mb-2 text-sm text-center">The Growth Engine</h2>            <h3 class="text-4xl font-black text-white mb-12 text-center">Marketing & Referral Loops.</h3>            <div class="grid md:grid-cols-2 gap-8">                <div class="glass-panel p-8 rounded-3xl relative overflow-hidden group">                    <img src="images/global_network.png" class="absolute top-0 right-0 w-48 h-48 opacity-10 group-hover:scale-110 transition-transform duration-500 object-cover rounded-bl-full">                    <h4 class="text-2xl font-bold text-white mb-4 relative z-10">Managed Surrogate Marketing</h4>                    <p class="text-slate-400 mb-6 relative z-10">You focus on connecting; we focus on traffic. Kelza runs a vast network of highly targeted TikTok, Instagram, and Facebook handles pumping high-spending Tier-1 users directly to your online profile.</p>                    <ul class="space-y-2 text-sm font-medium text-slate-300 relative z-10">                        <li class="flex items-center gap-2"><span class="text-heat-pink">✓</span> Professional Social Media Management</li>                        <li class="flex items-center gap-2"><span class="text-heat-pink">✓</span> High-intent ad spend in 15+ rich countries</li>                    </ul>                </div>                <div class="glass-panel p-8 rounded-3xl relative overflow-hidden group border border-heat-cyan/30">                    <h4 class="text-2xl font-bold text-white mb-4 relative z-10">The "Refer-a-Peer" Bonus</h4>                    <p class="text-slate-400 mb-6 relative z-10">Grow your own wealth by growing our network. Invite other verified creators and build your own passive income stream.</p>                    <div class="bg-surface-950 p-6 rounded-2xl border border-white/10 relative z-10 text-center">                        <p class="text-4xl font-black text-heat-cyan mb-2">10%</p>                        <p class="text-white font-bold mb-2">Passive Revenue Share</p>                        <p class="text-xs text-slate-400">Earn 10% of Kelza's revenue from any creator you refer for their first full year on the platform. No limits.</p>                    </div>                </div>            </div>        </div>    </section>
+    <!-- Global Scale Strategy -->    <section class="py-24 bg-surface-900 relative border-y border-white/5">        <div class="max-w-7xl mx-auto px-4 reveal">            <div class="text-center mb-16">                <h2 class="text-heat-pink font-black tracking-widest uppercase mb-2 text-sm">Global Scale Strategy</h2>                <h3 class="text-4xl font-black text-white mb-4">Phase-Wise Expansion Model.</h3>                <p class="text-slate-400 max-w-3xl mx-auto text-lg">A calculated rollout bridging high-intent Tier-1 demand with dedicated global creator supply across carefully selected markets.</p>            </div>
+            <div class="grid lg:grid-cols-2 gap-8">                <!-- Creator Supply -->                <div class="glass-panel p-8 rounded-3xl border border-heat-cyan/30 h-full">                    <h4 class="text-2xl font-black text-white mb-6 flex items-center gap-2">                        <span class="w-3 h-3 rounded-full bg-heat-cyan"></span> Supply: Creator Onboarding                    </h4>                                        <div class="space-y-6">                        <div>                            <h5 class="text-heat-cyan font-bold text-sm uppercase tracking-wider mb-2 border-b border-white/10 pb-1">Phase 1 (Initial Rollout - Low CPA)</h5>                            <p class="text-xs text-slate-400 mb-3">Targeting 1,500 initial creators for continuous 24/7 timezone coverage.</p>                            <div class="flex flex-wrap gap-2 text-xs font-semibold text-slate-300">                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇵🇭 Philippines</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇮🇩 Indonesia</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇻🇳 Vietnam</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇹🇭 Thailand</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇰🇭 Cambodia</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇮🇳 India</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇳🇵 Nepal</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇧🇩 Bangladesh</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇰🇪 Kenya</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇨🇴 Colombia</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇧🇷 Brazil</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇲🇽 Mexico</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇻🇪 Venezuela</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇵🇪 Peru</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇪🇨 Ecuador</span>                            </div>                        </div>                        <div>                            <h5 class="text-white font-bold text-sm uppercase tracking-wider mb-2 border-b border-white/10 pb-1 mt-4">Phase 2 (Emerging Markets)</h5>                            <p class="text-xs text-slate-400 mb-3">Scaling to 5,000+ creators tapping into next-tier internet economies.</p>                            <div class="flex flex-wrap gap-2 text-xs font-semibold text-slate-300">                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇿🇦 South Africa</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇳🇬 Nigeria</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇪🇬 Egypt</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇹🇷 Turkey</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇦🇷 Argentina</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇨🇱 Chile</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇲🇦 Morocco</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇵🇰 Pakistan</span>                            </div>                        </div>                        <div>                            <h5 class="text-white font-bold text-sm uppercase tracking-wider mb-2 border-b border-white/10 pb-1 mt-4">Phase 3 (Global Dominance)</h5>                            <p class="text-xs text-slate-400 mb-2">Open registration with adaptive AI filters dictating supply based on real-time global demand and language needs.</p>                        </div>                    </div>                </div>
+                <!-- User Demand -->                <div class="glass-panel p-8 rounded-3xl border border-heat-pink/30 h-full">                    <h4 class="text-2xl font-black text-white mb-6 flex items-center gap-2">                        <span class="w-3 h-3 rounded-full bg-heat-pink"></span> Demand: User Acquisition                    </h4>                                        <div class="space-y-6">                        <div>                            <h5 class="text-heat-pink font-bold text-sm uppercase tracking-wider mb-2 border-b border-white/10 pb-1">Phase 1 (High ARPU Markets)</h5>                            <p class="text-xs text-slate-400 mb-3">Targeting 100,000+ users (5-10k DAU) with high purchasing power.</p>                            <div class="flex flex-wrap gap-2 text-xs font-semibold text-slate-300">                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇺🇸 United States</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇬🇧 UK</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇦🇺 Australia</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇩🇪 Germany</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇫🇷 France</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇰🇷 South Korea</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇸🇬 Singapore</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇮🇹 Italy</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇪🇸 Spain</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇳🇱 Netherlands</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇮🇳 India</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇧🇷 Brazil</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇲🇽 Mexico</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇸🇦 Saudi Arabia</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇳🇿 New Zealand</span>                            </div>                        </div>                        <div>                            <h5 class="text-white font-bold text-sm uppercase tracking-wider mb-2 border-b border-white/10 pb-1 mt-4">Phase 2 (Expanding Horizons)</h5>                            <p class="text-xs text-slate-400 mb-3">15 more high-paying countries to scale to 1M+ active users.</p>                            <div class="flex flex-wrap gap-2 text-xs font-semibold text-slate-300">                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇨🇦 Canada</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇨🇭 Switzerland</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇸🇪 Sweden</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇳🇴 Norway</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇦🇪 UAE</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇯🇵 Japan</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇮🇪 Ireland</span>                                <span class="bg-surface-950 border border-white/10 px-2 py-1 rounded">🇩🇰 Denmark</span>                            </div>                        </div>                        <div>                            <h5 class="text-white font-bold text-sm uppercase tracking-wider mb-2 border-b border-white/10 pb-1 mt-4">Phase 3 (Global Dominance)</h5>                            <p class="text-xs text-slate-400 mb-2">Worldwide availability on App Store and Play Store with localized pricing matrices.</p>                        </div>                    </div>                </div>            </div>        </div>    </section>
+    <!-- Creator Toolkit & Incentives -->    <section id="creator-features" class="py-24 bg-surface-950 relative overflow-hidden border-b border-white/5">        <div class="absolute inset-0 bg-neon-glow opacity-30"></div>        <div class="max-w-7xl mx-auto px-4 relative z-10 reveal">            <h2 class="text-heat-cyan font-black tracking-widest uppercase mb-2 text-sm text-center">Creator Toolkit & Incentives</h2>            <h3 class="text-4xl font-black text-white mb-12 text-center">Total Control. Maximum Earnings.</h3>                        <div class="grid md:grid-cols-3 gap-8">                <!-- Status Management -->                <div class="glass-panel p-8 rounded-3xl border-t-4 border-t-heat-cyan relative group hover:-translate-y-2 transition-transform duration-300">                    <h4 class="text-xl font-bold text-white mb-4">Availability Status</h4>                    <ul class="space-y-4 text-sm text-slate-400">                        <li class="flex items-start gap-3"><span class="text-heat-cyan mt-1">●</span> <div><strong>Online/Offline:</strong> Instant toggle to control your global visibility.</div></li>                        <li class="flex items-start gap-3"><span class="text-heat-cyan mt-1">●</span> <div><strong>Holiday Mode:</strong> Take a break without losing your algorithmic ranking or followers.</div></li>                        <li class="flex items-start gap-3"><span class="text-heat-cyan mt-1">●</span> <div><strong>Custom Push:</strong> Pause video calls but keep audio or direct messages active when multi-tasking.</div></li>                    </ul>                </div>
+                <!-- Financial Controls -->                <div class="glass-panel p-8 rounded-3xl border-t-4 border-t-heat-pink relative group hover:-translate-y-2 transition-transform duration-300">                    <h4 class="text-xl font-bold text-white mb-4">Financial Autonomy</h4>                    <ul class="space-y-4 text-sm text-slate-400">                        <li class="flex items-start gap-3"><span class="text-heat-pink mt-1">●</span> <div><strong>Rate Management:</strong> Set your exact Kelza Coin price per minute based on your personal demand.</div></li>                        <li class="flex items-start gap-3"><span class="text-heat-pink mt-1">●</span> <div><strong>Target Bonuses:</strong> Hit 30 mins live or 50 unique calls daily to unlock 50% or 100% commission-free periods.</div></li>                        <li class="flex items-start gap-3"><span class="text-heat-pink mt-1">●</span> <div><strong>Bank Transfers:</strong> Direct Stripe payouts to local banks across all 15 Phase 1 countries.</div></li>                    </ul>                </div>
+                <!-- Engagement Tools -->                <div class="glass-panel p-8 rounded-3xl border-t-4 border-t-heat-violet relative group hover:-translate-y-2 transition-transform duration-300">                    <h4 class="text-xl font-bold text-white mb-4">Engagement Engine</h4>                    <ul class="space-y-4 text-sm text-slate-400">                        <li class="flex items-start gap-3"><span class="text-heat-violet mt-1">●</span> <div><strong>Instant Alerts:</strong> "New User Online" notifications help you capture high-intent traffic instantly.</div></li>                        <li class="flex items-start gap-3"><span class="text-heat-violet mt-1">●</span> <div><strong>Dynamic Bios:</strong> Update your bio, tags, and vibe to match current user trends.</div></li>                        <li class="flex items-start gap-3"><span class="text-heat-violet mt-1">●</span> <div><strong>Referrals:</strong> Earn high cash commissions for referring other verified creators to the platform.</div></li>                    </ul>                </div>            </div>        </div>    </section>
+    <!-- Creator Onboarding -->    <section id="creator-onboarding" class="py-24 bg-surface-900 border-y border-white/5 relative">        <div class="max-w-4xl mx-auto px-4 reveal">            <div class="glass-panel p-8 md:p-12 rounded-[2.5rem] border border-heat-pink/30 shadow-[0_0_40px_rgba(255,0,127,0.15)] relative overflow-hidden">                <div class="absolute top-0 right-0 w-64 h-64 bg-heat-pink/10 rounded-full mix-blend-screen filter blur-3xl translate-x-1/2 -translate-y-1/2"></div>                                <div class="text-center mb-10 relative z-10">                    <h3 class="text-3xl md:text-4xl font-black text-white mb-4">Apply for the Creator Collective</h3>                    <p class="text-slate-400">Phase 1 onboarding is currently open. Secure your spot, complete KYC, and start earning USD from home.</p>                </div>                                <form class="space-y-6 relative z-10" onsubmit="event.preventDefault(); alert('Application Received. Redirecting to KYC Verification...');">                    <div class="grid md:grid-cols-2 gap-6">                        <div>                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Full Legal Name</label>                            <input type="text" required class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-heat-pink transition-colors" placeholder="As it appears on ID">                        </div>                        <div>                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">WhatsApp Number</label>                            <input type="tel" required class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-heat-pink transition-colors" placeholder="+Country Code">                        </div>                    </div>                                        <div class="grid md:grid-cols-2 gap-6">                        <div>                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Country of Residence</label>                            <select class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-heat-pink transition-colors appearance-none">                                <optgroup label="Phase 1 (Open)">                                    <option>Philippines</option><option>Indonesia</option><option>Vietnam</option>                                    <option>Thailand</option><option>Cambodia</option><option>India</option>                                    <option>Nepal</option><option>Bangladesh</option><option>Kenya</option>                                    <option>Colombia</option><option>Brazil</option><option>Mexico</option>                                    <option>Venezuela</option><option>Peru</option><option>Ecuador</option>                                </optgroup>                                <optgroup label="Phase 2 (Waitlist)">                                    <option>South Africa</option><option>Nigeria</option><option>Egypt</option>                                    <option>Turkey</option><option>Argentina</option><option>Chile</option>                                    <option>Morocco</option><option>Pakistan</option>                                </optgroup>                            </select>                        </div>                        <div>                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Primary Social Link</label>                            <input type="url" required class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-heat-pink transition-colors" placeholder="Instagram/TikTok URL">                        </div>                    </div>
+                    <div class="pt-4">                        <button type="submit" class="w-full btn-heat-primary text-white font-black text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(255,0,127,0.4)] hover:scale-[1.02] transition-transform">                            Submit Application & Start KYC                        </button>                        <p class="text-center text-xs text-slate-500 mt-4 font-medium">* All applicants must be 18+ and pass mandatory Liveness AI verification.</p>                    </div>                </form>            </div>        </div>    </section>
+    <!-- Competitive Edge -->    <section id="why-us" class="py-24 bg-surface-950 relative overflow-hidden border-b border-white/5">        <div class="max-w-7xl mx-auto px-4 reveal">            <h2 class="text-heat-violet font-black tracking-widest uppercase mb-2 text-sm text-center">Competitive Edge</h2>            <h3 class="text-4xl font-black text-white mb-16 text-center">Why Kelza Wins the Market.</h3>            <div class="grid lg:grid-cols-3 gap-6">                <div class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-300">                    <img src="images/trust_ecosystem.png" alt="No Bots" class="w-24 h-24 mx-auto rounded-full mb-6 border-2 border-heat-cyan/50 object-cover">                    <h4 class="text-xl font-bold text-white mb-3">Zero Fake Profiles</h4>                    <p class="text-sm text-slate-400">Competitors are flooded with AI bots. Kelza forces API-level Identity Verification on 100% of accounts.</p>                </div>                <div class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-300 border border-heat-pink/30 relative">                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-heat-pink text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Industry Best</div>                    <img src="images/creator_dashboard.png" alt="80% Payout" class="w-24 h-24 mx-auto rounded-full mb-6 border-2 border-heat-pink/50 object-cover">                    <h4 class="text-xl font-bold text-white mb-3">80% Creator Payouts</h4>                    <p class="text-sm text-slate-400">Industry standard takes 50-70%. We take 20%. Our low-overhead tech stack passes massive earnings back.</p>                </div>                <div class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-300">                    <img src="images/global_network.png" alt="Low Latency" class="w-24 h-24 mx-auto rounded-full mb-6 border-2 border-heat-violet/50 object-cover">                    <h4 class="text-xl font-bold text-white mb-3">Sub-200ms Latency</h4>                    <p class="text-sm text-slate-400">A call across the world shouldn't lag. Multi-region STUN/TURN server network ensures flawless sync.</p>                </div>            </div>        </div>    </section>
+    <!-- Infrastructure -->    <section id="tech" class="py-24 bg-surface-900 border-b border-white/5 relative">        <div class="max-w-7xl mx-auto px-4 reveal">            <h2 class="text-heat-cyan font-black tracking-widest uppercase mb-2 text-sm text-center">Infrastructure</h2>            <h3 class="text-4xl font-black text-white mb-12 text-center">Uncompromising Security & Tech.</h3>            <div class="grid md:grid-cols-3 gap-6">                <div class="glass-panel p-6 rounded-2xl text-center">                    <div class="w-12 h-12 bg-surface-800 rounded-full mx-auto flex items-center justify-center mb-4 text-heat-cyan">                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>                    </div>                    <h4 class="text-lg font-bold text-white mb-2">100% Mandatory KYC</h4>                    <p class="text-sm text-slate-400">Strictly 18+. Real identity verification via API.</p>                </div>                <div class="glass-panel p-6 rounded-2xl text-center">                    <div class="w-12 h-12 bg-surface-800 rounded-full mx-auto flex items-center justify-center mb-4 text-heat-pink">                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>                    </div>                    <h4 class="text-lg font-bold text-white mb-2">Custom WebRTC</h4>                    <p class="text-sm text-slate-400">Regional STUN/TURN nodes guarantee proper audio/video sync.</p>                </div>                <div class="glass-panel p-6 rounded-2xl text-center">                    <div class="w-12 h-12 bg-surface-800 rounded-full mx-auto flex items-center justify-center mb-4 text-heat-violet">                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>                    </div>                    <h4 class="text-lg font-bold text-white mb-2">Privacy First</h4>                    <p class="text-sm text-slate-400">End-to-End Encryption (E2EE) and screen record blocking.</p>                </div>            </div>        </div>    </section>
+    <!-- App Store Download Section -->    <section class="py-20 bg-gradient-to-b from-surface-950 to-surface-900 border-b border-white/5 text-center relative overflow-hidden">        <div class="absolute inset-0 bg-cyan-glow opacity-10"></div>        <div class="max-w-4xl mx-auto px-4 relative z-10 reveal">            <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Ready to kill boredom?</h2>            <p class="text-slate-400 mb-10 text-lg">Download the Kelza app today. Available on all major platforms.</p>            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">                <a href="#" class="glass-panel w-full sm:w-auto px-8 py-4 rounded-2xl flex items-center justify-center gap-4 hover:scale-105 transition-transform border-white/20 hover:border-white/40 shadow-xl">                   <svg class="w-10 h-10 text-white" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 22.8 184.6 4 273.5q-23.5 111.4 52.6 220.6c17.9 25.9 40 50.1 66.4 50.1 27.2 0 38-16.1 72.8-16.1 34.3 0 44.1 16.1 73.3 16.1 29.2 0 51.7-25.9 71.1-53.8 24.3-33.8 35-68.5 35.5-70.2-1.3-.7-56.1-20.9-57-81.5zM263.7 93.6c20.2-24.3 33.8-58.3 30-93.6-29.2 1.3-65.7 19.7-86.4 44.1-17.9 20.7-33.3 55.4-28.7 89.7 32.8 2.3 64.9-15.9 85.1-40.2z"/></svg>                   <div class="text-left"><p class="text-xs text-slate-300">Download on the</p><p class="text-xl font-bold text-white">App Store</p></div>                </a>                <a href="#" class="glass-panel w-full sm:w-auto px-8 py-4 rounded-2xl flex items-center justify-center gap-4 hover:scale-105 transition-transform border-white/20 hover:border-white/40 shadow-xl">                   <svg class="w-10 h-10 text-white" viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>                   <div class="text-left"><p class="text-xs text-slate-300">GET IT ON</p><p class="text-xl font-bold text-white">Google Play</p></div>                </a>            </div>        </div>    </section>
+    <!-- Investors -->    <section id="investors" class="py-24 bg-surface-950 relative overflow-hidden">        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>                <div class="max-w-7xl mx-auto px-4 relative z-10 reveal">            <div class="text-center mb-16">                <h2 class="text-heat-violet font-black tracking-widest uppercase mb-2 text-sm">Seed Round Open</h2>                <h3 class="text-5xl font-black text-white mb-6">The $120,000 Catalyst.</h3>                <p class="text-slate-300 max-w-3xl mx-auto text-lg">                    We are securing optimized capital to execute our 90-day sprint, acquire foundational creators, and scale to 100k+ users via clever surrogate marketing and referral loops.                </p>            </div>
+            <!-- Budget Breakdown -->            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-heat-cyan">                    <p class="text-xs text-slate-400 font-bold uppercase mb-1">Product & Tech (35%)</p>                    <p class="text-3xl font-black text-white mb-4">$42K</p>                    <ul class="text-xs text-slate-300 space-y-2 text-left">                        <li>• Cross-platform iOS/Android app dev (Flutter).</li>                        <li>• Custom WebRTC Engine & global STUN/TURN nodes.</li>                        <li>• Sub-200ms latency video routing algorithms.</li>                        <li>• End-to-End Encryption (E2EE) implementation.</li>                        <li>• Real-time AI chat translation API integration.</li>                        <li>• Interactive 3D gift animation engine.</li>                        <li>• Scalable PostgreSQL/MongoDB architecture.</li>                        <li>• Admin panel for moderation management.</li>                    </ul>                </div>                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-heat-pink">                    <p class="text-xs text-slate-400 font-bold uppercase mb-1">Marketing (40%)</p>                    <p class="text-3xl font-black text-white mb-4">$48K</p>                    <ul class="text-xs text-slate-300 space-y-2 text-left">                        <li>• Phase 1 "Earn from Home" creator onboarding ads.</li>                        <li>• High-intent TikTok, Instagram, and Facebook ads.</li>                        <li>• Surrogate Organic Social Media Network (10+ handles).</li>                        <li>• SEO-optimized landing pages and content marketing.</li>                        <li>• "Refer-a-Peer" 10% Revenue Share bonus pool funding.</li>                        <li>• Micro-influencer partnerships in Phase 1 countries.</li>                        <li>• Brand identity, UI/UX design, and premium graphics.</li>                    </ul>                </div>                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-white">                    <p class="text-xs text-slate-400 font-bold uppercase mb-1">Ops & Legal (15%)</p>                    <p class="text-3xl font-black text-white mb-4">$18K</p>                    <ul class="text-xs text-slate-300 space-y-2 text-left">                        <li>• UK Corporate Entity Formation & Tax Structuring.</li>                        <li>• Liveness KYC/AML API integration & per-user fees.</li>                        <li>• 18+ Platform Compliance & Terms of Service.</li>                        <li>• Apple App Store & Google Play Developer accounts.</li>                        <li>• Stripe Business Bank & international payout setup.</li>                        <li>• Data Privacy (GDPR/CCPA) audits.</li>                        <li>• Creator independent contractor agreements.</li>                    </ul>                </div>                <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-slate-600">                    <p class="text-xs text-slate-400 font-bold uppercase mb-1">Reserve (10%)</p>                    <p class="text-3xl font-black text-white mb-4">$12K</p>                    <ul class="text-xs text-slate-300 space-y-2 text-left">                        <li>• Cloudflare CDN edge-node scaling buffers.</li>                        <li>• AWS Auto-scaling costs for traffic spikes.</li>                        <li>• Emergency Development Pivot Contingency.</li>                        <li>• Unforeseen API rate limit overages (KYC).</li>                        <li>• Exchange rate fluctuation buffer for payouts.</li>                    </ul>                </div>            </div>
+            <div class="grid lg:grid-cols-2 gap-12">                <!-- 90 Day Sprint Roadmap -->                <div class="glass-panel p-8 rounded-3xl">                    <h4 class="text-2xl font-black text-white mb-6">The 90-Day Execution Sprint</h4>                    <div class="space-y-6">                        <div class="k-tl-node flex gap-4">                            <div class="text-heat-pink font-bold shrink-0 w-16">Days 1-15</div>                            <div>                                <h5 class="text-white font-bold">Planning & Design</h5>                                <p class="text-sm text-slate-400">Research, Wireframing, 30 days UI/UX & Graphics design overlap.</p>                            </div>                        </div>                        <div class="k-tl-node k-cyan flex gap-4">                            <div class="text-heat-cyan font-bold shrink-0 w-16">Days 16-75</div>                            <div>                                <h5 class="text-white font-bold">60-Day Sprint Coding</h5>                                <p class="text-sm text-slate-400">WebRTC, Wallet, Match engine. Parallel tracking: Launch "Earn from home" ads & onboard first 1,500 creators.</p>                            </div>                        </div>                        <div class="k-tl-node k-white flex gap-4">                            <div class="text-white font-bold shrink-0 w-16">Days 76-90</div>                            <div>                                <h5 class="text-white font-bold">QA & V1 Launch</h5>                                <p class="text-sm text-slate-400">15 days Testing/Audit -> 15 days Revision & Internal Deployment -> Production Live.</p>                            </div>                        </div>                        <div class="pt-4 border-t border-white/10 mt-4 text-xs text-slate-500 font-bold">                            * V2 (Games/Rooms) begins after 180 days. V3 (Global) begins Year 2.                        </div>                    </div>                </div>
+                <!-- Manpower & Operations -->                <div class="glass-panel p-8 rounded-3xl">                    <h4 class="text-2xl font-black text-white mb-6">Optimized Human Resources</h4>                    <p class="text-sm text-slate-400 mb-6">A specialized team managing 100k+ users, augmented by TikTok, FB, Insta main handles and 10+ surrogate organic marketing push handles.</p>                                        <div class="grid grid-cols-2 gap-4 text-sm">                        <div>                            <p class="text-white font-bold mb-2">Leadership & Tech</p>                            <ul class="text-slate-400 space-y-1">                                <li>• Founder / CEO</li>                                <li>• Product Manager & Team Lead</li>                                <li>• 2 Frontend Web Devs</li>                                <li>• 2 Frontend App Devs</li>                                <li>• 2 Backend Devs</li>                                <li>• 1 AI Engineer / Dev</li>                                <li>• 1 DevOps, 1 QA, 1 Tester</li>                            </ul>                        </div>                        <div>                            <p class="text-white font-bold mb-2">Creative & Growth</p>                            <ul class="text-slate-400 space-y-1">                                <li>• 1 UI/UX Designer</li>                                <li>• 1 Graphics Designer</li>                                <li>• 1 Content Creator, 2 Video Eds</li>                                <li>• 2 Social Media Managers</li>                                <li>• 2 Social Media Marketers</li>                                <li>• 1 Manual Automation Expert</li>                                <li>• 2 Customer Care, 2 Creator Care</li>                            </ul>                        </div>                    </div>                </div>
+                <!-- Marketing Expansion -->                <div class="glass-panel p-8 rounded-3xl">                    <h4 class="text-2xl font-black text-white mb-6">Marketing Strategy</h4>                    <ul class="text-slate-400 space-y-3 text-sm">                        <li><strong class="text-white">Main Sources:</strong> TikTok, Instagram, Facebook high-intent paid ads for rapid user acquisition.</li>                        <li><strong class="text-white">Surrogate Network:</strong> Social media management & internet marketing via 10+ organic push handles simulating viral community growth.</li>                        <li><strong class="text-white">Web & SEO:</strong> High-conversion landing pages and targeted search optimization to capture organic intent.</li>                        <li><strong class="text-white">Viral Loops:</strong> "Refer-a-Peer" commission structure ensuring exponential organic onboarding.</li>                    </ul>                </div>
+                <!-- Ops & Legal Expansion -->                <div class="glass-panel p-8 rounded-3xl">                    <h4 class="text-2xl font-black text-white mb-6">Ops & Legal Setup</h4>                    <ul class="text-slate-400 space-y-3 text-sm">                        <li><strong class="text-white">Corporate:</strong> UK Company Formation for established global trust and streamlined international financial routing.</li>                        <li><strong class="text-white">Payments:</strong> Direct Stripe integration for frictionless creator payouts & secure Business Bank setup.</li>                        <li><strong class="text-white">App Stores:</strong> iOS App Store & Google Play in-app purchase compliance, payment gateways, and developer account setup.</li>                        <li><strong class="text-white">Compliance:</strong> Liveness KYC, AML protocols, and strict 18+ legal frameworks enforcing platform safety.</li>                    </ul>                </div>            </div>        </div>    </section>
+    <!-- Footer -->    <footer class="bg-[#030508] pt-20 pb-10 border-t border-white/5 relative z-10">        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-16">                                <div class="space-y-4 max-w-sm">                    <div class="flex items-center gap-3">                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-heat-pink to-heat-violet flex items-center justify-center">                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>                        </div>                        <p class="text-xl font-black tracking-widest text-white">KELZA</p>                    </div>                    <p class="text-sm text-slate-400 italic leading-relaxed font-medium">                        "People don't remember apps. People remember people."                    </p>                </div>                                <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">                    <a href="https://wa.me/9779746464149?text=Hello,%0A%0AI%20am%20interested%20in%20the%20investment%20opportunity%20for%20Kelza.%20I%20would%20like%20to%20learn%20more%20about%20the%20platform,%20the%20global%20strategy,%20and%20how%20we%20can%20partner%20to%20build%20this%20future-grade%20super%20app.%0A%0ACould%20we%20schedule%20a%20call%20to%20discuss%20this%20further?%0A%0AThank%20you." target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 glass-panel px-6 py-3 rounded-xl hover:bg-[#25D366]/10 hover:border-[#25D366]/50 transition-all group border border-white/10">                        <svg class="w-6 h-6 text-[#25D366] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>                        <div class="text-left">                            <p class="text-xs text-slate-400 font-medium">Invest via WhatsApp</p>                            <p class="text-sm font-bold text-white tracking-wide">+977 974-6464149</p>                        </div>                    </a>                    <a href="mailto:erbhaweshkafle@gmail.com?subject=Investment%20Opportunity%20-%20Kelza%20Super%20App&body=Hello,%0A%0AI%20am%20interested%20in%20the%20investment%20opportunity%20for%20Kelza.%20I%20would%20like%20to%20learn%20more%20about%20the%20platform,%20the%20global%20strategy,%20and%20how%20we%20can%20partner%20to%20build%20this%20future-grade%20super%20app.%0A%0ACould%20we%20schedule%20a%20call%20to%20discuss%20this%20further?%0A%0AThank%20you." class="flex items-center justify-center gap-3 glass-panel px-6 py-3 rounded-xl hover:bg-[#EA4335]/10 hover:border-[#EA4335]/50 transition-all group border border-white/10">                        <svg class="w-6 h-6 text-[#EA4335] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>                        <div class="text-left">                            <p class="text-xs text-slate-400 font-medium">Email the Founder</p>                            <p class="text-sm font-bold text-white tracking-wide">erbhaweshkafle@gmail.com</p>                        </div>                    </a>                </div>            </div>                        <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 font-bold border-t border-white/10 pt-8">                <p>&copy; 2026 Er Lekhnath Kafle. All rights reserved.</p>                <div class="flex flex-wrap gap-4 md:gap-6 justify-center">                    <a href="https://kelza.fun" class="hover:text-heat-pink transition-colors">kelza.fun</a>                    <a href="#problem" class="hover:text-white transition-colors">The Market Gap</a>                    <a href="#product" class="hover:text-white transition-colors">Ecosystem</a>                    <a href="#investors" class="hover:text-heat-cyan transition-colors">Investor Pitch</a>                </div>            </div>        </div>    </footer>
+    <script>        document.addEventListener('DOMContentLoaded', () => {
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            /* --- Reveal: stagger via IntersectionObserver, with file:// fallback (P1) --- */
+            const revealEls = document.querySelectorAll('.reveal');
+            if ('IntersectionObserver' in window && !prefersReduced) {
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach((e) => {
+                        if (e.isIntersecting) { e.target.classList.add('active'); io.unobserve(e.target); }
+                    });
+                }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+                revealEls.forEach((el) => io.observe(el));
+            } else {
+                revealEls.forEach((el) => el.classList.add('active'));
             }
-        }
+            /* Sticky Nav styling on scroll */            const navbar = document.getElementById('navbar');            window.addEventListener('scroll', () => {                if (window.scrollY > 50) {                    navbar.classList.add('bg-[#030508]/90', 'shadow-2xl');                    navbar.classList.remove('border-b-0');                    navbar.classList.add('border-b', 'border-white/10');                } else {                    navbar.classList.remove('bg-[#030508]/90', 'shadow-2xl', 'border-b', 'border-white/10');                    navbar.classList.add('border-b-0');                }            });
+            /* --- Async Sleep Utility --- */            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            /* --- Mobile Canvas Simulation Engine --- */            async function runInfiniteSimulation() {                const swipeCard = document.getElementById('sim-swipe-card');                const heartPulse = document.getElementById('sim-heart-pulse');                const screen1 = document.getElementById('sim-screen-1');                const screen1_5 = document.getElementById('sim-screen-1-5'); /* Incoming Call */                const btnAccept = document.getElementById('sim-btn-accept');                const screen2 = document.getElementById('sim-screen-2');     /* Active Chat */                const chatBubble = document.getElementById('sim-chat-bubble');                const chatText = document.getElementById('sim-chat-text');                const floatingGift = document.getElementById('sim-floating-gift');                const grandGift = document.getElementById('sim-grand-gift');                const modal = document.getElementById('sim-modal');
+                /* Array of grand gifts to cycle through */                const giftVariations = ['🎁', '🌹', '💎', '🚀', '👑', '🏰', '🛒'];
+                while (true) {                    /* --- 0: Reset State --- */                    heartPulse.classList.remove('anim-pulse-heart');                    swipeCard.classList.remove('anim-swipe-right');                    chatBubble.classList.remove('anim-slide-up', 'anim-translate');                    floatingGift.classList.remove('anim-gift');                    grandGift.classList.remove('anim-grand-gift');                                        screen1.style.opacity = '1'; screen1.style.pointerEvents = 'auto';                    screen1_5.style.opacity = '0'; screen1_5.style.pointerEvents = 'none';                    screen2.style.opacity = '0'; screen2.style.pointerEvents = 'none';                    modal.style.opacity = '0'; modal.style.pointerEvents = 'none'; modal.style.transform = 'translateY(10px)';                    chatText.innerText = "¡Hola! ¿Cómo estás hoy?";                                        await sleep(2000); /* Rest on match screen */
+                    /* --- 1: Swipe Right --- */                    heartPulse.classList.add('anim-pulse-heart');                    swipeCard.classList.add('anim-swipe-right');                    await sleep(600);
+                    /* --- 2: Incoming Call Screen --- */                    screen1.style.opacity = '0'; screen1.style.pointerEvents = 'none';                    screen1_5.style.opacity = '1'; screen1_5.style.pointerEvents = 'auto';                                        await sleep(2500); /* Wait for phone to "ring" */                                        /* Simulate Accept Button Click */                    btnAccept.style.transform = "scale(0.85)";                    await sleep(150);                    btnAccept.style.transform = "scale(1)";                    await sleep(200);
+                    /* --- 3: Transition to Active Call --- */                    screen1_5.style.opacity = '0'; screen1_5.style.pointerEvents = 'none';                    screen2.style.opacity = '1'; screen2.style.pointerEvents = 'auto';                    await sleep(1000);
+                    /* --- 4: Chat slides up --- */                    chatBubble.classList.add('anim-slide-up');                    await sleep(1500);
+                    /* --- 5: AI Translation --- */                    chatBubble.classList.add('anim-translate');                    await sleep(750); /* wait for halfway point of flash */                    chatText.innerText = "Hello! How are you today?";                    await sleep(1500);
+                    /* --- 6: Send Grand Gift --- */                    /* Randomize the gift sent */                    let randomGift = giftVariations[Math.floor(Math.random() * giftVariations.length)];                                        if (Math.random() > 0.5) {                        grandGift.innerText = randomGift;                        grandGift.classList.add('anim-grand-gift');                    } else {                        floatingGift.innerText = randomGift;                        floatingGift.classList.add('anim-gift');                    }                    await sleep(1500);
+                    /* --- 7: Low Balance Warning --- */                    modal.style.opacity = '1';                    modal.style.pointerEvents = 'auto';                    modal.style.transform = 'translateY(0)';                                        /* Allow the user to see the final state before resetting */                    await sleep(4000);                }            }
+            /* =========================================================
+               PREMIUM POLISH — interactions, motion, perf (P1/3/4/6/7/8/10)
+               ========================================================= */
+            (function premiumPolish() {
+                if (prefersReduced) return;
 
-        // Start Engine immediately on DOM Load
-        document.addEventListener('DOMContentLoaded', () => {
-            // General UI Reveal Observer
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); } });
-            }, { threshold: 0.15 });
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+                /* --- Hero floating particles (P1) --- */
+                const pLayer = document.getElementById('hero-particles');
+                if (pLayer) {
+                    const pcount = window.innerWidth < 768 ? 10 : 22;
+                    for (let i = 0; i < pcount; i++) {
+                        const p = document.createElement('span');
+                        p.className = 'k-particle k-decor';
+                        const size = (Math.random() * 5 + 2);
+                        p.style.width = p.style.height = size + 'px';
+                        p.style.left = (Math.random() * 100) + '%';
+                        p.style.bottom = (-10 - Math.random() * 20) + '%';
+                        p.style.setProperty('--k-d', (8 + Math.random() * 12) + 's');
+                        p.style.animationDelay = (Math.random() * 12) + 's';
+                        pLayer.appendChild(p);
+                    }
+                }
 
-            // Navbar Scroll Effect
-            const nav = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) { nav.classList.add('bg-[#030508]/90', 'shadow-2xl', 'border-b', 'border-white/10'); nav.classList.remove('border-b-0'); } 
-                else { nav.classList.remove('bg-[#030508]/90', 'shadow-2xl', 'border-b', 'border-white/10'); nav.classList.add('border-b-0'); }
-            });
+                /* --- Mouse parallax on hero content (P1) --- */
+                const hero = document.getElementById('hero');
+                if (hero && window.matchMedia('(pointer:fine)').matches) {
+                    const pxTargets = hero.querySelectorAll('.animate-blob, #hero-particles');
+                    hero.addEventListener('mousemove', (e) => {
+                        const rx = (e.clientX / window.innerWidth - 0.5);
+                        const ry = (e.clientY / window.innerHeight - 0.5);
+                        pxTargets.forEach((el, i) => {
+                            const depth = (i + 1) * 8;
+                            el.style.transform = `translate(${rx * depth}px, ${ry * depth}px)`;
+                        });
+                    });
+                }
 
-            // Trigger Infinite Simulation
-            runInfiniteSimulation();
-        });
-    </script>
-</body>
-</html>
+                /* --- Animated counters (P6) --- */
+                const counters = document.querySelectorAll('.k-count[data-count]');
+                const fmtK = (n) => n >= 1000 ? (n / 1000).toFixed(1).replace('.0','') + 'K' : Math.round(n).toString();
+                const runCount = (el) => {
+                    const target = parseFloat(el.dataset.count);
+                    const suffix = el.dataset.suffix || '';
+                    const fmt = el.dataset.format;
+                    const dur = 1600; const start = performance.now();
+                    const step = (now) => {
+                        const t = Math.min(1, (now - start) / dur);
+                        const eased = 1 - Math.pow(1 - t, 3);
+                        const val = target * eased;
+                        el.textContent = (fmt === 'k1' ? fmtK(val) : Math.round(val)) + suffix;
+                        if (t < 1) requestAnimationFrame(step);
+                        else el.textContent = (fmt === 'k1' ? fmtK(target) : Math.round(target)) + suffix;
+                    };
+                    requestAnimationFrame(step);
+                };
+                if ('IntersectionObserver' in window) {
+                    const cio = new IntersectionObserver((entries) => {
+                        entries.forEach((e) => { if (e.isIntersecting) { runCount(e.target); cio.unobserve(e.target); } });
+                    }, { threshold: 0.6 });
+                    counters.forEach((c) => cio.observe(c));
+                } else { counters.forEach((c) => runCount(c)); }
+
+                /* --- Magnetic primary buttons + ripple (P8) --- */
+                const magnetics = document.querySelectorAll('.btn-heat-primary, .btn-heat-secondary');
+                if (window.matchMedia('(pointer:fine)').matches) {
+                    magnetics.forEach((btn) => {
+                        btn.addEventListener('mousemove', (e) => {
+                            const r = btn.getBoundingClientRect();
+                            const mx = e.clientX - r.left - r.width / 2;
+                            const my = e.clientY - r.top - r.height / 2;
+                            btn.style.transform = `translate(${mx * 0.18}px, ${my * 0.25}px) scale(1.04)`;
+                        });
+                        btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+                    });
+                }
+                document.querySelectorAll('.btn-heat-primary, .btn-heat-secondary, .k-fab').forEach((btn) => {
+                    btn.addEventListener('click', (e) => {
+                        const r = btn.getBoundingClientRect();
+                        const ripple = document.createElement('span');
+                        ripple.className = 'ripple';
+                        const size = Math.max(r.width, r.height);
+                        ripple.style.width = ripple.style.height = size + 'px';
+                        ripple.style.left = (e.clientX - r.left - size / 2) + 'px';
+                        ripple.style.top = (e.clientY - r.top - size / 2) + 'px';
+                        btn.appendChild(ripple);
+                        setTimeout(() => ripple.remove(), 650);
+                    });
+                });
+
+                /* --- Ecosystem Gallery builder: lazy load all screen_*.png + auto captions (P3) --- */
+                const grid = document.getElementById('k-gallery-grid');
+                if (grid) {
+                    const capFromName = (file) => {
+                        let s = file.replace(/^screen_/, '').replace(/\.[a-z]+$/i, '').replace(/[_-]+/g, ' ').trim();
+                        return s.replace(/\b\w/g, (c) => c.toUpperCase());
+                    };
+                    const shots = [
+                        'screen_home.png','screen_live_match.png','screen_single_chat.png','screen_chat_history.png',
+                        'screen_private_video.png','screen_audio_call.png','screen_creator_profile.png','screen_creator_dashboard.png',
+                        'screen_coin_topup.png','screen_subscription.png','screen_bonus_page.png','screen_games_grid.png'
+                    ];
+                    shots.forEach((src) => {
+                        const cell = document.createElement('div');
+                        cell.className = 'k-shot';
+                        cell.tabIndex = 0;
+                        const img = document.createElement('img');
+                        img.alt = capFromName(src);
+                        img.loading = 'lazy';
+                        img.dataset.src = 'images/' + src;
+                        img.addEventListener('load', () => cell.classList.add('k-loaded'));
+                        cell.appendChild(img);
+                        const cap = document.createElement('div');
+                        cap.className = 'k-cap';
+                        cap.textContent = capFromName(src);
+                        cell.appendChild(cap);
+                        grid.appendChild(cell);
+                    });
+                    /* Lazy-load with IntersectionObserver */
+                    const galImgs = grid.querySelectorAll('img[data-src]');
+                    if ('IntersectionObserver' in window) {
+                        const lio = new IntersectionObserver((entries) => {
+                            entries.forEach((e) => { if (e.isIntersecting) { e.target.src = e.target.dataset.src; lio.unobserve(e.target); } });
+                        }, { rootMargin: '300px 0px' });
+                        galImgs.forEach((im) => lio.observe(im));
+                    } else { galImgs.forEach((im) => { im.src = im.dataset.src; }); }
+                }
+
+                /* --- Floating nav: active section highlight (P4) --- */
+                const fabs = document.querySelectorAll('.k-fab');
+                const hashFab = document.querySelector('.k-fab[data-target="#gallery"]');
+                if (hashFab && 'IntersectionObserver' in window) {
+                    const galSection = document.getElementById('gallery');
+                    if (galSection) {
+                        const fio = new IntersectionObserver((entries) => {
+                            entries.forEach((e) => { hashFab.classList.toggle('is-active', e.isIntersecting); });
+                        }, { threshold: 0.3 });
+                        fio.observe(galSection);
+                    }
+                }
+                /* Hide FABs when they would cover the footer contact area */
+                const fabWrap = document.getElementById('k-fab-wrap');
+                const contactSection = document.querySelector('footer');
+                if (fabWrap && contactSection && 'IntersectionObserver' in window) {
+                    const cio = new IntersectionObserver((entries) => {
+                        entries.forEach((e) => { fabWrap.style.opacity = e.isIntersecting ? '0' : '1'; fabWrap.style.pointerEvents = e.isIntersecting ? 'none' : 'auto'; fabWrap.style.transition = 'opacity .4s ease'; });
+                    }, { threshold: 0.05 });
+                    cio.observe(contactSection);
+                }
+
+                /* --- Perf: pause decorative animations when hero off-screen (P10) --- */
+                const decor = document.querySelectorAll('.k-decor');
+                if ('IntersectionObserver' in window && decor.length) {
+                    const dio = new IntersectionObserver((entries) => {
+                        entries.forEach((e) => { e.target.classList.toggle('k-paused', !e.isIntersecting); });
+                    }, { threshold: 0 });
+                    decor.forEach((el) => dio.observe(el));
+                }
+            })();
+
+            /* Start the infinite loop instantly */            runInfiniteSimulation();        });    </script></body></html>
